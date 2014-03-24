@@ -27,7 +27,6 @@ import android.util.Log;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.model.*;
-import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.*;
 
@@ -36,9 +35,11 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Iterator;
 
+import de.k3b.android.compat.CalendarContract;
+
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 
-public class MainActivity extends Activity {
+public class CalendarImportActivity extends Activity {
 
 	// see http://stackoverflow.com/questions/3721963/how-to-add-calendar-events-in-android
     private static final String CONTENT_TYPE_EVENT = "vnd.android.cursor.item/event";
