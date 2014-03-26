@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Add to calendar</string>
+    <string name="import_from">Import to calendar</string>
+    <string name="export_to">Export to &#8230;</string>
 </resources>

@@ -42,7 +42,7 @@ public class CalendarFactory {
 	public VEvent addEvent(EventData data, TimeZone timezone) {
 		VEvent event = new VEvent();
 		PropertyList eventProperties = event.getProperties();
-		if (data.getId() != 0) eventProperties.add(new Uid("acal-"+data.getId()));
+		if (data.getId() != 0) eventProperties.add(new Uid("acal-"+data.getCalendarId()+"-"+data.getId()));
 		if (data.getDtstart() != 0) eventProperties.add(new DtStart(new Date( data.getDtstart())));
 		if (data.getDtend() != 0) eventProperties.add(new DtEnd(new Date( data.getDtend())));
 

@@ -9,24 +9,27 @@
         android:targetSdkVersion="19" />
  	<uses-permission android:name="android.permission.READ_CALENDAR" />
     <application
-        android:label="@string/app_name"
+        
         android:allowBackup="true"
 		android:icon="@drawable/ic_launcher"
         android:theme="@android:style/Theme.NoDisplay">
         <activity
-            android:name="org.dgtale.icsimport.CalendarExportActivity">
+            android:name="org.dgtale.icsimport.CalendarExportActivity" android:label="@string/export_to">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.INSERT" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/calendar" />
+                <data android:mimeType="vnd.android.cursor.item/event" />                
             </intent-filter>
 
         </activity>
         <activity
-            android:name="org.dgtale.icsimport.CalendarImportActivity">
+            android:name="org.dgtale.icsimport.CalendarImportActivity"
+            android:label="@string/import_from">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -34,7 +37,20 @@
             </intent-filter>
 
         </activity>
-    </application>
+        
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.mydomain.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+ 
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+ 
+        </provider>        
+        
+   </application>
 
 
 </manifest>

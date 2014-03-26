@@ -1,9 +1,5 @@
 package de.k3b.android.data;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +17,6 @@ import android.net.Uri;
  * It can used with contentResolver or with database
  */
 public abstract class CursorData {
-	protected static String providerAutority = "com.android.calendar"; // uri of content provider. my differ with android version below 4.0
-
 	protected static String selectionById = "(" + CalendarContract.EventsColumns._ID + " = ? )";
 	protected Cursor cur = null;
 	protected ContentResolver contentResolver = null;
@@ -66,9 +60,8 @@ public abstract class CursorData {
 		List<String> uriSegments = uri.getPathSegments();
 		if (uriSegments.size() < 1) throw new IllegalArgumentException("ContentURI expected content://com.adnroid.calendar/{TABLE}[/{EVENTID}] but was " + uri.toString());
 		
-		providerAutority  = uri.getAuthority();
 		String tableName = uriSegments.get(0);
-		if (contentToTablePlurals.contains(tableName)) {
+		if ((contentToTablePlurals != null) && contentToTablePlurals.contains(tableName)) {
 			tableName += "s";
 		}
 		String id = (uriSegments.size() == 1) ? null : uriSegments.get(1);
@@ -89,14 +82,6 @@ public abstract class CursorData {
 		return cur;
 	}
 
-	public static Uri createContentUri(String... urlParts) {
-		StringBuffer uri = new StringBuffer("content://" + providerAutority);
-		for(String urlPart : urlParts) {
-			uri.append("/").append(urlPart);
-		}
-		return Uri.parse(uri.toString());
-	}
-	
 	public long getId() {return cur.getLong(0);}
 
 	protected Date getDateTime(int columnIndex) {

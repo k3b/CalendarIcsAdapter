@@ -19,30 +19,24 @@
 package org.dgtale.icsimport;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ShareCompat;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import net.fortuna.ical4j.data.CalendarBuilder;
-import net.fortuna.ical4j.model.*;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.property.*;
-
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.Iterator;
 
-import de.k3b.android.compat.CalendarContract;
-import de.k3b.android.data.CursorData;
+import net.fortuna.ical4j.model.Calendar;
+
 import de.k3b.android.data.calendar.CalendarExportEngine;
+import de.k3b.android.data.calendar.CalendarsCursorDataBase;
+import de.k3b.data.calendar.EventData;
 
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 
@@ -50,10 +44,7 @@ public class CalendarExportActivity extends Activity {
 	/**
 	 * true: use local calendar db (for testing); false: use contentProvider for production
 	 */
-	private static final boolean USE_MOCK_CALENDAR = true;
-
-	// see http://stackoverflow.com/questions/3721963/how-to-add-calendar-events-in-android
-    private static final String CONTENT_TYPE_EVENT = "vnd.android.cursor.item/event";
+	private static final boolean USE_MOCK_CALENDAR = false;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +56,7 @@ public class CalendarExportActivity extends Activity {
 		
 		if ((USE_MOCK_CALENDAR) && (data == null)) {
 			// data = CursorData.createContentUri("event","68");
-			data = CursorData.createContentUri("event");
+			data = CalendarsCursorDataBase.createContentUri("events");
 		}
 		
 		if (data != null) {
@@ -74,11 +65,13 @@ public class CalendarExportActivity extends Activity {
 				
 				CalendarExportEngine engine = new CalendarExportEngine(this.getApplication(), USE_MOCK_CALENDAR);
 				
-				Calendar result = engine.export(data);
+				Object result = engine.export(data);
+				
+				engine.close();
 				
 				if (result != null) {
-					// Log.d(CalendarExportEngine.TAG, result.toString());
-					writeStringToTextFile(this.getDir("log", Context.MODE_PRIVATE), "last.ics", result.toString());
+					viewViaFileContent(result.toString());
+					// viewViaFile(result.toString());
 				}
 				
 			} catch (Exception e) {
@@ -89,18 +82,66 @@ public class CalendarExportActivity extends Activity {
 		Log.d(CalendarExportEngine.TAG, "done");
 		this.finish();
     }
+
+	private void sendTo(String calendarEventContent) throws IOException {
+		
+		final Intent outIntent = new Intent();
+		outIntent.setAction(Intent.ACTION_SEND);
+		outIntent.putExtra(Intent.EXTRA_TEXT, calendarEventContent);
+		outIntent.setType("text/calendar");
+		this.startActivity(Intent.createChooser(outIntent, "Send to ..."));
+		
+		// erscheint leider als mail content und nicht als *.ics anlage vielleicht geht sendto oder extra_stream
+	}
 	
-	private void writeStringToTextFile(File dir, String fileName, String content){
-		File file = new File(dir, fileName);
-		try{
-		    FileOutputStream f1 = new FileOutputStream(file,false); //True = Append to file, false = Overwrite
-		    PrintStream p = new PrintStream(f1);
-		    p.print(content);
-		    p.close();
-		    f1.close();
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-		}   
+
+	// unfortunately the client has no permissions to read the file
+	// and this adapter should not need public file writing permissions
+	private void viewViaFile(String calendarEventContent) throws IOException {
+		// making app local file visible to the world is depricated since android 17.
+		// if there are problems in newer android version maybe a file contentprovider helps
+		// https://developer.android.com/reference/android/support/v4/content/FileProvider.html
+		File icsFIle = new File(this.getDir("export", Context.MODE_WORLD_READABLE), "current.ics");
+		// Log.d(CalendarExportEngine.TAG, result.toString());
+		writeStringToTextFile(icsFIle, calendarEventContent.toString());
+		
+		final Intent outIntent = new Intent();
+		outIntent.setAction(Intent.ACTION_VIEW);
+		outIntent.setData(Uri.fromFile(icsFIle));
+		this.startActivity(Intent.createChooser(outIntent, "Send to ..."));
+	}
+	
+	// unfortunately the client has no permissions to read the file
+	// and this adapter should not need public file writing permissions
+	private void viewViaFileContent(String calendarEventContent) throws IOException {
+		// https://developer.android.com/reference/android/support/v4/content/FileProvider.html
+
+		// concatenate the internal cache folder with the document its path and filename
+		File path = new File(this.getCacheDir(), "documents");
+		path.mkdirs();
+		final File icsFIle = new File(path, "current.ics");
+		// Log.d(CalendarExportEngine.TAG, result.toString());
+		writeStringToTextFile(icsFIle, calendarEventContent.toString());
+		
+		// let the FileProvider generate an URI for this private icsFIle
+		final Uri uri = FileProvider.getUriForFile(this, "com.mydomain.fileprovider", icsFIle);
+		
+		final Intent outIntent = new Intent()
+			.setAction(Intent.ACTION_SEND)
+			.setDataAndType(uri, "text/calendar")
+			.putExtra(Intent.EXTRA_STREAM, uri)
+			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
+			.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+		this.startActivity(Intent.createChooser(outIntent, "Send to ..."));
+	}
+	
+	private void writeStringToTextFile(File file, String content) throws IOException{
+	    FileOutputStream f1 = new FileOutputStream(file,false); //True = Append to file, false = Overwrite
+	    PrintStream p = new PrintStream(f1);
+	    p.print(content);
+	    p.close();
+	    f1.close();
 	}
 
 }

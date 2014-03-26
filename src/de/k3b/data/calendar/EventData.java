@@ -1,7 +1,5 @@
 package de.k3b.data.calendar;
 
-import java.util.Date;
-
 /**
  * android calendar-compatible Eventdata at leas available in samsung-android 2.2 and in android 4.0 and up (and maybe in other androids that have a calendar)
  */
@@ -25,5 +23,7 @@ public interface EventData {
 	public abstract String getRrule();
 
 	public String getOrganizer();
+
+	public int getCalendarId();
 
 }

@@ -5,23 +5,13 @@ package de.k3b.android.compat;
 // included into source so that android 2.1 can use it too. works for my android 2.2
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.Entity;
-import android.content.EntityIterator;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.net.Uri;
-import android.os.RemoteException;
-import android.text.format.DateUtils;
 import android.text.format.Time;
-import android.util.Log;
 
 /**
  * <p>
@@ -1322,11 +1312,6 @@ public final class CalendarContract {
          * This utility class cannot be instantiated
          */
         private Events() {}
-
-        /**
-         * The default sort order for this table
-         */
-        private static final String DEFAULT_SORT_ORDER = "";
 
         /**
          * These are columns that should only ever be updated by the provider,

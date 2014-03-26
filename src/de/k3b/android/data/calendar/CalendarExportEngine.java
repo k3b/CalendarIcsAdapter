@@ -6,9 +6,6 @@ import de.k3b.data.calendar.CalendarFactory;
 import de.k3b.data.calendar.EventData;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.TimeZone;
-import net.fortuna.ical4j.util.Calendars;
-import android.app.Application;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.*;
 import android.database.sqlite.*;
@@ -23,10 +20,13 @@ public class CalendarExportEngine {
 
 	final private SQLiteOpenHelper mock;
 	final private EventDataImpl eventData;
+
+	private SQLiteDatabase writableDatabase = null;
 	
 	public CalendarExportEngine(Context ctx, boolean useMockCalendar) {
 		mock = (useMockCalendar) ? new CalendarMock(ctx) : null;
-		this.eventData = (mock != null) ? new EventDataImpl(mock.getWritableDatabase()) : new EventDataImpl(ctx) ;
+		this.writableDatabase  = (useMockCalendar) ? mock.getWritableDatabase() : null;
+		this.eventData = (mock != null) ? new EventDataImpl(writableDatabase) : new EventDataImpl(ctx) ;
 	}
 
 	public Calendar export(Uri contentUri) {
@@ -50,5 +50,12 @@ public class CalendarExportEngine {
 	TimeZone getOrCreateTimeZone(EventData data) {
 		// not implemented yet
 		return null; //??? if (data.getEventTimezone() != null) eventProperties.add(new Timez(data.getEventTimezone()));
+	}
+
+	public void close() {
+		if (writableDatabase != null) {
+			writableDatabase.close();
+			writableDatabase = null;
+		}
 	}
 }

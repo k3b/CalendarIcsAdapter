@@ -1,7 +1,6 @@
 package de.k3b.android.data.calendar;
 
 import de.k3b.android.compat.CalendarContract;
-import de.k3b.android.data.CursorData;
 import de.k3b.data.calendar.EventData;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -42,7 +41,8 @@ public class EventDataImpl extends CalendarsCursorDataBase implements EventData 
 			CalendarContract.EventsColumns.EVENT_TIMEZONE,                           
 			CalendarContract.EventsColumns.DURATION,                           
 			CalendarContract.EventsColumns.RRULE,
-			CalendarContract.EventsColumns.ORGANIZER                          
+			CalendarContract.EventsColumns.ORGANIZER,
+			CalendarContract.EventsColumns.CALENDAR_ID                          
 		};
 
 	/* (non-Javadoc)
@@ -89,11 +89,13 @@ public class EventDataImpl extends CalendarsCursorDataBase implements EventData 
 	public String getOrganizer() {return cur.getString(9);}
 	/*
 	DTSTAMP:20131031T071858Z
-?	UID:20131031T071858Z-1383219060000@fe80:0:0:0:92e2:baff:fe3e:5ab6%17
 	PRIORITY:1
 	ATTENDEE;ROLE=REQ-PARTICIPANT;CN=BUYER:mailto:notimportant@example.com
 	ATTENDEE;ROLE=REQ-PARTICIPANT;CN=TRAVELLER:notimportant@example.com
 	ORGANIZER;CN=ORGANIZER:mailto:webmaster@trenitalia.it
 	RRULE:FREQ=MONTHLY;WKST=MO;BYDAY=3SA
 	*/
+
+	@Override
+	public int getCalendarId() {return cur.getInt(10);}
 }

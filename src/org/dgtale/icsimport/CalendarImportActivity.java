@@ -126,13 +126,7 @@ public class CalendarImportActivity extends Activity {
 			insertIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startDate.getDate().getTime());
 			//insertIntent.putExtra(CalendarContract.Events.DTSTART, startDate.getDate().getTime());
 
-			// calulate endDate from startDate+duration if neccessary
-			if ((endDate == null) && (duration != null)) {
-				Date start = startDate.getDate();
-				endDate = new DtEnd( start ); 
-			}
-
-			if ((endDate == null) && (duration == null)) { 
+			if (endDate == null) { 
 				allDay = true;
 			}
 		}
