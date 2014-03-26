@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package org.dgtale.icsimport;
+package de.k3b.calendar.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -35,12 +35,12 @@ import java.io.PrintStream;
 import net.fortuna.ical4j.model.Calendar;
 
 import de.k3b.android.data.calendar.CalendarExportEngine;
-import de.k3b.android.data.calendar.CalendarsCursorDataBase;
-import de.k3b.data.calendar.EventData;
+import de.k3b.android.data.calendar.CalendarsContentUriCursor;
+import de.k3b.data.calendar.EventDTO;
 
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 
-public class CalendarExportActivity extends Activity {
+public class Calendar2IcsActivity extends Activity {
 	/**
 	 * true: use local calendar db (for testing); false: use contentProvider for production
 	 */
@@ -55,8 +55,8 @@ public class CalendarExportActivity extends Activity {
 		Uri data = intent.getData();
 		
 		if ((USE_MOCK_CALENDAR) && (data == null)) {
-			// data = CursorData.createContentUri("event","68");
-			data = CalendarsCursorDataBase.createContentUri("events");
+			// data = ContentUriCursor.createContentUri("event","68");
+			data = CalendarsContentUriCursor.createContentUri("events");
 		}
 		
 		if (data != null) {
@@ -117,14 +117,14 @@ public class CalendarExportActivity extends Activity {
 		// https://developer.android.com/reference/android/support/v4/content/FileProvider.html
 
 		// concatenate the internal cache folder with the document its path and filename
-		File path = new File(this.getCacheDir(), "documents");
+		File path = new File(this.getCacheDir(), "ics");
 		path.mkdirs();
-		final File icsFIle = new File(path, "current.ics");
+		final File icsFIle = new File(path, "FromAndroidCalendar.ics");
 		// Log.d(CalendarExportEngine.TAG, result.toString());
 		writeStringToTextFile(icsFIle, calendarEventContent.toString());
 		
 		// let the FileProvider generate an URI for this private icsFIle
-		final Uri uri = FileProvider.getUriForFile(this, "com.mydomain.fileprovider", icsFIle);
+		final Uri uri = FileProvider.getUriForFile(this, "de.k3b.calendar.adapter", icsFIle);
 		
 		final Intent outIntent = new Intent()
 			.setAction(Intent.ACTION_SEND)

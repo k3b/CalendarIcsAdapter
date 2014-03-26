@@ -1,3 +1,16 @@
+todo k3b
+
+import via eventData-Interface vcal->eventData->androidIntent
+
+new readme with workflow pc-calendar<->email<->android-calendar
+
+
+howto
+	send mail with attachment (needs file-write permissions :-( )
+	enable/disable intents at runtime
+
+
+
 ICSImport
 =========
 

@@ -16,7 +16,7 @@ import android.net.Uri;
  * Baseclass for cursor based dataaccess via content-uri.<br/>
  * It can used with contentResolver or with database
  */
-public abstract class CursorData {
+public abstract class ContentUriCursor {
 	protected static String selectionById = "(" + CalendarContract.EventsColumns._ID + " = ? )";
 	protected Cursor cur = null;
 	protected ContentResolver contentResolver = null;
@@ -27,7 +27,7 @@ public abstract class CursorData {
 	/**
 	 * Creates a datasource that uses the ContentResolver from context
 	 */
-	public CursorData(Context ctx) {
+	public ContentUriCursor(Context ctx) {
 		this.contentResolver = ctx.getContentResolver();
 	}
 	
@@ -36,16 +36,16 @@ public abstract class CursorData {
 	 * mockimplementation for testing with local copy of events database. This way real events are not at risc or you can test it on an 
 	 * emulator with no calendar.<br/>
 	 * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db ) 
-	 * to local apps database folder ( /data/data/org.dgtale.icsimport/databases/calendar.db ) .<br/>
+	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
 	 */
 	@SuppressWarnings("unchecked")
-	public CursorData(SQLiteDatabase mockDatabase, String... contentToTablePlurals) {
+	public ContentUriCursor(SQLiteDatabase mockDatabase, String... contentToTablePlurals) {
 		this.mockDatabase = mockDatabase;
 		this.contentToTablePlurals = Arrays.asList(contentToTablePlurals);
 	}
 
 	/**
-	 * gets the colums that belong to this CursorData.
+	 * gets the colums that belong to this ContentUriCursor.
 	 * col 0 should be "_id"
 	 */
 	abstract protected String[] getColums();	

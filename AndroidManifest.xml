@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dgtale.icsimport"
-    android:versionCode="3"
-    android:versionName="1.2" >
+    android:versionCode="4"
+    android:versionName="1.3" >
 
     <uses-sdk
         android:minSdkVersion="7"
@@ -14,7 +14,7 @@
 		android:icon="@drawable/ic_launcher"
         android:theme="@android:style/Theme.NoDisplay">
         <activity
-            android:name="org.dgtale.icsimport.CalendarExportActivity" android:label="@string/export_to">
+            android:name="de.k3b.calendar.adapter.Calendar2IcsActivity" android:label="@string/export_to">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -25,10 +25,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/event" />                
             </intent-filter>
-
         </activity>
+        
         <activity
-            android:name="org.dgtale.icsimport.CalendarImportActivity"
+            android:name="de.k3b.calendar.adapter.Ics2CalendarActivity"
             android:label="@string/import_from">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -40,17 +40,14 @@
         
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.mydomain.fileprovider"
+            android:authorities="de.k3b.calendar.adapter"
             android:exported="false"
             android:grantUriPermissions="true">
- 
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/fileprovider" />
- 
         </provider>        
         
    </application>
-
 
 </manifest>

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package org.dgtale.icsimport;
+package de.k3b.calendar.adapter;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -39,7 +39,7 @@ import de.k3b.android.compat.CalendarContract;
 
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 
-public class CalendarImportActivity extends Activity {
+public class Ics2CalendarActivity extends Activity {
 
 	// see http://stackoverflow.com/questions/3721963/how-to-add-calendar-events-in-android
     private static final String CONTENT_TYPE_EVENT = "vnd.android.cursor.item/event";

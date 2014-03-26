@@ -3,7 +3,7 @@ package de.k3b.data.calendar;
 /**
  * android calendar-compatible Eventdata at leas available in samsung-android 2.2 and in android 4.0 and up (and maybe in other androids that have a calendar)
  */
-public interface EventData {
+public interface EventDTO {
 	public abstract long getId();
 	
 	public abstract long getDtstart();

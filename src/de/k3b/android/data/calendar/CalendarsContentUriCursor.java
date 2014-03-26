@@ -4,15 +4,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import de.k3b.android.data.CursorData;
+import de.k3b.android.data.ContentUriCursor;
 
-public abstract class CalendarsCursorDataBase extends CursorData {
+public abstract class CalendarsContentUriCursor extends ContentUriCursor {
 	protected static String providerAutority = "com.android.calendar"; // uri of content provider. my differ with android version below 4.0
 
 	/**
 	 * Creates a datasource that uses the ContentResolver from context
 	 */
-	public CalendarsCursorDataBase(Context ctx) {
+	public CalendarsContentUriCursor(Context ctx) {
 		super(ctx);
 	}
 	
@@ -21,9 +21,9 @@ public abstract class CalendarsCursorDataBase extends CursorData {
 	 * mockimplementation for testing with local copy of events database. This way real events are not at risc or you can test it on an 
 	 * emulator with no calendar.<br/>
 	 * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db ) 
-	 * to local apps database folder ( /data/data/org.dgtale.icsimport/databases/calendar.db ) .<br/>
+	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
 	 */
-	public CalendarsCursorDataBase(SQLiteDatabase mockDatabase) {
+	public CalendarsContentUriCursor(SQLiteDatabase mockDatabase) {
 		super(mockDatabase,"calendar", "event");
 	}
 	

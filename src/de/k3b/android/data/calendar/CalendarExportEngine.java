@@ -1,9 +1,9 @@
 package de.k3b.android.data.calendar;
 
 import de.k3b.android.data.calendar.CalendarMock;
-import de.k3b.android.data.calendar.EventDataImpl;
+import de.k3b.android.data.calendar.EventDTOCursor;
 import de.k3b.data.calendar.CalendarFactory;
-import de.k3b.data.calendar.EventData;
+import de.k3b.data.calendar.EventDTO;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.TimeZone;
 import android.content.Context;
@@ -19,19 +19,19 @@ public class CalendarExportEngine {
 	public static final String TAG = "ICS-Export";
 
 	final private SQLiteOpenHelper mock;
-	final private EventDataImpl eventData;
+	final private EventDTOCursor eventData;
 
 	private SQLiteDatabase writableDatabase = null;
 	
 	public CalendarExportEngine(Context ctx, boolean useMockCalendar) {
 		mock = (useMockCalendar) ? new CalendarMock(ctx) : null;
 		this.writableDatabase  = (useMockCalendar) ? mock.getWritableDatabase() : null;
-		this.eventData = (mock != null) ? new EventDataImpl(writableDatabase) : new EventDataImpl(ctx) ;
+		this.eventData = (mock != null) ? new EventDTOCursor(writableDatabase) : new EventDTOCursor(ctx) ;
 	}
 
 	public Calendar export(Uri contentUri) {
 		boolean hasData = false;
-		CalendarFactory factory = new CalendarFactory("-//org.dgtale.icsimport//iCal4j 1.0//EN");
+		CalendarFactory factory = new CalendarFactory("-//de.k3b.calendar.adapter//iCal4j 1.0//EN");
 		// set to null for non mocked production
 		Cursor eventCursor = eventData.getByContentURI(contentUri);
 		
@@ -47,7 +47,7 @@ public class CalendarExportEngine {
 		return (hasData) ? factory.getCalendar() : null;
 	}
 	
-	TimeZone getOrCreateTimeZone(EventData data) {
+	TimeZone getOrCreateTimeZone(EventDTO data) {
 		// not implemented yet
 		return null; //??? if (data.getEventTimezone() != null) eventProperties.add(new Timez(data.getEventTimezone()));
 	}
