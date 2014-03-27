@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">CalendarIcsAdapter</string>
     <string name="import_from">Import to calendar</string>
-    <string name="export_to">Export to &#8230;</string>
+    <string name="export_to">Send Event to &#8230;</string>
 </resources>

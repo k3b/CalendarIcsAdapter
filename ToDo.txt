@@ -1,0 +1,14 @@
+ToDO.txt
+
+	j2se-Junit-Integration test
+		EventDtoSimple
+		ics->EventDto->ics
+	sendto parameter subject body
+		EventDto2txt
+	new readme with workflow pc-calendar<->email<->android-calendar
+
+
+	howto
+		? enable/disable intents at runtime
+		? config intend filter to only accept "content:..../Events/id" urls but not file urls
+		? hoto handle timezones in android-calendar

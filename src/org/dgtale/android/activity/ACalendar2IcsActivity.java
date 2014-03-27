@@ -32,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.dgtale.R;
 import org.dgtale.android.calendar.ACalendar2IcsEngine;
 import org.dgtale.android.calendar.ACalendarCursor;
 import org.dgtale.calendar.EventDto;
@@ -90,17 +91,6 @@ public class ACalendar2IcsActivity extends Activity {
 		Log.d(ACalendar2IcsEngine.TAG, "done");
 		this.finish();
     }
-
-	private void sendTo(String calendarEventContent) throws IOException {
-		
-		final Intent outIntent = new Intent();
-		outIntent.setAction(Intent.ACTION_SEND);
-		outIntent.putExtra(Intent.EXTRA_TEXT, calendarEventContent);
-		outIntent.setType("text/calendar");
-		this.startActivity(Intent.createChooser(outIntent, "Send to ..."));
-		
-		// erscheint leider als mail content und nicht als *.ics anlage vielleicht geht sendto oder extra_stream
-	}
 	
 	// unfortunately the client has no permissions to read the file
 	// and this adapter should not need public file writing permissions
