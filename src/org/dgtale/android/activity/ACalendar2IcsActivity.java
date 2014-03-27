@@ -79,7 +79,7 @@ public class ACalendar2IcsActivity extends Activity {
 				engine.close();
 				
 				if (result != null) {
-					viewViaFileContent(result.toString());
+					sendIcsTo(result.toString());
 					// viewViaFile(result.toString());
 				}
 				
@@ -92,9 +92,7 @@ public class ACalendar2IcsActivity extends Activity {
 		this.finish();
     }
 	
-	// unfortunately the client has no permissions to read the file
-	// and this adapter should not need public file writing permissions
-	private void viewViaFileContent(String calendarEventContent) throws IOException {
+	private void sendIcsTo(String calendarEventContent) throws IOException {
 		// https://developer.android.com/reference/android/support/v4/content/FileProvider.html
 
 		// concatenate the internal cache folder with the document its path and filename
@@ -114,7 +112,7 @@ public class ACalendar2IcsActivity extends Activity {
 			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
 			.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-		this.startActivity(Intent.createChooser(outIntent, "Send to ..."));
+		this.startActivity(Intent.createChooser(outIntent, this.getText(R.string.export_to)));
 	}
 	
 	private void writeStringToTextFile(File file, String content) throws IOException{
