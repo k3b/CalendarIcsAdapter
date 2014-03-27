@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2013- Daniele Gobbetti
+ * Copyright (C) 2014- k3b
  * 
- * This file is part of icsimport.
+ * This file is part of CalendarIcsAdapter.
  * 
  * This program is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by 
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package de.k3b.calendar.adapter;
+package org.dgtale.android.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,15 +32,23 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
+import org.dgtale.android.calendar.ACalendar2IcsEngine;
+import org.dgtale.android.calendar.ACalendarCursor;
+import org.dgtale.calendar.EventDto;
+
 import net.fortuna.ical4j.model.Calendar;
-
-import de.k3b.android.data.calendar.CalendarExportEngine;
-import de.k3b.android.data.calendar.CalendarsContentUriCursor;
-import de.k3b.data.calendar.EventDto;
-
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 
-public class Calendar2IcsActivity extends Activity {
+/**
+ * Invisible Pseudo-Activity that exports a ics-calendar-event-file from the android Calendar.<br/>
+ * Supports Android 4.0 and up. Runs on most Android 2.1 and up that have a calendar and a calendar provider. <br/><br/>
+ * 
+ * delivers ics-file-content via uri 
+ * 			content:org.dgtale.calendar.adapter/ics/FromAndroidCalendar.ics 
+ * that is readable by other android apps without the need that this app requires sd-card-write-permission.<br/><br/>
+ * @author k3b
+ */
+public class ACalendar2IcsActivity extends Activity {
 	/**
 	 * true: use local calendar db (for testing); false: use contentProvider for production
 	 */
@@ -56,14 +64,14 @@ public class Calendar2IcsActivity extends Activity {
 		
 		if ((USE_MOCK_CALENDAR) && (data == null)) {
 			// data = ContentUriCursor.createContentUri("event","68");
-			data = CalendarsContentUriCursor.createContentUri("events");
+			data = ACalendarCursor.createContentUri("events");
 		}
 		
 		if (data != null) {
 			try {
-				Log.d(CalendarExportEngine.TAG, "opening " + data);
+				Log.d(ACalendar2IcsEngine.TAG, "opening " + data);
 				
-				CalendarExportEngine engine = new CalendarExportEngine(this.getApplication(), USE_MOCK_CALENDAR);
+				ACalendar2IcsEngine engine = new ACalendar2IcsEngine(this.getApplication(), USE_MOCK_CALENDAR);
 				
 				Object result = engine.export(data);
 				
@@ -75,11 +83,11 @@ public class Calendar2IcsActivity extends Activity {
 				}
 				
 			} catch (Exception e) {
-				Log.e(CalendarExportEngine.TAG, "error processing " + data + " : " + e);
+				Log.e(ACalendar2IcsEngine.TAG, "error processing " + data + " : " + e);
 				e.printStackTrace();
 			}
 		}
-		Log.d(CalendarExportEngine.TAG, "done");
+		Log.d(ACalendar2IcsEngine.TAG, "done");
 		this.finish();
     }
 
@@ -94,23 +102,6 @@ public class Calendar2IcsActivity extends Activity {
 		// erscheint leider als mail content und nicht als *.ics anlage vielleicht geht sendto oder extra_stream
 	}
 	
-
-	// unfortunately the client has no permissions to read the file
-	// and this adapter should not need public file writing permissions
-	private void viewViaFile(String calendarEventContent) throws IOException {
-		// making app local file visible to the world is depricated since android 17.
-		// if there are problems in newer android version maybe a file contentprovider helps
-		// https://developer.android.com/reference/android/support/v4/content/FileProvider.html
-		File icsFIle = new File(this.getDir("export", Context.MODE_WORLD_READABLE), "current.ics");
-		// Log.d(CalendarExportEngine.TAG, result.toString());
-		writeStringToTextFile(icsFIle, calendarEventContent.toString());
-		
-		final Intent outIntent = new Intent();
-		outIntent.setAction(Intent.ACTION_VIEW);
-		outIntent.setData(Uri.fromFile(icsFIle));
-		this.startActivity(Intent.createChooser(outIntent, "Send to ..."));
-	}
-	
 	// unfortunately the client has no permissions to read the file
 	// and this adapter should not need public file writing permissions
 	private void viewViaFileContent(String calendarEventContent) throws IOException {
@@ -120,11 +111,11 @@ public class Calendar2IcsActivity extends Activity {
 		File path = new File(this.getCacheDir(), "ics");
 		path.mkdirs();
 		final File icsFIle = new File(path, "FromAndroidCalendar.ics");
-		// Log.d(CalendarExportEngine.TAG, result.toString());
+		// Log.d(ACalendar2IcsEngine.TAG, result.toString());
 		writeStringToTextFile(icsFIle, calendarEventContent.toString());
 		
 		// let the FileProvider generate an URI for this private icsFIle
-		final Uri uri = FileProvider.getUriForFile(this, "de.k3b.calendar.adapter", icsFIle);
+		final Uri uri = FileProvider.getUriForFile(this, "org.dgtale.calendar.adapter", icsFIle);
 		
 		final Intent outIntent = new Intent()
 			.setAction(Intent.ACTION_SEND)

@@ -1,4 +1,22 @@
-package de.k3b.data.calendar;
+/*
+ * Copyright (C) 2013, 2014 - Daniele Gobbetti and k3b
+ * 
+ * This file is part of CalendarIcsAdapter.
+ * 
+ * This program is free software: you can redistribute it and/or modify it 
+ * under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License 
+ * for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License along with 
+ * this program. If not, see <http://www.gnu.org/licenses/>
+ */
+package org.dgtale.calendar;
 
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.VEvent;
@@ -11,10 +29,16 @@ import net.fortuna.ical4j.model.property.RRule;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Uid;
 
-public class EventDtoIcs implements EventDto {
+/**
+ * Facade that makes a ical4j-vevent implementation specific ics appear as EventDto.<br/>
+ * 
+ * This class has no direct dependency to android so it can be run in a j2se-junit-integration test.<br/><br/>
+ * @author Daniele Gobbetti and k3b
+ */
+public class IcsAsEventDto implements EventDto {
 	private VEvent event;
 
-	public EventDtoIcs(VEvent event) {
+	public IcsAsEventDto(VEvent event) {
 		this.event = event;
 	}
 

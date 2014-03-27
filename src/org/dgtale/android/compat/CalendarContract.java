@@ -1,8 +1,21 @@
-package de.k3b.android.compat;
+/*
+ * This file is part of CalendarIcsAdapter.
+ * 
+ * This program is free software: you can redistribute it and/or modify it 
+ * under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License 
+ * for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License along with 
+ * this program. If not, see <http://www.gnu.org/licenses/>
+ */
 
-// copied from android 4.0 from public final class android.provider.CalendarContract {
-// where only constants are left.
-// included into source so that android 2.1 can use it too. works for my android 2.2
+package org.dgtale.android.compat;
 
 import android.app.Activity;
 import android.content.ContentProviderClient;
@@ -12,6 +25,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.format.Time;
+
+// This is an Android 2.1 Compatibility layer. CalendarContract was introduced in Andoid4.0.<br/>
+// This file was copied from android 4.0 from public final class android.provider.CalendarContract
+// where only constants are left.
+// It is included into source so that android 2.1 can use it too. works for my android 2.2 handset.
 
 /**
  * <p>
@@ -1907,8 +1925,6 @@ public final class CalendarContract {
          */
         public static final Uri CONTENT_URI_BY_INSTANCE =
             Uri.parse("content://" + AUTHORITY + "/calendar_alerts/by_instance");
-
-        private static final boolean DEBUG = false;
 
         /**
          * Searches for an entry in the CalendarAlerts table that matches the

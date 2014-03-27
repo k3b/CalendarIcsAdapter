@@ -1,4 +1,22 @@
-package de.k3b.android.data.calendar;
+/*
+ * Copyright (C) 2014- k3b
+ * 
+ * This file is part of CalendarIcsAdapter.
+ * 
+ * This program is free software: you can redistribute it and/or modify it 
+ * under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License 
+ * for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License along with 
+ * this program. If not, see <http://www.gnu.org/licenses/>
+ */
+package org.dgtale.android.calendar;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,10 +24,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * Encapsulation of the Database create/open/close/upgrade
+ * Simulates the api of an android calendar content provider that is compatibel with Samsung-Android2.2 Calendar.
+ * Used internally for testing on emulator that has no calendar-app and no calendar-provder.<br/><br/>
+ * @author k3b
  */
-public class CalendarMock extends SQLiteOpenHelper {
-	public CalendarMock(final Context context) {
+public class ACalendarMock extends SQLiteOpenHelper {
+	public ACalendarMock(final Context context) {
 		super(context, "calendar.db", null, 1);
 		context.getDir("databases", Context.MODE_PRIVATE); // create dir if it does not exist
 	}

@@ -1,19 +1,35 @@
-package de.k3b.data.calendar;
+/*
+ * Copyright (C) 2014- k3b
+ * 
+ * This file is part of CalendarIcsAdapter.
+ * 
+ * This program is free software: you can redistribute it and/or modify it 
+ * under the terms of the GNU General Public License as published by 
+ * the Free Software Foundation, either version 3 of the License, or 
+ * (at your option) any later version. 
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License 
+ * for more details. 
+ * 
+ * You should have received a copy of the GNU General Public License along with 
+ * this program. If not, see <http://www.gnu.org/licenses/>
+ */
+package org.dgtale.calendar;
 
 import java.text.ParseException;
 
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Date;
-import net.fortuna.ical4j.model.Dur;
-import net.fortuna.ical4j.model.PropertyList;
-import net.fortuna.ical4j.model.TimeZone;
+import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.*;
 import net.fortuna.ical4j.model.property.*;
 
 /**
- * Wrapper around iCal4j
+ * Factory that converts EventDto to iCal4j-Implementation specific ics.
+ * This class has no direct dependency to android so it can be run in a j2se-junit-integration test.<br/><br/>
+ * @author k3b
  */
-public class CalendarFactory {
+public class EventDto2IcsFactory {
 	/**
 	 * i.e. "-//Ben Fortuna//iCal4j 1.0//EN"
 	 */
@@ -25,7 +41,7 @@ public class CalendarFactory {
 	 * creates a calendar
 	 * @param applicationID used to identify the datasource i.e. "-//Ben Fortuna//iCal4j 1.0//EN"
 	 */
-	public CalendarFactory(String applicationID) {
+	public EventDto2IcsFactory(String applicationID) {
 		this.applicationID = applicationID;
 	}
 	

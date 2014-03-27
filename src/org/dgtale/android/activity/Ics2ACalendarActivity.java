@@ -1,7 +1,7 @@
 /*
- * Copyright (C) 2013- Daniele Gobbetti
+ * Copyright (C) 2013, 2014 - Daniele Gobbetti and k3b
  * 
- * This file is part of icsimport.
+ * This file is part of CalendarIcsAdapter.
  * 
  * This program is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by 
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package de.k3b.calendar.adapter;
+package org.dgtale.android.activity;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -35,13 +35,19 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Iterator;
 
-import de.k3b.android.compat.CalendarContract;
-import de.k3b.data.calendar.EventDto;
-import de.k3b.data.calendar.EventDtoIcs;
+import org.dgtale.android.compat.CalendarContract;
+import org.dgtale.calendar.EventDto;
+import org.dgtale.calendar.IcsAsEventDto;
+
 
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 
-public class Ics2CalendarActivity extends Activity {
+/**
+ * Invisible Pseudo-Activity that imports a ics-calendar-event-file into the android Calendar.
+ * Supports Android 4.0 and up. Runs on most Android 2.1 and up that have a calendar and a calendar provider.<br/><br/>
+ * @author k3b
+ */
+public class Ics2ACalendarActivity extends Activity {
 
 	// see http://stackoverflow.com/questions/3721963/how-to-add-calendar-events-in-android
     private static final String CONTENT_TYPE_EVENT = "vnd.android.cursor.item/event";
@@ -90,7 +96,7 @@ public class Ics2CalendarActivity extends Activity {
     }
 
 	private Intent createEventIntent(VEvent _event) {
-		EventDto event = new EventDtoIcs(_event);
+		EventDto event = new IcsAsEventDto(_event);
 
 		Intent insertIntent = new Intent(Intent.ACTION_EDIT).setType(CONTENT_TYPE_EVENT);
 		addBeginEnd(insertIntent, event.getDtstart(), event.getDtend(), event.getDuration());
