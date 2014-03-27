@@ -36,6 +36,8 @@ import java.io.InputStream;
 import java.util.Iterator;
 
 import de.k3b.android.compat.CalendarContract;
+import de.k3b.data.calendar.EventDto;
+import de.k3b.data.calendar.EventDtoIcs;
 
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 
@@ -70,6 +72,9 @@ public class Ics2CalendarActivity extends Activity {
 						Log.d(TAG, "processing event " + event.getName());
 
 						Intent insertIntent = createEventIntent(event);
+						insertIntent.putExtra(CalendarContract.Events.ACCESS_LEVEL, getAccessLevel(event.getClassification()));
+
+
 						startActivity(insertIntent);
 		
 					}
@@ -84,31 +89,31 @@ public class Ics2CalendarActivity extends Activity {
 		this.finish();
     }
 
-	private Intent createEventIntent(VEvent event) {
+	private Intent createEventIntent(VEvent _event) {
+		EventDto event = new EventDtoIcs(_event);
+
 		Intent insertIntent = new Intent(Intent.ACTION_EDIT).setType(CONTENT_TYPE_EVENT);
-		addBeginEnd(insertIntent, event.getStartDate(), event.getEndDate(), event.getDuration());
-		if (event.getSummary() != null)
-			insertIntent.putExtra(CalendarContract.Events.TITLE, event.getSummary().getValue());
+		addBeginEnd(insertIntent, event.getDtstart(), event.getDtend(), event.getDuration());
+		if (event.getTitle() != null)
+			insertIntent.putExtra(CalendarContract.Events.TITLE, event.getTitle());
 
 		if (event.getDescription() != null)
-			insertIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.getDescription().getValue());
+			insertIntent.putExtra(CalendarContract.Events.DESCRIPTION, event.getDescription());
 
-		if (event.getLocation() != null) 
-			insertIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.getLocation().getValue());
+		if (event.getEventLocation() != null) 
+			insertIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, event.getEventLocation());
 
-		insertIntent.putExtra(CalendarContract.Events.ACCESS_LEVEL, getAccessLevel(event.getClassification()));
-
-		if (event.getUid() != null) {
-			insertIntent.putExtra(CalendarContract.Events.ORIGINAL_ID, event.getUid().getValue());
-			insertIntent.putExtra("event_id", event.getUid().getValue());
+		if (event.getId() != null) {
+			insertIntent.putExtra(CalendarContract.Events.ORIGINAL_ID, event.getId());
+			insertIntent.putExtra("event_id", event.getId());
 		
 		}
 		// X-MICROSOFT-CDO-BUSYSTATUS:BUSY
 
 		
-		RRule rule = (RRule) event.getProperty(Property.RRULE);
+		String rule = event.getRrule();
 		if (rule != null) {
-			insertIntent.putExtra(CalendarContract.Events.RRULE, rule.getValue());
+			insertIntent.putExtra(CalendarContract.Events.RRULE, rule);
 		}
 
 		return insertIntent;
@@ -118,31 +123,31 @@ public class Ics2CalendarActivity extends Activity {
 	 * Assumes allday if enddate is null or diff between end-start has 0 hours and 0 minutes.<br/>
 	 * calculates enddate from startdate+duration if neccessary.<br/>
 	 */
-    private void addBeginEnd(Intent insertIntent, DateProperty startDate,
-    		DateProperty endDate, Duration duration) {
+    private void addBeginEnd(Intent insertIntent, long startDate,
+    		long endDate, String duration) {
     	
 		boolean allDay = false;
-		if (startDate != null) {
-			insertIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startDate.getDate().getTime());
+		if (startDate != 0) {
+			insertIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startDate);
 			//insertIntent.putExtra(CalendarContract.Events.DTSTART, startDate.getDate().getTime());
 
-			if (endDate == null) { 
+			if (endDate == 0) { 
 				allDay = true;
 			}
 		}
 		
-		if (endDate != null) {
-			insertIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDate.getDate().getTime());
+		if (endDate != 0) {
+			insertIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDate);
 			// insertIntent.putExtra(CalendarContract.Events.DTEND, endDate.getDate().getTime());
-			if ((startDate != null)) {
-				if (isAllDay(new Dur(startDate.getDate(), endDate.getDate()))) {
+			if ((startDate != 0)) {
+				if (isAllDay(new Dur(new Date(startDate), new Date(endDate)))) {
 					allDay = true;					
 				}
 			}
 		}
 
 		if (duration != null) {
-			insertIntent.putExtra(CalendarContract.Events.DURATION, duration.getValue());		
+			insertIntent.putExtra(CalendarContract.Events.DURATION, duration);		
 		}
 
 		if (allDay) {

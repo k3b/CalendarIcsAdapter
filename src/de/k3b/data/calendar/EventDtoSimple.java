@@ -1,11 +1,11 @@
 package de.k3b.data.calendar;
 
-public class EventDtoSimple implements EventDTO {
-	public long getId() {
+public class EventDtoSimple implements EventDto {
+	public String getId() {
 		return Id;
 	}
 
-	public EventDtoSimple setId(long id) {
+	public EventDtoSimple setId(String id) {
 		Id = id;
 		return this;
 	}
@@ -91,16 +91,16 @@ public class EventDtoSimple implements EventDTO {
 		return this;
 	}
 
-	public int getCalendarId() {
+	public String getCalendarId() {
 		return CalendarId;
 	}
 
-	public EventDtoSimple setCalendarId(int calendarId) {
-		CalendarId = calendarId;
+	public EventDtoSimple setCalendarId(String calendarId) {
+		this.CalendarId = calendarId;
 		return this;
 	}
 
-	long Id;
+	String Id;
 	
 	long Dtstart;
 
@@ -120,5 +120,5 @@ public class EventDtoSimple implements EventDTO {
 
 	String Organizer;
 
-	int CalendarId;
+	String CalendarId;
 }

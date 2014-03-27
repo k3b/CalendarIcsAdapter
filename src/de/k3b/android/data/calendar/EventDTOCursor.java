@@ -1,11 +1,11 @@
 package de.k3b.android.data.calendar;
 
 import de.k3b.android.compat.CalendarContract;
-import de.k3b.data.calendar.EventDTO;
+import de.k3b.data.calendar.EventDto;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-public class EventDTOCursor extends CalendarsContentUriCursor implements EventDTO {
+public class EventDTOCursor extends CalendarsContentUriCursor implements EventDto {
 	/**
 	 * Creates a datasource that uses the ContentResolver from context
 	 */
@@ -97,5 +97,5 @@ public class EventDTOCursor extends CalendarsContentUriCursor implements EventDT
 	*/
 
 	@Override
-	public int getCalendarId() {return cur.getInt(10);}
+	public String getCalendarId() {return cur.getString(10);}
 }

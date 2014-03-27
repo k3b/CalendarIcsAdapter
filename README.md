@@ -1,20 +1,27 @@
 todo k3b
 
-import via eventData-Interface vcal->eventData->androidIntent
+>	import via eventData-Interface vcal->eventData->androidIntent
+	  commit all + backup + git-rebranch (siehe ff-download)
+	  todo test ob noch ok
+	  eigene klasse  
 
-new readme with workflow pc-calendar<->email<->android-calendar
+	j2se-Junit-Integration test
+		EventDtoSimple
+		ics->EventDto->ics
+	sendto parameter subject body
+		EventDto2txt
+	new readme with workflow pc-calendar<->email<->android-calendar
 
 
-howto
-	send mail with attachment (needs file-write permissions :-( )
-	enable/disable intents at runtime
+	howto
+		enable/disable intents at runtime
 
 
 
-ICSImport
+CalendarIcsAdapter
 =========
 
-ICSImport is a small free and open source app for Android 2.1 and up that intercepts the VIEW intent for text/calendar files and allows to add it to the calendar. 
+CalendarIcsAdapter is a small free and open source app for Android 2.1 and up that intercepts the VIEW intent for text/calendar files and allows to add it to the calendar. 
 At the moment it does not need any calendar-related permissions because it acts as a bridge. The original .ics file is parsed and the event is 
 added using the native calendar application. This way you are free to change the event details before saving.
 

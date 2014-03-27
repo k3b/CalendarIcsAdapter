@@ -39,10 +39,10 @@ public class CalendarFactory {
 		return calendar;
 	}
 
-	public VEvent addEvent(EventDTO data, TimeZone timezone) {
+	public VEvent addEvent(EventDto data, TimeZone timezone) {
 		VEvent event = new VEvent();
 		PropertyList eventProperties = event.getProperties();
-		if (data.getId() != 0) eventProperties.add(new Uid("acal-"+data.getCalendarId()+"-"+data.getId()));
+		if (data.getId() != null) eventProperties.add(new Uid("acal-"+data.getCalendarId()+"-"+data.getId()));
 		if (data.getDtstart() != 0) eventProperties.add(new DtStart(new Date( data.getDtstart())));
 		if (data.getDtend() != 0) eventProperties.add(new DtEnd(new Date( data.getDtend())));
 

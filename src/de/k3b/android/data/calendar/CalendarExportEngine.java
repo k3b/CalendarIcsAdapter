@@ -3,7 +3,7 @@ package de.k3b.android.data.calendar;
 import de.k3b.android.data.calendar.CalendarMock;
 import de.k3b.android.data.calendar.EventDTOCursor;
 import de.k3b.data.calendar.CalendarFactory;
-import de.k3b.data.calendar.EventDTO;
+import de.k3b.data.calendar.EventDto;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.TimeZone;
 import android.content.Context;
@@ -47,7 +47,7 @@ public class CalendarExportEngine {
 		return (hasData) ? factory.getCalendar() : null;
 	}
 	
-	TimeZone getOrCreateTimeZone(EventDTO data) {
+	TimeZone getOrCreateTimeZone(EventDto data) {
 		// not implemented yet
 		return null; //??? if (data.getEventTimezone() != null) eventProperties.add(new Timez(data.getEventTimezone()));
 	}

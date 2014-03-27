@@ -36,7 +36,7 @@ import net.fortuna.ical4j.model.Calendar;
 
 import de.k3b.android.data.calendar.CalendarExportEngine;
 import de.k3b.android.data.calendar.CalendarsContentUriCursor;
-import de.k3b.data.calendar.EventDTO;
+import de.k3b.data.calendar.EventDto;
 
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 

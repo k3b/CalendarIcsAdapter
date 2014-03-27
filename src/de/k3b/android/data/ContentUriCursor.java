@@ -82,7 +82,7 @@ public abstract class ContentUriCursor {
 		return cur;
 	}
 
-	public long getId() {return cur.getLong(0);}
+	public String getId() {return cur.getString(0);}
 
 	protected Date getDateTime(int columnIndex) {
 		long ticks = cur.getLong(columnIndex);
