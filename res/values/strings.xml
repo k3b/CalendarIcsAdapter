@@ -3,4 +3,6 @@
     <string name="app_name">CalendarIcsAdapter</string>
     <string name="import_from">Import to calendar</string>
     <string name="export_to">Send Event to &#8230;</string>
+    <string name="mail_subject">%1$s-%2$s</string>
+    <string name="mail_content">When: %1$s\nWhere: %2$s\n\n%3$s\n\n-----------------\nExported from Android calendar using %4$s</string>
 </resources>

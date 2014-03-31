@@ -1,0 +1,14 @@
+todo.txt for CalendarIcsAdapter
+=========
+
+v exportToIcs only for non-file
+v sendTo with email-subject and content
+	v intent-text/subject
+	v format date
+	v appVersion
+- send/receive bluetooth workaround
+	! mime=text/* kann ics attachment trotzdem nicht senden
+	? mit local file permission?
+- main view with settings and about
+	
+? split a4.0 and a 2.1-

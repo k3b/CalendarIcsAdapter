@@ -59,8 +59,8 @@ public class EventDto2IcsFactory {
 		VEvent event = new VEvent();
 		PropertyList eventProperties = event.getProperties();
 		if (data.getId() != null) eventProperties.add(new Uid("acal-"+data.getCalendarId()+"-"+data.getId()));
-		if (data.getDtstart() != 0) eventProperties.add(new DtStart(new Date( data.getDtstart())));
-		if (data.getDtend() != 0) eventProperties.add(new DtEnd(new Date( data.getDtend())));
+		if (data.getDtstart() != 0) eventProperties.add(new DtStart(new DateTime( data.getDtstart())));
+		if (data.getDtend() != 0) eventProperties.add(new DtEnd(new DateTime( data.getDtend())));
 
 		if (data.getTitle() != null) eventProperties.add(new Summary(data.getTitle()));
 		if (data.getDescription() != null) eventProperties.add(new Description(data.getDescription()));

@@ -18,6 +18,8 @@
  */
 package org.dgtale.calendar;
 
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.DateProperty;
@@ -38,13 +40,17 @@ import net.fortuna.ical4j.model.property.Uid;
 public class IcsAsEventDto implements EventDto {
 	private VEvent event;
 
+	public IcsAsEventDto(Calendar calendar) {
+		this.event = (VEvent) calendar.getComponent(Component.VEVENT);
+	}
+
 	public IcsAsEventDto(VEvent event) {
 		this.event = event;
 	}
 
 	@Override
 	public String getId() {
-		Uid value = event.getUid();
+		Uid value = (this.event == null) ? null : event.getUid();
 		
 		if (value != null) {
 			return value.getValue();
@@ -54,17 +60,17 @@ public class IcsAsEventDto implements EventDto {
 
 	@Override
 	public long getDtstart() {
-		return getDate(event.getStartDate());
+		return (this.event == null) ? null : getDate(event.getStartDate());
 	}
 
 	@Override
 	public long getDtend() {
-		return getDate(event.getEndDate());
+		return (this.event == null) ? null : getDate(event.getEndDate());
 	}
 
 	@Override
 	public String getTitle() {
-		Summary value = event.getSummary();
+		Summary value = (this.event == null) ? null : event.getSummary();
 		
 		if (value != null) {
 			return value.getValue();
@@ -74,7 +80,7 @@ public class IcsAsEventDto implements EventDto {
 
 	@Override
 	public String getDescription() {
-		Description value = event.getDescription();
+		Description value = (this.event == null) ? null : event.getDescription();
 		
 		if (value != null) {
 			return value.getValue();
@@ -84,7 +90,7 @@ public class IcsAsEventDto implements EventDto {
 
 	@Override
 	public String getEventLocation() {
-		Location value = event.getLocation();
+		Location value = (this.event == null) ? null : event.getLocation();
 		
 		if (value != null) {
 			return value.getValue();
@@ -94,7 +100,7 @@ public class IcsAsEventDto implements EventDto {
 
 	@Override
 	public String getDuration() {
-		Duration value = event.getDuration();
+		Duration value = (this.event == null) ? null : event.getDuration();
 		
 		if (value != null) {
 			return value.getValue();
@@ -114,7 +120,7 @@ public class IcsAsEventDto implements EventDto {
 
 	@Override
 	public String getRrule() {
-		RRule value = (RRule) event.getProperty(Property.RRULE);
+		RRule value = (this.event == null) ? null :  (RRule) event.getProperty(Property.RRULE);
 		
 		if (value != null) {
 			return value.getValue();
@@ -124,7 +130,7 @@ public class IcsAsEventDto implements EventDto {
 
 	@Override
 	public String getOrganizer() {
-		Organizer value = event.getOrganizer();
+		Organizer value = (this.event == null) ? null : event.getOrganizer();
 		
 		if (value != null) {
 			return value.getValue();
@@ -132,13 +138,16 @@ public class IcsAsEventDto implements EventDto {
 		return null;
 	}
 
+	// not supported by ics-calendar
 	@Override
 	public String getCalendarId() {
-		Uid value = event.getUid();
+		/*
+		Uid value = (this.event == null) ? null : event.getUid();
 		
 		if (value != null) {
 			return value.getValue();
 		}
+		*/
 		return null;
 	}
 	

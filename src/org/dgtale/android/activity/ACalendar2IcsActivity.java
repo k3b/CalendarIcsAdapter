@@ -21,6 +21,7 @@ package org.dgtale.android.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
@@ -31,11 +32,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import org.dgtale.R;
 import org.dgtale.android.calendar.ACalendar2IcsEngine;
 import org.dgtale.android.calendar.ACalendarCursor;
 import org.dgtale.calendar.EventDto;
+import org.dgtale.calendar.IcsAsEventDto;
 
 import net.fortuna.ical4j.model.Calendar;
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
@@ -74,13 +79,16 @@ public class ACalendar2IcsActivity extends Activity {
 				
 				ACalendar2IcsEngine engine = new ACalendar2IcsEngine(this.getApplication(), USE_MOCK_CALENDAR);
 				
-				Object result = engine.export(data);
+				Calendar calendarEvent = engine.export(data);
 				
 				engine.close();
 				
-				if (result != null) {
-					sendIcsTo(result.toString());
-					// viewViaFile(result.toString());
+				if (calendarEvent != null) {
+					EventDto event = new IcsAsEventDto(calendarEvent);
+					
+					String mailSubject = getMailSubject(event); 
+					String description = getMailDescription(event);
+					sendIcsTo(mailSubject, description, calendarEvent.toString());
 				}
 				
 			} catch (Exception e) {
@@ -91,8 +99,56 @@ public class ACalendar2IcsActivity extends Activity {
 		Log.d(ACalendar2IcsEngine.TAG, "done");
 		this.finish();
     }
+
+	private String getMailSubject(EventDto event) {
+		if (event != null) {
+			String date = "";
+
+			long start = event.getDtstart();
+			if (start != 0) {
+				Date dtStart = (start == 0) ? null : new Date(start);
+			
+				Locale locale = Locale.getDefault();
+				DateFormat shortTimeformatter = DateFormat.getDateInstance(java.text.DateFormat.SHORT, locale);
+				date = shortTimeformatter.format(dtStart);
+			}
+			return String.format(this.getString(R.string.mail_subject).toString(),
+							date,event.getTitle());
+		}
+		return null;
+	}
+
+	protected String getMailDescription(EventDto event) {
+		if (event != null) {
+			String date = "";
+
+			long start = event.getDtstart();
+			if (start != 0) {
+				Date dtStart = (start == 0) ? null : new Date(start);
+			
+				Locale locale = Locale.getDefault();
+				DateFormat dateFormatter = DateFormat.getDateInstance(java.text.DateFormat.FULL, locale);
+				DateFormat timeFormatter = DateFormat.getTimeInstance(java.text.DateFormat.SHORT, locale);
+				date = dateFormatter.format( dtStart) + " " + timeFormatter.format(dtStart);
+			}
+			return String.format(this.getString(R.string.mail_content).toString(),
+							date,event.getEventLocation(), event.getDescription(), getAppVersionName());
+		}
+		return null;
+	}
 	
-	private void sendIcsTo(String calendarEventContent) throws IOException {
+	private String getAppVersionName() {
+		String versionName = "";
+		try {
+
+			versionName = "-" + this.getPackageManager()
+					.getPackageInfo(this.getPackageName(), 0).versionName;
+		} catch (final NameNotFoundException e) {
+		}
+		return getString(R.string.app_name) + versionName;
+	}
+
+	private void sendIcsTo(String mailSubject, String mailBody, String mailAttachmentContent) throws IOException {
 		// https://developer.android.com/reference/android/support/v4/content/FileProvider.html
 
 		// concatenate the internal cache folder with the document its path and filename
@@ -100,7 +156,7 @@ public class ACalendar2IcsActivity extends Activity {
 		path.mkdirs();
 		final File icsFIle = new File(path, "FromAndroidCalendar.ics");
 		// Log.d(ACalendar2IcsEngine.TAG, result.toString());
-		writeStringToTextFile(icsFIle, calendarEventContent.toString());
+		writeStringToTextFile(icsFIle, mailAttachmentContent.toString());
 		
 		// let the FileProvider generate an URI for this private icsFIle
 		final Uri uri = FileProvider.getUriForFile(this, "org.dgtale.calendar.adapter", icsFIle);
@@ -111,7 +167,15 @@ public class ACalendar2IcsActivity extends Activity {
 			.putExtra(Intent.EXTRA_STREAM, uri)
 			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
 			.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
+		
+		if (mailSubject != null) {
+			outIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, mailSubject);
+		}
+		
+		if (mailBody != null) {
+			outIntent.putExtra(android.content.Intent.EXTRA_TEXT, mailBody);
+		}
+		
 		this.startActivity(Intent.createChooser(outIntent, this.getText(R.string.export_to)));
 	}
 	

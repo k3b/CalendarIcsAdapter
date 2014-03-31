@@ -55,14 +55,16 @@ public class ACalendar2IcsEngine {
 		// set to null for non mocked production
 		Cursor eventCursor = eventData.getByContentURI(contentUri);
 		
-		// Use the cursor to step through the returned records
-		while (eventCursor.moveToNext()) {
-			hasData = true;
-			TimeZone timezone = getOrCreateTimeZone(eventData);
-			factory.addEvent(eventData, timezone);
-			Log.d(ACalendar2IcsEngine.TAG, "added event " + eventData.getTitle());
+		if (eventCursor != null) {		
+			// Use the cursor to step through the returned records
+			while (eventCursor.moveToNext()) {
+				hasData = true;
+				TimeZone timezone = getOrCreateTimeZone(eventData);
+				factory.addEvent(eventData, timezone);
+				Log.d(ACalendar2IcsEngine.TAG, "added event " + eventData.getTitle());
+			}
+			eventCursor.close();
 		}
-		eventCursor.close();
 		
 		return (hasData) ? factory.getCalendar() : null;
 	}

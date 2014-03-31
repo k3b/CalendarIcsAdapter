@@ -146,7 +146,7 @@ public class Ics2ACalendarActivity extends Activity {
 			insertIntent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDate);
 			// insertIntent.putExtra(CalendarContract.Events.DTEND, endDate.getDate().getTime());
 			if ((startDate != 0)) {
-				if (isAllDay(new Dur(new Date(startDate), new Date(endDate)))) {
+				if (isAllDay(new Dur(new DateTime(startDate), new DateTime(endDate)))) {
 					allDay = true;					
 				}
 			}

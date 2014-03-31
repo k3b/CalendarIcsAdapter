@@ -78,7 +78,10 @@ public abstract class ContentUriCursor {
 	public Cursor getByContentURI(Uri uri) throws IllegalArgumentException {
 		if (uri == null) throw new IllegalArgumentException("ContentURI must not be null");
 		List<String> uriSegments = uri.getPathSegments();
-		if (uriSegments.size() < 1) throw new IllegalArgumentException("ContentURI expected content://com.adnroid.calendar/{TABLE}[/{EVENTID}] but was " + uri.toString());
+		String uriAsString = uri.toString();
+		if ((uriSegments.size() < 1) || (!uriAsString.startsWith("content:"))) {
+			throw new IllegalArgumentException("ContentURI expected content://com.adnroid.calendar/{TABLE}[/{EVENTID}] but was " + uriAsString);
+		}
 		
 		String tableName = uriSegments.get(0);
 		if ((contentToTablePlurals != null) && contentToTablePlurals.contains(tableName)) {
