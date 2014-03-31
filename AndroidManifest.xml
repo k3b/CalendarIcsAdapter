@@ -60,21 +60,6 @@
             </intent-filter>
 
         </activity>
-   
-        <!-- used in ACalendar2IcsActivity to deliver ics-file-content via uri 
-        		content:org.dgtale.calendar.adapter/ics/FromAndroidCalendar.ics 
-        	that is readable by other android apps without the need that this app requires sd-card-write-permission.
-        -->
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="org.dgtale.calendar.adapter"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/fileprovider" />
-        </provider>        
-        
-   </application>
+      </application>
 
 </manifest>

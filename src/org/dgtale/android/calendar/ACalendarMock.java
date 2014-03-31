@@ -21,7 +21,6 @@ package org.dgtale.android.calendar;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 /**
  * Simulates the api of an android calendar content provider that is compatibel with Samsung-Android2.2 Calendar.

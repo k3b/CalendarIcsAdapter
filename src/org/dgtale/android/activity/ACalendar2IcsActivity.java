@@ -23,10 +23,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -52,17 +55,11 @@ public class ACalendar2IcsActivity extends Activity {
 	 * true: use local calendar db (for testing); false: use contentProvider for production
 	 */
 	private static final boolean USE_MOCK_CALENDAR = false;
-	private CalenderDataUriContentFile resultUri;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // resultUri = new CalenderDataUriContentFile(this);
-        resultUri = (CalenderDataUriGlobalFile.isAvailable(this)) 
-        		? new CalenderDataUriGlobalFile(this) 
-        		: new CalenderDataUriContentFile(this) ;
-        
         Intent intent = getIntent();
 
 		Uri data = intent.getData();
@@ -148,11 +145,11 @@ public class ACalendar2IcsActivity extends Activity {
 	}
 
 	private void sendIcsTo(String mailSubject, String mailBody, String mailAttachmentContent) throws IOException {
-		final File icsFIle = this.resultUri.getOuputFile();
+		final File icsFIle = this.getOuputFile();
 		// Log.d(ACalendar2IcsEngine.TAG, result.toString());
-		this.resultUri.writeStringToTextFile(icsFIle, mailAttachmentContent.toString());
+		this.writeStringToTextFile(icsFIle, mailAttachmentContent.toString());
 		
-		final Uri uri = this.resultUri.getUriForFile(icsFIle);
+		final Uri uri = this.getUriForFile(icsFIle);
 		
 		final Intent outIntent = new Intent()
 			.setAction(Intent.ACTION_SEND)
@@ -172,4 +169,39 @@ public class ACalendar2IcsActivity extends Activity {
 		this.startActivity(Intent.createChooser(outIntent, this.getText(R.string.export_to)));
 	}
 
+	/**
+	 * global readable File.<br/>
+	 */
+	private  Uri getUriForFile(final File icsFile) {
+		final Uri uri = Uri.fromFile(icsFile);
+		return uri;
+	}
+
+	private  void writeStringToTextFile(File file, String content) throws IOException{
+	    FileOutputStream f1 = new FileOutputStream(file,false); //True = Append to file, false = Overwrite
+	    PrintStream p = new PrintStream(f1);
+	    p.print(content);
+	    p.close();
+	    f1.close();
+	}
+	
+	/**
+	 * cachefile content.FileProvider specific implementention that does not need local file permissions.<br/>
+	 */
+	private File getOuputFile() {
+		final File path = getOutputDir();
+		final File icsFIle = new File(path, "FromAndroidCalendar.ics");
+		return icsFIle;
+	}
+
+
+	/**
+	 * get or create dir where ics file will be stored.<br/>
+	 */
+	private File getOutputDir() {
+		File path = new File(Environment.getExternalStorageDirectory(),"tmp");
+		path.mkdirs();
+
+		return path;
+	}
 }

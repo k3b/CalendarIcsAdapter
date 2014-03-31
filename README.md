@@ -12,17 +12,21 @@ It also  intercepts the VIEW intent for
 for the calendar-viewer and allows to generate ics/vevent filecontent that 
 can be send via email.
 
-At the moment CalendarIcsAdapter only needs calendar-read permissions.
-There is no need for file-write or internet permissions
-because it acts as a bridge. 
+Permissions
+===========
+android.permission.READ_CALENDAR 
+	to export event data for export
+android.permission.WRITE_EXTERNAL_STORAGE 
+	to save event data to local file. This
+	must be readable by other apps to make SendTo work. Unfortunately FileProvider 
+	does not work on my android 2.2 togehter with send to bluetooth.
+	
+At the moment CalendarIcsAdapter does not need calendar-write permissions.
 
 When importing the original .ics file is 
 parsed and the event is added using the native calendar application. 
 This way you are free to change 
 the event details before saving.
-
-Simillary when sending events via email it uses the installed email app and its
-gui to send ics-file as mail attachment.
  
 Building
 ========
