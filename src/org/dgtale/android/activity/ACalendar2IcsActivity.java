@@ -149,17 +149,11 @@ public class ACalendar2IcsActivity extends Activity {
 	}
 
 	private void sendIcsTo(String mailSubject, String mailBody, String mailAttachmentContent) throws IOException {
-		// https://developer.android.com/reference/android/support/v4/content/FileProvider.html
-
-		// concatenate the internal cache folder with the document its path and filename
-		File path = new File(this.getCacheDir(), "ics");
-		path.mkdirs();
-		final File icsFIle = new File(path, "FromAndroidCalendar.ics");
+		final File icsFIle = getOuputFile();
 		// Log.d(ACalendar2IcsEngine.TAG, result.toString());
 		writeStringToTextFile(icsFIle, mailAttachmentContent.toString());
 		
-		// let the FileProvider generate an URI for this private icsFIle
-		final Uri uri = FileProvider.getUriForFile(this, "org.dgtale.calendar.adapter", icsFIle);
+		final Uri uri = getUriForFile(icsFIle);
 		
 		final Intent outIntent = new Intent()
 			.setAction(Intent.ACTION_SEND)
@@ -178,7 +172,7 @@ public class ACalendar2IcsActivity extends Activity {
 		
 		this.startActivity(Intent.createChooser(outIntent, this.getText(R.string.export_to)));
 	}
-	
+
 	private void writeStringToTextFile(File file, String content) throws IOException{
 	    FileOutputStream f1 = new FileOutputStream(file,false); //True = Append to file, false = Overwrite
 	    PrintStream p = new PrintStream(f1);
@@ -186,5 +180,27 @@ public class ACalendar2IcsActivity extends Activity {
 	    p.close();
 	    f1.close();
 	}
+	
+	/**
+	 * cachefile content.FileProvider specific implementention that does not need local file permissions.<br/>
+	 */
+	protected Uri getUriForFile(final File icsFIle) {
+		// let the FileProvider generate an URI for this private icsFIle
+		final Uri uri = FileProvider.getUriForFile(this, "org.dgtale.calendar.adapter", icsFIle);
+		return uri;
+	}
 
+	/**
+	 * cachefile content.FileProvider specific implementention that does not need local file permissions.<br/>
+	 */
+	protected File getOuputFile() {
+		// for details see https://developer.android.com/reference/android/support/v4/content/FileProvider.html
+
+		// concatenate the internal cache folder with the document its path and filename
+		File path = new File(this.getCacheDir(), "ics");
+		path.mkdirs();
+		final File icsFIle = new File(path, "FromAndroidCalendar.ics");
+		return icsFIle;
+	}
+	
 }

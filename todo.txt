@@ -6,7 +6,7 @@ v sendTo with email-subject and content
 	v intent-text/subject
 	v format date
 	v appVersion
-- send/receive bluetooth workaround
+> send/receive bluetooth workaround
 	! mime=text/* kann ics attachment trotzdem nicht senden
 	? mit local file permission?
 - main view with settings and about
