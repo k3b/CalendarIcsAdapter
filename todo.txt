@@ -12,3 +12,32 @@ v sendTo with email-subject and content
 - main view with settings and about
 	
 ? split a4.0 and a 2.1-
+
+
+################
+
+from http://stackoverflow.com/questions/5764562/android-saving-public-files-in-the-internal-storage/16846171#16846171
+
+ I realize this is old and has an accepted answer, but I think the question is still relevant and that there is a way to achieve what the asker wants.
+
+To paraphrase, I believe the asker wants to save a file, and make it accessible (e.g. for viewing) by other apps, without having to think about external storage (e.g. an additional permission and the possibility that the external storage is not present).
+
+It turns out that you can make your own files readable by other apps.
+
+File file = new File( ctx.getCacheDir(), "picture" );               
+...
+file.setReadable( true, false ); !!!!!
+  // makes file readable to other apps
+
+// Get another app to view my picture
+Uri uri = Uri.fromFile(file);          
+Intent intent = new Intent( Intent.ACTION_VIEW );
+intent.setDataAndType( uri, "image/*" );
+ctx.startActivity( intent );
+
+The setReadable made the above code work for me - without that line the viewer app couldn't 
+read the file. Note that setReadable operates on the whole directory, so the best solution is probably to create a sub-directory name 'public' and put your files in there.
+
+todo k3b: 
+	i already tried using `MODE_WORLD_READABLE` which is depricated did not work on my android2.2. 
+	does `file.setReadable( true, false );` work???

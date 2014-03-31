@@ -32,11 +32,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.dgtale.R;
-import org.dgtale.android.calendar.ACalendar2IcsEngine;
-import org.dgtale.android.calendar.ACalendarCursor;
-import org.dgtale.android.calendar.CalenderDataUriContentFile;
-import org.dgtale.calendar.EventDto;
-import org.dgtale.calendar.IcsAsEventDto;
+import org.dgtale.android.calendar.*;
+import org.dgtale.calendar.*;
 
 import net.fortuna.ical4j.model.Calendar;
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
@@ -61,7 +58,11 @@ public class ACalendar2IcsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        resultUri = new CalenderDataUriContentFile(this);
+        // resultUri = new CalenderDataUriContentFile(this);
+        resultUri = (CalenderDataUriGlobalFile.isAvailable(this)) 
+        		? new CalenderDataUriGlobalFile(this) 
+        		: new CalenderDataUriContentFile(this) ;
+        
         Intent intent = getIntent();
 
 		Uri data = intent.getData();
@@ -155,7 +156,7 @@ public class ACalendar2IcsActivity extends Activity {
 		
 		final Intent outIntent = new Intent()
 			.setAction(Intent.ACTION_SEND)
-			.setDataAndType(uri, "text/calendar")
+			.setDataAndType(uri, "text/*")
 			.putExtra(Intent.EXTRA_STREAM, uri)
 			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
 			.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);

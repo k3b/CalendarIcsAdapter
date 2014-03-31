@@ -2,8 +2,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.dgtale"
-    android:versionCode="5"
-    android:versionName="1.4" >
+    android:versionCode="6"
+    android:versionName="1.5" >
 
 <!-- /*
  * Copyright (C) 2013, 2014 - Daniele Gobbetti and k3b
@@ -29,6 +29,7 @@
         android:minSdkVersion="7"
         android:targetSdkVersion="19" />
  	<uses-permission android:name="android.permission.READ_CALENDAR" />
+  	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <application
         
         android:allowBackup="true"
