@@ -64,6 +64,18 @@ public abstract class ContentUriCursor {
 		this.contentToTablePlurals = Arrays.asList(contentToTablePlurals);
 	}
 
+	public void close() {
+		if (cur != null) {
+			cur.close();
+			cur = null;
+		}
+		contentResolver = null;
+		
+		if (mockDatabase != null) {
+			mockDatabase.close();
+		}
+	}
+	
 	/**
 	 * gets the colums that belong to this ContentUriCursor.
 	 * col 0 should be "_id"

@@ -70,14 +70,17 @@ public class ACalendar2IcsActivity extends Activity {
 		}
 		
 		if (data != null) {
+			ACalendar2IcsEngine engine = null;
 			try {
 				Log.d(ACalendar2IcsEngine.TAG, "opening " + data);
 				
-				ACalendar2IcsEngine engine = new ACalendar2IcsEngine(this.getApplication(), USE_MOCK_CALENDAR);
+				engine = new ACalendar2IcsEngine(this.getApplication(), USE_MOCK_CALENDAR);
 				
 				Calendar calendarEvent = engine.export(data);
 				
 				engine.close();
+				
+				engine = null;
 				
 				if (calendarEvent != null) {
 					EventDto event = new IcsAsEventDto(calendarEvent);
@@ -90,6 +93,11 @@ public class ACalendar2IcsActivity extends Activity {
 			} catch (Exception e) {
 				Log.e(ACalendar2IcsEngine.TAG, "error processing " + data + " : " + e);
 				e.printStackTrace();
+			} finally {
+				if (engine != null) {
+					engine.close();
+				}
+				engine = null;
 			}
 		}
 		Log.d(ACalendar2IcsEngine.TAG, "done");

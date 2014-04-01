@@ -45,7 +45,7 @@ public class ACalendar2IcsEngine {
 	
 	public ACalendar2IcsEngine(Context ctx, boolean useMockCalendar) {
 		mock = (useMockCalendar) ? new ACalendarMock(ctx) : null;
-		this.writableDatabase  = (useMockCalendar) ? mock.getWritableDatabase() : null;
+		writableDatabase  = (useMockCalendar) ? mock.getWritableDatabase() : null;
 		this.eventData = (mock != null) ? new ACalendarCursorAsEventDto(writableDatabase) : new ACalendarCursorAsEventDto(ctx) ;
 	}
 
@@ -75,9 +75,15 @@ public class ACalendar2IcsEngine {
 	}
 
 	public void close() {
+		if (eventData != null) {
+			eventData.close();
+		}
 		if (writableDatabase != null) {
 			writableDatabase.close();
-			writableDatabase = null;
+		}
+		
+		if (mock != null) {
+			mock.close();
 		}
 	}
 }
