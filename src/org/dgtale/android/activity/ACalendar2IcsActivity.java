@@ -56,6 +56,8 @@ public class ACalendar2IcsActivity extends Activity {
 	 */
 	private static final boolean USE_MOCK_CALENDAR = false;
 
+	private ACalendar2IcsEngine engine = null;
+
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,44 +67,48 @@ public class ACalendar2IcsActivity extends Activity {
 		Uri data = intent.getData();
 		
 		if ((USE_MOCK_CALENDAR) && (data == null)) {
-			// data = ContentUriCursor.createContentUri("event","68");
-			data = ACalendarCursor.createContentUri("events");
+			data = ACalendarCursor.createContentUri("event","1");
+			// data = ACalendarCursor.createContentUri("events");
 		}
 		
 		if (data != null) {
-			ACalendar2IcsEngine engine = null;
 			try {
-				Log.d(ACalendar2IcsEngine.TAG, "opening " + data);
+				if (engine == null) {
+					Log.d(ACalendar2IcsEngine.TAG, "creating ACalendar2IcsEngine");					
+					engine = new ACalendar2IcsEngine(this.getApplication(), USE_MOCK_CALENDAR);
+				}
 				
-				engine = new ACalendar2IcsEngine(this.getApplication(), USE_MOCK_CALENDAR);
-				
+				Log.d(ACalendar2IcsEngine.TAG, "opening " + data);					
 				Calendar calendarEvent = engine.export(data);
-				
-				engine.close();
-				
-				engine = null;
 				
 				if (calendarEvent != null) {
 					EventDto event = new IcsAsEventDto(calendarEvent);
 					
 					String mailSubject = getMailSubject(event); 
 					String description = getMailDescription(event);
+					Log.d(ACalendar2IcsEngine.TAG, "sending '" + mailSubject + "'");					
 					sendIcsTo(mailSubject, description, calendarEvent.toString());
 				}
 				
 			} catch (Exception e) {
 				Log.e(ACalendar2IcsEngine.TAG, "error processing " + data + " : " + e);
 				e.printStackTrace();
-			} finally {
-				if (engine != null) {
-					engine.close();
-				}
-				engine = null;
 			}
 		}
-		Log.d(ACalendar2IcsEngine.TAG, "done");
+		Log.d(ACalendar2IcsEngine.TAG, "export done");
 		this.finish();
     }
+
+	@Override protected void onDestroy() 
+	{
+		if (engine != null) {
+			Log.d(ACalendar2IcsEngine.TAG, "destroying ACalendar2IcsEngine");					
+			engine.close();
+		}
+		engine = null;
+		
+		super.onDestroy();
+	};
 
 	private String getMailSubject(EventDto event) {
 		if (event != null) {
