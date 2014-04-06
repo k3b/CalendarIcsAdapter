@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2014- k3b
  * 
- * This file is part of CalendarIcsAdapter.
+ * This file is part of android.calendar.ics.adapter.
  * 
  * This program is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by 
@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package org.dgtale.android.activity;
+package de.k3b.android.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,9 +35,10 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import org.dgtale.R;
-import org.dgtale.android.calendar.*;
-import org.dgtale.calendar.*;
+import de.k3b.android.calendar.ics.adapter.R;
+
+import de.k3b.android.calendar.*;
+import de.k3b.calendar.*;
 
 import net.fortuna.ical4j.model.Calendar;
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
@@ -46,8 +48,9 @@ import net.fortuna.ical4j.model.Calendar;
  * Supports Android 4.0 and up. Runs on most Android 2.1 and up that have a calendar and a calendar provider. <br/><br/>
  * 
  * delivers ics-file-content via uri 
- * 			content:org.dgtale.calendar.adapter/ics/FromAndroidCalendar.ics 
+ * 			content:de.k3b.calendar.adapter/ics/FromAndroidCalendar.ics 
  * that is readable by other android apps without the need that this app requires sd-card-write-permission.<br/><br/>
+ *
  * @author k3b
  */
 public class ACalendar2IcsActivity extends Activity {

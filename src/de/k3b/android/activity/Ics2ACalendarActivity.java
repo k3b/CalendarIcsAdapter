@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2013, 2014 - Daniele Gobbetti and k3b
  * 
- * This file is part of CalendarIcsAdapter.
+ * This file is part of android.calendar.ics.adapter.
  * 
  * This program is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by 
@@ -16,31 +16,30 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package org.dgtale.android.activity;
-
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
-
-import net.fortuna.ical4j.data.CalendarBuilder;
-import net.fortuna.ical4j.model.*;
-import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.property.*;
+package de.k3b.android.activity;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Iterator;
 
-import org.dgtale.android.compat.CalendarContract;
-import org.dgtale.calendar.EventDto;
-import org.dgtale.calendar.IcsAsEventDto;
-
-
-//import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
+import net.fortuna.ical4j.data.CalendarBuilder;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Component;
+import net.fortuna.ical4j.model.DateTime;
+import net.fortuna.ical4j.model.Dur;
+import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.property.Clazz;
+import de.k3b.android.compat.CalendarContract;
+import de.k3b.calendar.EventDto;
+import de.k3b.calendar.IcsAsEventDto;
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
 
 /**
  * Invisible Pseudo-Activity that imports a ics-calendar-event-file into the android Calendar.
@@ -48,11 +47,11 @@ import org.dgtale.calendar.IcsAsEventDto;
  * @author k3b
  */
 public class Ics2ACalendarActivity extends Activity {
+	static final String TAG = "ICS-Import";
 
 	// see http://stackoverflow.com/questions/3721963/how-to-add-calendar-events-in-android
     private static final String CONTENT_TYPE_EVENT = "vnd.android.cursor.item/event";
-	private static final String TAG = "ICS-Import";
-
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,41 +60,46 @@ public class Ics2ACalendarActivity extends Activity {
 
 		Uri data = intent.getData();
 		
-		if (data != null) {
+		Log.d(TAG, "Ics2ACalendarActivity begin " + data);
+		startCalendarImportActivity(this.getApplicationContext(), data);
+		Log.d(TAG, "Ics2ACalendarActivity done" + data);
+
+		this.finish();
+    }
+	static void startCalendarImportActivity(Context context, Uri calendarEventUri) {
+		if (calendarEventUri != null) {
 			try {
-				Log.d(TAG, "opening " + data);
+				Log.d(TAG, "opening " + calendarEventUri);
 				//use ical4j to parse the event
 				CalendarBuilder cb = new CalendarBuilder();
-				Calendar calendar = cb.build(getStreamFromOtherSource(data));
-		
+				Calendar calendar = cb.build(getStreamFromOtherSource(context, calendarEventUri));
+	
 				if (calendar != null) {
-		
+	
 					Iterator i = calendar.getComponents(Component.VEVENT).iterator();
-		
+	
 					while (i.hasNext()) {
 						VEvent event = (VEvent) i.next();
-		
+	
 						Log.d(TAG, "processing event " + event.getName());
-
-						Intent insertIntent = createEventIntent(event);
+	
+						Intent insertIntent = createEventIntent(context, event);
 						insertIntent.putExtra(CalendarContract.Events.ACCESS_LEVEL, getAccessLevel(event.getClassification()));
-
-
-						startActivity(insertIntent);
-		
+	
+	
+						context.startActivity(insertIntent);
+	
 					}
 				}
-		
+	
 			} catch (Exception e) {
-				Log.e(TAG, "error processing " + data + " : " + e);
+				Log.e(TAG, "error processing " + calendarEventUri + " : " + e);
 				e.printStackTrace();
 			}
 		}
-		Log.d(TAG, "done");
-		this.finish();
-    }
+	}
 
-	private Intent createEventIntent(VEvent _event) {
+	private static Intent createEventIntent(Context context, VEvent _event) {
 		EventDto event = new IcsAsEventDto(_event);
 
 		Intent insertIntent = new Intent(Intent.ACTION_EDIT).setType(CONTENT_TYPE_EVENT);
@@ -129,7 +133,7 @@ public class Ics2ACalendarActivity extends Activity {
 	 * Assumes allday if enddate is null or diff between end-start has 0 hours and 0 minutes.<br/>
 	 * calculates enddate from startdate+duration if neccessary.<br/>
 	 */
-    private void addBeginEnd(Intent insertIntent, long startDate,
+    private static void addBeginEnd(Intent insertIntent, long startDate,
     		long endDate, String duration) {
     	
 		boolean allDay = false;
@@ -161,11 +165,11 @@ public class Ics2ACalendarActivity extends Activity {
 		}
 	}
 
-	private boolean isAllDay(Dur duration) {
+	private static boolean isAllDay(Dur duration) {
 		return duration.getHours() == 0 && duration.getMinutes() == 0;
 	}
 
-	private int getAccessLevel(Clazz clazz)
+	private static int getAccessLevel(Clazz clazz)
 	{
 		if (clazz == Clazz.CONFIDENTIAL) return CalendarContract.Events.ACCESS_DEFAULT;
 		if (clazz == Clazz.PUBLIC) return CalendarContract.Events.ACCESS_PUBLIC;
@@ -173,9 +177,8 @@ public class Ics2ACalendarActivity extends Activity {
 		return CalendarContract.Events.ACCESS_DEFAULT;
 	}
 	
-	protected InputStream getStreamFromOtherSource(Uri contentUri) throws FileNotFoundException {
-	//this helps in dealing with content:// URIs
-	    ContentResolver res = getApplicationContext().getContentResolver();
+	protected static InputStream getStreamFromOtherSource(Context context, Uri contentUri) throws FileNotFoundException {
+	    ContentResolver res = context.getContentResolver();
 	    Uri uri = Uri.parse(contentUri.toString());
 	    InputStream is;
 	    try {
@@ -185,5 +188,4 @@ public class Ics2ACalendarActivity extends Activity {
 	    }
 	    return is;
     }
-
 }

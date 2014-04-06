@@ -1,18 +1,112 @@
-todo.txt for CalendarIcsAdapter
+todo.txt for android.calendar.ics.adapter
 =========
 
+> push to f-droid-store
+	v v1.5.1 wrong package name
 v exportToIcs only for non-file
 v sendTo with email-subject and content
 	v intent-text/subject
 	v format date
 	v appVersion
-v send via bluetooth workaround
+v send via bluetooth workaround via public readable file
 - receive bluetooth workaround
+	- intend to file extension *.ics and *.ics2 (as bluetooth workaround)
+	- FileObserver in bluetooth folder triggers import
 
 - main view with settings and about
 	
 ? split a4.0 and a 2.1-
 
+###############
 
-################
+
+http://stackoverflow.com/questions/6408086/android-can-i-enable-disable-an-activitys-intent-filter-programmatically
+
+Android: Can I enable/disable an activity's intent filter programmatically?
+up vote 5 down vote favorite
+2
+	
+
+I need to hide or show my app's icon in the launcher depending on some runtime information. I'd like to still be able to run the activity by an explicit intent, so disabling the activity isn't a good option (I don't even know for sure if it will work, I haven't tried it yet, but I guess it will). So, can I disable an intent filter?
+android intentfilter
+share|edit|close|flag
+	
+edited Aug 30 '11 at 20:57
+Tim Cooper
+48.9k1490114
+	
+asked Jun 20 '11 at 7:33
+Lapis
+785917
+	add comment
+	
+start a bounty
+1 Answer
+active oldest votes
+up vote 8 down vote accepted
+	
+
+You can't do this directly, but you can create an activity alias in your AndroidManifest.xml with the intent filter in question, and then enable or disable the alias using PackageManager#setComponentEnabledSetting(), leaving your other intent filters in the main copy of the Activity so they won't be affected.
+
+----------------------
+
+http://developer.android.com/guide/topics/manifest/activity-alias-element.html
+
+<activity-alias>
+
+syntax:
+
+    <activity-alias android:enabled=["true" | "false"]
+                    android:exported=["true" | "false"]
+                    android:icon="drawable resource"
+                    android:label="string resource"
+                    android:name="string"
+                    android:permission="string"
+                    android:targetActivity="string" >
+        . . .
+    </activity-alias>
+
+contained in:
+    <application>
+can contain:
+    <intent-filter>
+    <meta-data>
+description:
+    An alias for an activity, named by the targetActivity attribute. The target must be in the same application as the alias and it must be declared before the alias in the manifest.
+
+    The alias presents the target activity as a independent entity. It can have its own set of intent filters, and they, rather than the intent filters on the target activity itself, determine which intents can activate the target through the alias and how the system treats the alias. For example, the intent filters on the alias may specify the "android.intent.action.MAIN" and "android.intent.category.LAUNCHER" flags, causing it to be represented in the application launcher, even though none of the filters on the target activity itself set these flags.
+
+    With the exception of targetActivity, <activity-alias> attributes are a subset of <activity> attributes. For attributes in the subset, none of the values set for the target carry over to the alias. However, for attributes not in the subset, the values set for the target activity also apply to the alias. 
+attributes:
+
+    android:enabled
+        Whether or not the target activity can be instantiated by the system through this alias — "true" if it can be, and "false" if not. The default value is "true".
+
+        The <application> element has its own enabled attribute that applies to all application components, including activity aliases. The <application> and <activity-alias> attributes must both be "true" for the system to be able to instantiate the target activity through the alias. If either is "false", the alias does not work. 
+    android:exported
+        Whether or not components of other applications can launch the target activity through this alias — "true" if they can, and "false" if not. If "false", the target activity can be launched through the alias only by components of the same application as the alias or applications with the same user ID.
+
+        The default value depends on whether the alias contains intent filters. The absence of any filters means that the activity can be invoked through the alias only by specifying the exact name of the alias. This implies that the alias is intended only for application-internal use (since others would not know its name) — so the default value is "false". On the other hand, the presence of at least one filter implies that the alias is intended for external use — so the default value is "true". 
+    android:icon
+        An icon for the target activity when presented to users through the alias. See the <activity> element's icon attribute for more information. 
+    android:label
+        A user-readable label for the alias when presented to users through the alias. See the <activity> element's label attribute for more information.
+
+    android:name
+        A unique name for the alias. The name should resemble a fully qualified class name. But, unlike the name of the target activity, the alias name is arbitrary; it does not refer to an actual class.
+
+    android:permission
+        The name of a permission that clients must have to launch the target activity or get it to do something via the alias. If a caller of startActivity() or startActivityForResult() has not been granted the specified permission, the target activity will not be activated.
+
+        This attribute supplants any permission set for the target activity itself. If it is not set, a permission is not needed to activate the target through the alias.
+
+        For more information on permissions, see the Permissions section in the introduction. 
+    android:targetActivity
+        The name of the activity that can be activated through the alias. This name must match the name attribute of an <activity> element that precedes the alias in the manifest.
+
+introduced in:
+    API Level 1
+see also:
+    <activity>
+
 

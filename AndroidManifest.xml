@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.dgtale"
-    android:versionCode="7"
-    android:versionName="1.5.1-140402" >
+    package="de.k3b.android.calendar.ics.adapter"
+    android:versionCode="8"
+    android:versionName="1.5.2-140405" >
 
 <!-- /*
  * Copyright (C) 2013, 2014 - Daniele Gobbetti and k3b
  * 
- * This file is part of CalendarIcsAdapter.
+ * This file is part of android.calendar.ics.adapter.
  * 
  * This program is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by 
@@ -31,16 +31,14 @@
  	<uses-permission android:name="android.permission.READ_CALENDAR" />
   	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
     <application
-        
-        android:allowBackup="true"
+        android:allowBackup="false"
 		android:icon="@drawable/ic_launcher"
         android:theme="@android:style/Theme.NoDisplay"
         android:label="@string/app_name" >
+
+        <!-- Hooks into Calendar-gui-view-event : adds "export calendar event" to ics file -->
         <activity
-            android:name="org.dgtale.android.activity.ACalendar2IcsActivity" android:label="@string/export_to">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
+            android:name="de.k3b.android.activity.ACalendar2IcsActivity" android:label="@string/export_to">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -49,16 +47,32 @@
                 <data android:mimeType="vnd.android.cursor.item/event" />                
             </intent-filter>
         </activity>
-        
+
+        <!-- Hooks into file-manager-gui-"view-ics-file" : adds "import event to calender" -->
         <activity
-            android:name="org.dgtale.android.activity.Ics2ACalendarActivity"
+            android:name="de.k3b.android.activity.Ics2ACalendarActivity"
             android:label="@string/import_from">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+				<action android:name="android.intent.action.EDIT"/>
+				<action android:name="android.intent.action.INSERT"/>
+								
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="*/*" />
+                <data android:host="*" />
+                <data android:scheme="file"  />
+				<!-- android does not allow to download *.ics-files via bluetooth but it works with *.ics_ -->
+                <data android:pathPattern=".*\\.ics_" />
+			</intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+				<action android:name="android.intent.action.EDIT"/>
+				<action android:name="android.intent.action.INSERT"/>
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/calendar" />
-            </intent-filter>
-
+			</intent-filter>
+            
         </activity>
       </application>
 

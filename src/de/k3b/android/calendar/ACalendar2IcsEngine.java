@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2014- k3b
  * 
- * This file is part of CalendarIcsAdapter.
+ * This file is part of android.calendar.ics.adapter.
  * 
  * This program is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by 
@@ -16,12 +16,15 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package org.dgtale.android.calendar;
+package de.k3b.android.calendar;
 
-import org.dgtale.android.calendar.ACalendarMock;
-import org.dgtale.android.calendar.ACalendarCursorAsEventDto;
-import org.dgtale.calendar.EventDto2IcsFactory;
-import org.dgtale.calendar.EventDto;
+
+import java.io.Closeable;
+
+import de.k3b.android.calendar.ACalendarCursorAsEventDto;
+import de.k3b.android.calendar.ACalendarMock;
+import de.k3b.calendar.EventDto;
+import de.k3b.calendar.EventDto2IcsFactory;
 
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.TimeZone;
@@ -35,7 +38,7 @@ import android.util.Log;
  * Android specific engine that converts a Android-Calendar-Event to a ics-Calendar-Event string.<br/><br/>
  * @author k3b
  */
-public class ACalendar2IcsEngine {
+public class ACalendar2IcsEngine implements Closeable {
 	public static final String TAG = "ICS-Export";
 
 	final private SQLiteOpenHelper mock;
@@ -51,7 +54,7 @@ public class ACalendar2IcsEngine {
 
 	public Calendar export(Uri contentUri) {
 		boolean hasData = false;
-		EventDto2IcsFactory factory = new EventDto2IcsFactory("-//org.dgtale.calendar.adapter//iCal4j 1.0//EN");
+		EventDto2IcsFactory factory = new EventDto2IcsFactory("-//de.k3b.calendar.adapter//iCal4j 1.0//EN");
 		// set to null for non mocked production
 		Cursor eventCursor = eventData.getByContentURI(contentUri);
 		

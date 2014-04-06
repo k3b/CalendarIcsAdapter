@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2014- k3b
  * 
- * This file is part of CalendarIcsAdapter.
+ * This file is part of android.calendar.ics.adapter.
  * 
  * This program is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by 
@@ -16,10 +16,11 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package org.dgtale.android.calendar;
+package de.k3b.android.calendar;
 
-import org.dgtale.android.compat.CalendarContract;
-import org.dgtale.calendar.EventDto;
+
+import de.k3b.android.compat.CalendarContract;
+import de.k3b.calendar.EventDto;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -41,7 +42,7 @@ public class ACalendarCursorAsEventDto extends ACalendarCursor implements EventD
 	 * mockimplementation for testing with local copy of events database. This way real events are not at risc or you can test it on an 
 	 * emulator with no calendar.<br/>
 	 * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db ) 
-	 * to local apps database folder ( /data/data/org.dgtale.calendar.adapter/databases/calendar.db ) .<br/>
+	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
 	 */
 	public ACalendarCursorAsEventDto(SQLiteDatabase mockDatabase) {
 		super(mockDatabase);
@@ -69,42 +70,42 @@ public class ACalendarCursorAsEventDto extends ACalendarCursor implements EventD
 		};
 
 	/* (non-Javadoc)
-	 * @see org.dgtale.calendar.adapter.EventData#getDtstart()
+	 * @see de.k3b.calendar.adapter.EventData#getDtstart()
 	 */
 	@Override
 	public long getDtstart() {return cur.getLong(1);}
 	/* (non-Javadoc)
-	 * @see org.dgtale.calendar.adapter.EventData#getDtend()
+	 * @see de.k3b.calendar.adapter.EventData#getDtend()
 	 */
 	@Override
 	public long getDtend() {return cur.getLong(2);}
 	/* (non-Javadoc)
-	 * @see org.dgtale.calendar.adapter.EventData#getTitle()
+	 * @see de.k3b.calendar.adapter.EventData#getTitle()
 	 */
 	@Override
 	public String getTitle() {return cur.getString(3);}
 	/* (non-Javadoc)
-	 * @see org.dgtale.calendar.adapter.EventData#getDescription()
+	 * @see de.k3b.calendar.adapter.EventData#getDescription()
 	 */
 	@Override
 	public String getDescription() {return cur.getString(4);}
 	/* (non-Javadoc)
-	 * @see org.dgtale.calendar.adapter.EventData#getEventLocation()
+	 * @see de.k3b.calendar.adapter.EventData#getEventLocation()
 	 */
 	@Override
 	public String getEventLocation() {return cur.getString(5);}
 	/* (non-Javadoc)
-	 * @see org.dgtale.calendar.adapter.EventData#getEventTimezone()
+	 * @see de.k3b.calendar.adapter.EventData#getEventTimezone()
 	 */
 	@Override
 	public String getEventTimezone() {return cur.getString(6);}
 	/* (non-Javadoc)
-	 * @see org.dgtale.calendar.adapter.EventData#getDuration()
+	 * @see de.k3b.calendar.adapter.EventData#getDuration()
 	 */
 	@Override
 	public String getDuration() {return cur.getString(7);}
 	/* (non-Javadoc)
-	 * @see org.dgtale.calendar.adapter.EventData#getRrule()
+	 * @see de.k3b.calendar.adapter.EventData#getRrule()
 	 */
 	@Override
 	public String getRrule() {return cur.getString(8);}

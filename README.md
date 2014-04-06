@@ -1,12 +1,12 @@
-CalendarIcsAdapter
+android.calendar.ics.adapter
 =========
 
-CalendarIcsAdapter is a small free and open source app for Android 2.1 and up
+android.calendar.ics.adapter is a small free and open source app for Android 2.1 and up
 that converts between android calendar events and ics-vevent-files.
 In other words you can invite and get invitations for calendar events via email 
 on your android device. 
 
-Technically CalendarIcsAdapter intercepts the VIEW intent for 
+Technically android.calendar.ics.adapter intercepts the VIEW intent for 
 ics/vevent/text-calendar files and allows to add it to the android calendar.
 It also  intercepts the VIEW intent for 
 for the calendar-viewer and allows to generate ics/vevent filecontent that 
@@ -21,7 +21,7 @@ android.permission.WRITE_EXTERNAL_STORAGE
 	must be readable by other apps to make SendTo work. Unfortunately FileProvider 
 	does not work on my android 2.2 togehter with send to bluetooth.
 	
-At the moment CalendarIcsAdapter does not need calendar-write permissions.
+At the moment android.calendar.ics.adapter does not need calendar-write permissions.
 
 When importing the original .ics file is 
 parsed and the event is added using the native calendar application. 

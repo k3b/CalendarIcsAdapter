@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2014- k3b
  * 
- * This file is part of CalendarIcsAdapter.
+ * This file is part of android.calendar.ics.adapter.
  * 
  * This program is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by 
@@ -16,10 +16,7 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package org.dgtale.android.calendar;
-
-import org.apache.commons.lang.SystemUtils;
-import org.dgtale.android.compat.CalendarContract;
+package de.k3b.android.calendar;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

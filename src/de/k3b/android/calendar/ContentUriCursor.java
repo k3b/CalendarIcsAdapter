@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2014- k3b
  * 
- * This file is part of CalendarIcsAdapter.
+ * This file is part of android.calendar.ics.adapter.
  * 
  * This program is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by 
@@ -16,12 +16,13 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package org.dgtale.android.calendar;
+package de.k3b.android.calendar;
 
+import java.io.Closeable;
 import java.util.Date;
 import java.util.List;
 
-import org.dgtale.android.compat.CalendarContract;
+import de.k3b.android.compat.CalendarContract;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -36,7 +37,7 @@ import android.net.Uri;
  * It can used with contentResolver or with a local (mock)database that simulates the contentProviderAPI.<br/><br/>
  * @author k3b
  */
-public abstract class ContentUriCursor {
+public abstract class ContentUriCursor implements Closeable {
 	protected static String selectionById = "(" + CalendarContract.EventsColumns._ID + " = ? )";
 	protected Cursor cur = null;
 	protected ContentResolver contentResolver = null;
@@ -56,7 +57,7 @@ public abstract class ContentUriCursor {
 	 * mockimplementation for testing with local copy of events database. This way real events are not at risc or you can test it on an 
 	 * emulator with no calendar.<br/>
 	 * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db ) 
-	 * to local apps database folder ( /data/data/org.dgtale.calendar.adapter/databases/calendar.db ) .<br/>
+	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
 	 */
 	@SuppressWarnings("unchecked")
 	public ContentUriCursor(SQLiteDatabase mockDatabase, String... contentToTablePlurals) {

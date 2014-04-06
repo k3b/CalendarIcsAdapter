@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2014- k3b
  * 
- * This file is part of CalendarIcsAdapter.
+ * This file is part of android.calendar.ics.adapter.
  * 
  * This program is free software: you can redistribute it and/or modify it 
  * under the terms of the GNU General Public License as published by 
@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package org.dgtale.android.calendar;
+package de.k3b.android.calendar;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -42,7 +42,7 @@ public abstract class ACalendarCursor extends ContentUriCursor {
 	 * mockimplementation for testing with local copy of events database. This way real events are not at risc or you can test it on an 
 	 * emulator with no calendar.<br/>
 	 * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db ) 
-	 * to local apps database folder ( /data/data/org.dgtale.calendar.adapter/databases/calendar.db ) .<br/>
+	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
 	 */
 	public ACalendarCursor(SQLiteDatabase mockDatabase) {
 		super(mockDatabase,"calendar", "event");
