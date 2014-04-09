@@ -3,7 +3,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.k3b.android.calendar.ics.adapter"
     android:versionCode="9"
-    android:versionName="1.5.2-140409" >
+    android:versionName="1.5.3-140409" >
 
 <!-- /*
  * Copyright (C) 2013, 2014 - Daniele Gobbetti and k3b
