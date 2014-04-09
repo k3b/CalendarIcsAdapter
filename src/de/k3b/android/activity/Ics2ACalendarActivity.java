@@ -61,11 +61,12 @@ public class Ics2ACalendarActivity extends Activity {
 		Uri data = intent.getData();
 		
 		Log.d(TAG, "Ics2ACalendarActivity begin " + data);
-		startCalendarImportActivity(this.getApplicationContext(), data);
+		startCalendarImportActivity(this, data);
 		Log.d(TAG, "Ics2ACalendarActivity done" + data);
 
 		this.finish();
     }
+	
 	static void startCalendarImportActivity(Context context, Uri calendarEventUri) {
 		if (calendarEventUri != null) {
 			try {
@@ -178,7 +179,7 @@ public class Ics2ACalendarActivity extends Activity {
 	}
 	
 	protected static InputStream getStreamFromOtherSource(Context context, Uri contentUri) throws FileNotFoundException {
-	    ContentResolver res = context.getContentResolver();
+	    ContentResolver res = context.getApplicationContext().getContentResolver();
 	    Uri uri = Uri.parse(contentUri.toString());
 	    InputStream is;
 	    try {
