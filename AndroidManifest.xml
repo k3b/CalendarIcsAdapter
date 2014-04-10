@@ -38,7 +38,21 @@
 
         <!-- Hooks into Calendar-gui-view-event : adds "export calendar event" to ics file -->
         <activity
-            android:name="de.k3b.android.activity.ACalendar2IcsActivity" android:label="@string/export_chooser_caption">
+            android:name="de.k3b.android.activity.ACalendar2IcsActivity" android:label="@string/export_chooser_caption_ics">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.INSERT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="*" />
+                <data android:scheme="content"  />
+                <data android:mimeType="vnd.android.cursor.item/event" />                
+            </intent-filter>
+        </activity>
+
+        <!-- Hooks into Calendar-gui-view-event : adds "export calendar event" to ics file -->
+        <activity
+            android:name="de.k3b.android.activity.ACalendar2IcalActivity" android:label="@string/export_chooser_caption_ical">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -54,6 +68,8 @@
         <activity
             android:name="de.k3b.android.activity.Ics2ACalendarActivity"
             android:label="@string/import_chooser_caption">
+            
+            <!-- according to http://en.wikipedia.org/wiki/ICalendar .ical or .icalendar fileextension are also used and not blocked by android -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 				<action android:name="android.intent.action.EDIT"/>
@@ -64,9 +80,14 @@
                 <data android:mimeType="*/*" />
                 <data android:host="*" />
                 <data android:scheme="file"  />
-				<!-- android does not allow to download *.ics-files via bluetooth but it works with *.ics_ -->
-                <data android:pathPattern=".*\\.ics_" />
-			</intent-filter>
+                <data android:scheme="http"  />
+                <data android:scheme="https"  />
+   				<!-- android does not allow to download *.ics-files via bluetooth but it works with other extensiond. 
+   					according to http://en.wikipedia.org/wiki/ICalendar .ical and .icalendar are also used. -->
+                <data android:pathPattern=".*\\.ics" />
+                <data android:pathPattern=".*\\.ical" />
+                <data android:pathPattern=".*\\.icalendar" />
+   			</intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 				<action android:name="android.intent.action.EDIT"/>

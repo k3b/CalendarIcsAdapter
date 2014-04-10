@@ -1,8 +1,11 @@
 todo.txt for android.calendar.ics.adapter
 =========
 
-> push to f-droid-store
+v push to f-droid-store
 	v v1.5.1 wrong package name
+	v v1.5.3 
+		> waiting for deployment
+	- v1.5.4 geplant 22.4.
 v exportToIcs only for non-file
 v sendTo with email-subject and content
 	v intent-text/subject
@@ -10,8 +13,7 @@ v sendTo with email-subject and content
 	v appVersion
 v send via bluetooth workaround via public readable file
 - receive bluetooth workaround
-	- intend to file extension *.ics and *.ics2 (as bluetooth workaround)
-	- FileObserver in bluetooth folder triggers import
+	- ask on stackoverflow
 
 - main view with settings and about
 	
@@ -19,34 +21,62 @@ v send via bluetooth workaround via public readable file
 
 ###############
 
+How to import ics-calendar-files via android-bluetooth
 
-http://stackoverflow.com/questions/6408086/android-can-i-enable-disable-an-activitys-intent-filter-programmatically
+Problem:
 
-Android: Can I enable/disable an activity's intent filter programmatically?
-up vote 5 down vote favorite
-2
-	
+Android 2.2 (and may be other versions, too) blocks bluetooth-receiving of *.ics calendar files.
+My android app wants to process ics-files coming in via bluetooth.
 
-I need to hide or show my app's icon in the launcher depending on some runtime information. I'd like to still be able to run the activity by an explicit intent, so disabling the activity isn't a good option (I don't even know for sure if it will work, I haven't tried it yet, but I guess it will). So, can I disable an intent filter?
-android intentfilter
-share|edit|close|flag
-	
-edited Aug 30 '11 at 20:57
-Tim Cooper
-48.9k1490114
-	
-asked Jun 20 '11 at 7:33
-Lapis
-785917
-	add comment
-	
-start a bounty
-1 Answer
-active oldest votes
-up vote 8 down vote accepted
-	
+Background:
 
-You can't do this directly, but you can create an activity alias in your AndroidManifest.xml with the intent filter in question, and then enable or disable the alias using PackageManager#setComponentEnabledSetting(), leaving your other intent filters in the main copy of the Activity so they won't be affected.
+I am building an [andriod CalendarIcsAdapter](https://github.com/k3b/CalendarIcsAdapter/wiki) that 
+should implement import ics-calendar-files via bluetooth.
+
+I already have the code to analyse and import the content of a local ics-file 
+and i can also export from calender to ics-file and send this via bluetooth or email.
+
+But i cannot receive the ics-file via android-bluetooth.
+
+If i transfer a file named "hello.txt" from my mswindows-laptop to my android 2.2 handset via bluetooth
+the file is store in the bluetooth-sdcard-folder as expected.
+
+If i rename the same file to hello.ics and try to transfer it via bluetooth
+android refuses to process the file.
+
+On my windows-laptop, I get this error message  (in german)
+ 
+"Dieses Bluetooth-Gerät bzw. der Computer kann diesen Typ nicht verarbeiten".
+
+that translates to "This bluetoothdevice or computer can not process this type."
+
+Since android knows the fileextension ".ics" in order to block the file. Is 
+there a way to handle bluetooth-in for ics content?
+
+Is there somthing like a handler where my code has to register to or are there brodcasts my app has to reply to?
+
+what i have tried
+
+I first startet renaming the files from SomeName.ics to SomeName.ics_ and create an android service
+that uses a android.os.FileObserver to monitor the bluetooth-directory for an incoming file.
+
+* But i think this is overkill.
+* My app would not be compatible with other bluetooth pc-apps and 
+* it is too complicated to manually rename the ics file before sending it. 
+
+Opening a serial rf-comm-in-bluetooth-connection would be only ok 
+if you have clues/examplecode how to make this compatibel with other ics-calendar-bluetooth-transmitters.
+
+Any ideas how i can do it? Is this a android 2.2 only issue. (i have no other device to verify this)
+
+[update]
+
+according to [wikipedia VCalendar](http://en.wikipedia.org/wiki/VCalendar) a calendar entry file may use
+these file extensions: .ical; .ics; .ifb .icalendar
+
+except .ics android let the others in. on my windows laptop the other file-extension are unknown.
+
+android bluetooth calendar.
 
 ----------------------
 

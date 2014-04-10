@@ -60,6 +60,20 @@ public class ACalendar2IcsActivity extends Activity {
 
 	private ACalendar2IcsEngine engine = null;
 
+	/**
+	 * This will differ between ics and ical
+	 */
+	protected CharSequence getChooserCaption() {
+		return this.getText(R.string.export_chooser_caption_ics);
+	}
+
+	/**
+	 * This will differ between ics and ical
+	 */
+	protected String getExportFileName() {
+		return this.getText(R.string.export_filename_ics).toString();
+	}
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,7 +196,7 @@ public class ACalendar2IcsActivity extends Activity {
 			outIntent.putExtra(android.content.Intent.EXTRA_TEXT, mailBody);
 		}
 		
-		this.startActivity(Intent.createChooser(outIntent, this.getText(R.string.export_chooser_caption)));
+		this.startActivity(Intent.createChooser(outIntent, getChooserCaption()));
 	}
 
 	/**
@@ -206,10 +220,9 @@ public class ACalendar2IcsActivity extends Activity {
 	 */
 	private File getOuputFile() {
 		final File path = getOutputDir();
-		final File icsFIle = new File(path, this.getText(R.string.export_file_public_filename).toString());
+		final File icsFIle = new File(path, getExportFileName());
 		return icsFIle;
 	}
-
 
 	/**
 	 * get or create dir where ics file will be stored.<br/>
