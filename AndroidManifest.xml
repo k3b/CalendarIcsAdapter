@@ -44,6 +44,8 @@
                 <action android:name="android.intent.action.EDIT" />
                 <action android:name="android.intent.action.INSERT" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="*" />
+                <data android:scheme="content"  />
                 <data android:mimeType="vnd.android.cursor.item/event" />                
             </intent-filter>
         </activity>
