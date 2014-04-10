@@ -1,6 +1,3 @@
-todo 
-- #3 german
-
 todo.txt for android.calendar.ics.adapter
 =========
 

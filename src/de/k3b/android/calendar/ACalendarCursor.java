@@ -18,6 +18,7 @@
  */
 package de.k3b.android.calendar;
 
+import de.k3b.android.calendar.ics.adapter.R;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,13 +29,19 @@ import android.net.Uri;
  * @author k3b
  */
 public abstract class ACalendarCursor extends ContentUriCursor {
-	protected static String providerAutority = "com.android.calendar"; // uri of content provider. my differ with android version below 4.0
-
+	
+	// uri of content provider. my differ with android version below 4.0
+	// may be dynamically updated
+	protected static String providerAutority = "com.android.calendar"; 
 	/**
 	 * Creates a datasource that uses the ContentResolver from context
 	 */
 	public ACalendarCursor(Context ctx) {
 		super(ctx);
+		
+		if (providerAutority == null) {
+			providerAutority = ctx.getText(R.string.app_android_calendar_defaultprovider).toString();
+		}
 	}
 	
 	/**

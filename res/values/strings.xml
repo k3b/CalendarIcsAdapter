@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">android.calendar.ics.adapter</string>
-    <string name="import_from">Import to calendar</string>
-    <string name="export_to">Send Event to &#8230;</string>
-    <string name="mail_subject">%1$s-%2$s</string>
-    <string name="mail_content">When: %1$s\nWhere: %2$s\n\n%3$s\n\n-----------------\nExported from Android calendar using %4$s</string>
+    <string name="export_chooser_caption">Send Event to &#8230;</string>
+    <string name="export_mail_subject">%1$s-%2$s</string>
+    <string name="export_mail_content">When: %1$s\nWhere: %2$s\n\n%3$s\n\n-----------------\nExported from Android calendar using %4$s</string>
+
+    <string name="import_chooser_caption">Import to calendar</string>
 </resources>

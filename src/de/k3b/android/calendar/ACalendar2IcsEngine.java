@@ -23,6 +23,7 @@ import java.io.Closeable;
 
 import de.k3b.android.calendar.ACalendarCursorAsEventDto;
 import de.k3b.android.calendar.ACalendarMock;
+import de.k3b.android.calendar.ics.adapter.R;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventDto2IcsFactory;
 
@@ -45,8 +46,11 @@ public class ACalendar2IcsEngine implements Closeable {
 	final private ACalendarCursorAsEventDto eventData;
 
 	private SQLiteDatabase writableDatabase = null;
+
+	private Context ctx;
 	
 	public ACalendar2IcsEngine(Context ctx, boolean useMockCalendar) {
+		this.ctx = ctx;
 		mock = (useMockCalendar) ? new ACalendarMock(ctx) : null;
 		writableDatabase  = (useMockCalendar) ? mock.getWritableDatabase() : null;
 		this.eventData = (mock != null) ? new ACalendarCursorAsEventDto(writableDatabase) : new ACalendarCursorAsEventDto(ctx) ;
@@ -54,7 +58,7 @@ public class ACalendar2IcsEngine implements Closeable {
 
 	public Calendar export(Uri contentUri) {
 		boolean hasData = false;
-		EventDto2IcsFactory factory = new EventDto2IcsFactory("-//de.k3b.calendar.adapter//iCal4j 1.0//EN");
+		EventDto2IcsFactory factory = new EventDto2IcsFactory(this.ctx.getText(R.string.app_ics_provider_name).toString());
 		// set to null for non mocked production
 		Cursor eventCursor = eventData.getByContentURI(contentUri);
 		

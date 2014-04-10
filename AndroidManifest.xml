@@ -3,7 +3,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.k3b.android.calendar.ics.adapter"
     android:versionCode="9"
-    android:versionName="1.5.3-140409" >
+    android:versionName="1.5.3-140410" >
 
 <!-- /*
  * Copyright (C) 2013, 2014 - Daniele Gobbetti and k3b
@@ -38,7 +38,7 @@
 
         <!-- Hooks into Calendar-gui-view-event : adds "export calendar event" to ics file -->
         <activity
-            android:name="de.k3b.android.activity.ACalendar2IcsActivity" android:label="@string/export_to">
+            android:name="de.k3b.android.activity.ACalendar2IcsActivity" android:label="@string/export_chooser_caption">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -53,7 +53,7 @@
         <!-- Hooks into file-manager-gui-"view-ics-file" : adds "import event to calender" -->
         <activity
             android:name="de.k3b.android.activity.Ics2ACalendarActivity"
-            android:label="@string/import_from">
+            android:label="@string/import_chooser_caption">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 				<action android:name="android.intent.action.EDIT"/>

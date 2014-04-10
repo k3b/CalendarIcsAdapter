@@ -19,12 +19,11 @@
 package de.k3b.android.calendar;
 
 import java.io.Closeable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import de.k3b.android.compat.CalendarContract;
-
-import edu.emory.mathcs.backport.java.util.Arrays;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -93,7 +92,9 @@ public abstract class ContentUriCursor implements Closeable {
 		List<String> uriSegments = uri.getPathSegments();
 		String uriAsString = uri.toString();
 		if ((uriSegments.size() < 1) || (!uriAsString.startsWith("content:"))) {
-			throw new IllegalArgumentException("ContentURI expected content://com.adnroid.calendar/{TABLE}[/{EVENTID}] but was " + uriAsString);
+			throw new IllegalArgumentException("ContentURI expected content://" +
+					"com.android.{providertype}" +
+					"/{TABLE}[/{EVENTID}] but was " + uriAsString);
 		}
 		
 		String tableName = uriSegments.get(0);

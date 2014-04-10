@@ -79,6 +79,7 @@ import android.text.format.Time;
  * </ul>
  *
  */
+@SuppressWarnings("unused")
 public final class CalendarContract {
     private static final String TAG = "Calendar";
 
@@ -1910,7 +1911,7 @@ public final class CalendarContract {
                 + " AND " + ALARM_TIME + "=?";
 
         private static final String WHERE_FINDNEXTALARMTIME = ALARM_TIME + ">=?";
-        private static final String SORT_ORDER_ALARMTIME_ASC = ALARM_TIME + " ASC";
+		private static final String SORT_ORDER_ALARMTIME_ASC = ALARM_TIME + " ASC";
 
         private static final String WHERE_RESCHEDULE_MISSED_ALARMS = STATE + "=" + STATE_SCHEDULED
                 + " AND " + ALARM_TIME + "<?"

@@ -77,7 +77,7 @@ public class Ics2ACalendarActivity extends Activity {
 	
 				if (calendar != null) {
 	
-					Iterator i = calendar.getComponents(Component.VEVENT).iterator();
+					Iterator<?> i = calendar.getComponents(Component.VEVENT).iterator();
 	
 					while (i.hasNext()) {
 						VEvent event = (VEvent) i.next();

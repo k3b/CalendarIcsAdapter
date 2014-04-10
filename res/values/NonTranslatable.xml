@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- string resources that are not localized -->
+    <string name="app_name">android.calendar.ics.adapter</string>
+    <string name="app_ics_provider_name">"-//de.k3b.calendar.adapter//iCal4j 1.0//EN"</string>
+    
+    <string name="app_android_calendar_defaultprovider"></string>
+    
+    <string name="export_file_public_folder">tmp</string>
+    <string name="export_file_public_filename">FromAndroidCalendar.ics</string>
+    <string name="export_file_mime_type">"text/*"</string>
+</resources>

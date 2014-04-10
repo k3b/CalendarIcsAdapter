@@ -20,7 +20,6 @@ package de.k3b.android.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
@@ -125,7 +124,7 @@ public class ACalendar2IcsActivity extends Activity {
 				DateFormat shortTimeformatter = DateFormat.getDateInstance(java.text.DateFormat.SHORT, locale);
 				date = shortTimeformatter.format(dtStart);
 			}
-			return String.format(this.getString(R.string.mail_subject).toString(),
+			return String.format(this.getString(R.string.export_mail_subject).toString(),
 							date,event.getTitle());
 		}
 		return null;
@@ -144,7 +143,7 @@ public class ACalendar2IcsActivity extends Activity {
 				DateFormat timeFormatter = DateFormat.getTimeInstance(java.text.DateFormat.SHORT, locale);
 				date = dateFormatter.format( dtStart) + " " + timeFormatter.format(dtStart);
 			}
-			return String.format(this.getString(R.string.mail_content).toString(),
+			return String.format(this.getString(R.string.export_mail_content).toString(),
 							date,event.getEventLocation(), event.getDescription(), getAppVersionName());
 		}
 		return null;
@@ -170,7 +169,7 @@ public class ACalendar2IcsActivity extends Activity {
 		
 		final Intent outIntent = new Intent()
 			.setAction(Intent.ACTION_SEND)
-			.setDataAndType(uri, "text/*")
+			.setDataAndType(uri, this.getText(R.string.export_file_mime_type).toString())
 			.putExtra(Intent.EXTRA_STREAM, uri)
 			.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
 			.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -183,7 +182,7 @@ public class ACalendar2IcsActivity extends Activity {
 			outIntent.putExtra(android.content.Intent.EXTRA_TEXT, mailBody);
 		}
 		
-		this.startActivity(Intent.createChooser(outIntent, this.getText(R.string.export_to)));
+		this.startActivity(Intent.createChooser(outIntent, this.getText(R.string.export_chooser_caption)));
 	}
 
 	/**
@@ -207,7 +206,7 @@ public class ACalendar2IcsActivity extends Activity {
 	 */
 	private File getOuputFile() {
 		final File path = getOutputDir();
-		final File icsFIle = new File(path, "FromAndroidCalendar.ics");
+		final File icsFIle = new File(path, this.getText(R.string.export_file_public_filename).toString());
 		return icsFIle;
 	}
 
@@ -216,7 +215,7 @@ public class ACalendar2IcsActivity extends Activity {
 	 * get or create dir where ics file will be stored.<br/>
 	 */
 	private File getOutputDir() {
-		File path = new File(Environment.getExternalStorageDirectory(),"tmp");
+		File path = new File(Environment.getExternalStorageDirectory(),this.getText(R.string.export_file_public_folder).toString()); 
 		path.mkdirs();
 
 		return path;
