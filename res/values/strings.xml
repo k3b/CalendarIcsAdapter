@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="export_chooser_caption_ics">Send as ics (standard) &#8230;</string>
-    <string name="export_chooser_caption_ical">Send as ical (apple, android) &#8230;</string>
+    <string name="export_chooser_caption_ical">Send as ical (apple, bluetooth) &#8230;</string>
     <string name="export_mail_subject">%1$s-%2$s</string>
     <string name="export_mail_content">When: %1$s\nWhere: %2$s\n\n%3$s\n\n-----------------\nExported from Android calendar using %4$s</string>
 
