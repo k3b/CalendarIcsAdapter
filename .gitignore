@@ -6,3 +6,5 @@
 /.settings
 /local.properties
 /proguard
+/build
+/.gradle
