@@ -32,7 +32,7 @@ public abstract class ACalendarCursor extends ContentUriCursor {
 	
 	// uri of content provider. my differ with android version below 4.0
 	// may be dynamically updated
-	protected static String providerAutority = "com.android.calendar"; 
+	protected static String providerAutority = null; 
 	/**
 	 * Creates a datasource that uses the ContentResolver from context
 	 */

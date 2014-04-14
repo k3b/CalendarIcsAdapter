@@ -45,19 +45,10 @@ import net.fortuna.ical4j.model.Calendar;
 /**
  * Invisible Pseudo-Activity that exports a ics-calendar-event-file from the android Calendar.<br/>
  * Supports Android 4.0 and up. Runs on most Android 2.1 and up that have a calendar and a calendar provider. <br/><br/>
- * 
- * delivers ics-file-content via uri 
- * 			content:de.k3b.calendar.adapter/ics/FromAndroidCalendar.ics 
- * that is readable by other android apps without the need that this app requires sd-card-write-permission.<br/><br/>
  *
  * @author k3b
  */
 public class ACalendar2IcsActivity extends Activity {
-	/**
-	 * true: use local calendar db (for testing); false: use contentProvider for production
-	 */
-	private static final boolean USE_MOCK_CALENDAR = false;
-
 	private ACalendar2IcsEngine engine = null;
 
 	/**
@@ -82,7 +73,7 @@ public class ACalendar2IcsActivity extends Activity {
 
 		Uri data = intent.getData();
 		
-		if ((USE_MOCK_CALENDAR) && (data == null)) {
+		if ((Global.USE_MOCK_CALENDAR) && (data == null)) {
 			data = ACalendarCursor.createContentUri("event","1");
 			// data = ACalendarCursor.createContentUri("events");
 		}
@@ -90,11 +81,15 @@ public class ACalendar2IcsActivity extends Activity {
 		if (data != null) {
 			try {
 				if (engine == null) {
-					Log.d(ACalendar2IcsEngine.TAG, "creating ACalendar2IcsEngine");					
-					engine = new ACalendar2IcsEngine(this.getApplication(), USE_MOCK_CALENDAR);
+					if (Global.debugEnabled) {
+						Log.d(ACalendar2IcsEngine.TAG, "creating ACalendar2IcsEngine");					
+					}
+					engine = new ACalendar2IcsEngine(this.getApplication(), Global.USE_MOCK_CALENDAR);
 				}
 				
-				Log.d(ACalendar2IcsEngine.TAG, "opening " + data);					
+				if (Global.debugEnabled) {
+					Log.d(ACalendar2IcsEngine.TAG, "opening " + data);					
+				}
 				Calendar calendarEvent = engine.export(data);
 				
 				if (calendarEvent != null) {
@@ -102,7 +97,9 @@ public class ACalendar2IcsActivity extends Activity {
 					
 					String mailSubject = getMailSubject(event); 
 					String description = getMailDescription(event);
-					Log.d(ACalendar2IcsEngine.TAG, "sending '" + mailSubject + "'");					
+					if (Global.debugEnabled) {
+						Log.d(ACalendar2IcsEngine.TAG, "sending '" + mailSubject + "'");
+					}
 					sendIcsTo(mailSubject, description, calendarEvent.toString());
 				}
 				
@@ -111,14 +108,18 @@ public class ACalendar2IcsActivity extends Activity {
 				e.printStackTrace();
 			}
 		}
-		Log.d(ACalendar2IcsEngine.TAG, "export done");
+		if (Global.debugEnabled) {
+			Log.d(ACalendar2IcsEngine.TAG, "export done");
+		}
 		this.finish();
     }
 
 	@Override protected void onDestroy() 
 	{
 		if (engine != null) {
-			Log.d(ACalendar2IcsEngine.TAG, "destroying ACalendar2IcsEngine");					
+			if (Global.debugEnabled) {
+				Log.d(ACalendar2IcsEngine.TAG, "destroying ACalendar2IcsEngine");					
+			}
 			engine.close();
 		}
 		engine = null;

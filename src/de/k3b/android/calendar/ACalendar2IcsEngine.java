@@ -68,7 +68,9 @@ public class ACalendar2IcsEngine implements Closeable {
 				hasData = true;
 				TimeZone timezone = getOrCreateTimeZone(eventData);
 				factory.addEvent(eventData, timezone);
-				Log.d(ACalendar2IcsEngine.TAG, "added event " + eventData.getTitle());
+				if (Global.debugEnabled) {
+					Log.d(ACalendar2IcsEngine.TAG, "added event " + eventData.getTitle());
+				}
 			}
 			eventCursor.close();
 		}

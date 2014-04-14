@@ -30,6 +30,7 @@ import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Dur;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Clazz;
+import de.k3b.android.calendar.Global;
 import de.k3b.android.compat.CalendarContract;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.IcsAsEventDto;
@@ -60,9 +61,13 @@ public class Ics2ACalendarActivity extends Activity {
 
 		Uri data = intent.getData();
 		
-		Log.d(TAG, "Ics2ACalendarActivity begin " + data);
+		if (Global.debugEnabled) {
+			Log.d(TAG, "Ics2ACalendarActivity begin " + data);
+		}
 		startCalendarImportActivity(this, data);
-		Log.d(TAG, "Ics2ACalendarActivity done" + data);
+		if (Global.debugEnabled) {
+			Log.d(TAG, "Ics2ACalendarActivity done" + data);
+		}
 
 		this.finish();
     }
@@ -70,7 +75,10 @@ public class Ics2ACalendarActivity extends Activity {
 	static void startCalendarImportActivity(Context context, Uri calendarEventUri) {
 		if (calendarEventUri != null) {
 			try {
-				Log.d(TAG, "opening " + calendarEventUri);
+				if (Global.debugEnabled) {
+					Log.d(TAG, "opening " + calendarEventUri);
+				}
+				
 				//use ical4j to parse the event
 				CalendarBuilder cb = new CalendarBuilder();
 				Calendar calendar = cb.build(getStreamFromOtherSource(context, calendarEventUri));
@@ -82,7 +90,9 @@ public class Ics2ACalendarActivity extends Activity {
 					while (i.hasNext()) {
 						VEvent event = (VEvent) i.next();
 	
-						Log.d(TAG, "processing event " + event.getName());
+						if (Global.debugEnabled) {
+							Log.d(TAG, "processing event " + event.getName());
+						}
 	
 						Intent insertIntent = createEventIntent(context, event);
 						insertIntent.putExtra(CalendarContract.Events.ACCESS_LEVEL, getAccessLevel(event.getClassification()));
