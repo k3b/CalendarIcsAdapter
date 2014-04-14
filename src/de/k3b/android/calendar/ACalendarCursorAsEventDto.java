@@ -27,6 +27,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 /**
  * Facade that make a android-calendar-event-cursor appear as EventDto.<br/>
+ * 
  * @author k3b
  */
 public class ACalendarCursorAsEventDto extends ACalendarCursor implements EventDto {
@@ -54,7 +55,10 @@ public class ACalendarCursorAsEventDto extends ACalendarCursor implements EventD
 	@Override
 	protected String[] getColums() { return COLUMS; }	
 
-	// collumn names must match order in the getters below
+	// collumn names must match order in the getters below.
+	// Warning: Adding further colums might break android 2.1 compatiblity.
+	// These 11 colums where found in my android2.2 calendar-events-table.
+	// See ACalendarMock.onCreate() for a list of android2.2 calendar-events columns
 	private String[] COLUMS = new String[] {
 			CalendarContract.EventsColumns._ID, 
 			CalendarContract.EventsColumns.DTSTART,                           
@@ -73,53 +77,46 @@ public class ACalendarCursorAsEventDto extends ACalendarCursor implements EventD
 	 * @see de.k3b.calendar.adapter.EventData#getDtstart()
 	 */
 	@Override
-	public long getDtstart() {return cur.getLong(1);}
+	public long getDtstart() {return currentCalendarContentDatabaseCursor.getLong(1);}
 	/* (non-Javadoc)
 	 * @see de.k3b.calendar.adapter.EventData#getDtend()
 	 */
 	@Override
-	public long getDtend() {return cur.getLong(2);}
+	public long getDtend() {return currentCalendarContentDatabaseCursor.getLong(2);}
 	/* (non-Javadoc)
 	 * @see de.k3b.calendar.adapter.EventData#getTitle()
 	 */
 	@Override
-	public String getTitle() {return cur.getString(3);}
+	public String getTitle() {return currentCalendarContentDatabaseCursor.getString(3);}
 	/* (non-Javadoc)
 	 * @see de.k3b.calendar.adapter.EventData#getDescription()
 	 */
 	@Override
-	public String getDescription() {return cur.getString(4);}
+	public String getDescription() {return currentCalendarContentDatabaseCursor.getString(4);}
 	/* (non-Javadoc)
 	 * @see de.k3b.calendar.adapter.EventData#getEventLocation()
 	 */
 	@Override
-	public String getEventLocation() {return cur.getString(5);}
+	public String getEventLocation() {return currentCalendarContentDatabaseCursor.getString(5);}
 	/* (non-Javadoc)
 	 * @see de.k3b.calendar.adapter.EventData#getEventTimezone()
 	 */
 	@Override
-	public String getEventTimezone() {return cur.getString(6);}
+	public String getEventTimezone() {return currentCalendarContentDatabaseCursor.getString(6);}
 	/* (non-Javadoc)
 	 * @see de.k3b.calendar.adapter.EventData#getDuration()
 	 */
 	@Override
-	public String getDuration() {return cur.getString(7);}
+	public String getDuration() {return currentCalendarContentDatabaseCursor.getString(7);}
 	/* (non-Javadoc)
 	 * @see de.k3b.calendar.adapter.EventData#getRrule()
 	 */
 	@Override
-	public String getRrule() {return cur.getString(8);}
-	@Override
-	public String getOrganizer() {return cur.getString(9);}
-	/*
-	DTSTAMP:20131031T071858Z
-	PRIORITY:1
-	ATTENDEE;ROLE=REQ-PARTICIPANT;CN=BUYER:mailto:notimportant@example.com
-	ATTENDEE;ROLE=REQ-PARTICIPANT;CN=TRAVELLER:notimportant@example.com
-	ORGANIZER;CN=ORGANIZER:mailto:webmaster@trenitalia.it
-	RRULE:FREQ=MONTHLY;WKST=MO;BYDAY=3SA
-	*/
+	public String getRrule() {return currentCalendarContentDatabaseCursor.getString(8);}
 
 	@Override
-	public String getCalendarId() {return cur.getString(10);}
+	public String getOrganizer() {return currentCalendarContentDatabaseCursor.getString(9);}
+
+	@Override
+	public String getCalendarId() {return currentCalendarContentDatabaseCursor.getString(10);}
 }

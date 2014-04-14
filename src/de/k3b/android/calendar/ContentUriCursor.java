@@ -19,7 +19,6 @@
 package de.k3b.android.calendar;
 
 import java.io.Closeable;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -33,22 +32,22 @@ import android.net.Uri;
 
 /**
  * Baseclass for cursor based dataaccess via content-uri.<br/>
- * It can used with contentResolver or with a local (mock)database that simulates the contentProviderAPI.<br/><br/>
+ * It can used with calendarContentResolver or with a local (mock)database that simulates the contentProviderAPI.<br/><br/>
+ * 
  * @author k3b
  */
 public abstract class ContentUriCursor implements Closeable {
-	protected static String selectionById = "(" + CalendarContract.EventsColumns._ID + " = ? )";
-	protected Cursor cur = null;
-	protected ContentResolver contentResolver = null;
-	protected SQLiteDatabase mockDatabase = null;
-
-	private List<String> contentToTablePlurals;
+	protected static String sqlFilterToFindById = "(" + CalendarContract.EventsColumns._ID + " = ? )";
+	
+	protected Cursor currentCalendarContentDatabaseCursor = null;
+	protected ContentResolver calendarContentResolver = null;
+	protected SQLiteDatabase mockedCalendarContentDatabase = null;
 
 	/**
 	 * Creates a datasource that uses the ContentResolver from context
 	 */
 	public ContentUriCursor(Context ctx) {
-		this.contentResolver = ctx.getContentResolver();
+		this.calendarContentResolver = ctx.getContentResolver();
 	}
 	
 	/**
@@ -59,20 +58,22 @@ public abstract class ContentUriCursor implements Closeable {
 	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
 	 */
 	@SuppressWarnings("unchecked")
-	public ContentUriCursor(SQLiteDatabase mockDatabase, String... contentToTablePlurals) {
-		this.mockDatabase = mockDatabase;
-		this.contentToTablePlurals = Arrays.asList(contentToTablePlurals);
+	public ContentUriCursor(SQLiteDatabase mockDatabase) {
+		this.mockedCalendarContentDatabase = mockDatabase;
 	}
 
+	/**
+	 * frees all allocated resources
+	 */
 	public void close() {
-		if (cur != null) {
-			cur.close();
-			cur = null;
+		if (currentCalendarContentDatabaseCursor != null) {
+			currentCalendarContentDatabaseCursor.close();
+			currentCalendarContentDatabaseCursor = null;
 		}
-		contentResolver = null;
+		calendarContentResolver = null;
 		
-		if (mockDatabase != null) {
-			mockDatabase.close();
+		if (mockedCalendarContentDatabase != null) {
+			mockedCalendarContentDatabase.close();
 		}
 	}
 	
@@ -87,7 +88,7 @@ public abstract class ContentUriCursor implements Closeable {
 	 * @param uri i.e. "content://com.adnroid.calendar/events/608" for event with _id=608.
 	 * @return opend cursor that must be closed by caller
 	 */
-	public Cursor getByContentURI(Uri uri) throws IllegalArgumentException {
+	public Cursor queryByContentURI(Uri uri) throws IllegalArgumentException {
 		if (uri == null) throw new IllegalArgumentException("ContentURI must not be null");
 		List<String> uriSegments = uri.getPathSegments();
 		String uriAsString = uri.toString();
@@ -98,31 +99,31 @@ public abstract class ContentUriCursor implements Closeable {
 		}
 		
 		String tableName = uriSegments.get(0);
-		if ((contentToTablePlurals != null) && contentToTablePlurals.contains(tableName)) {
-			tableName += "s";
-		}
 		String id = (uriSegments.size() == 1) ? null : uriSegments.get(1);
 
-		String sqlWhere = (id == null) ? null : selectionById; // all or one certain item
+		String sqlWhere = (id == null) ? null : sqlFilterToFindById; // all or one certain item
 		String[] sqlWhereparameters = (id == null) ? null : new String[] {id};
 
-		return getByContentURI(uri, tableName, sqlWhere, sqlWhereparameters);
+		return queryByContentURI(uri, tableName, sqlWhere, sqlWhereparameters);
 	}
 
-	protected Cursor getByContentURI(Uri uri, String tableName,
+	/**
+	 * Local Query executor that queries either the ContentResolver or the mocked database
+	 */
+	protected Cursor queryByContentURI(Uri uri, String tableName,
 			String sqlWhere, String[] sqlWhereparameters) {
-		if (contentResolver != null) {
-			cur = contentResolver.query(uri, getColums(), sqlWhere, sqlWhereparameters, null);
+		if (calendarContentResolver != null) {
+			currentCalendarContentDatabaseCursor = calendarContentResolver.query(uri, getColums(), sqlWhere, sqlWhereparameters, null);
 		} else {
-			cur = this.mockDatabase.query(tableName, getColums(), sqlWhere, sqlWhereparameters, null,null,null);			
+			currentCalendarContentDatabaseCursor = this.mockedCalendarContentDatabase.query(tableName, getColums(), sqlWhere, sqlWhereparameters, null,null,null);			
 		}
-		return cur;
+		return currentCalendarContentDatabaseCursor;
 	}
 
-	public String getId() {return cur.getString(0);}
+	public String getId() {return currentCalendarContentDatabaseCursor.getString(0);}
 
 	protected Date getDateTime(int columnIndex) {
-		long ticks = cur.getLong(columnIndex);
+		long ticks = currentCalendarContentDatabaseCursor.getLong(columnIndex);
 		return (ticks == 0) ? null : new Date(ticks);
 	}
 }

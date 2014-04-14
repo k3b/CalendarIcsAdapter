@@ -43,8 +43,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 /**
- * Invisible Pseudo-Activity that imports a ics-calendar-event-file into the android Calendar.
+ * Invisible Pseudo-Activity that imports a ics-calendar-event-file into the android Calendar.<br/>
  * Supports Android 4.0 and up. Runs on most Android 2.1 and up that have a calendar and a calendar provider.<br/><br/>
+ * 
  * @author k3b
  */
 public class Ics2ACalendarActivity extends Activity {
@@ -53,6 +54,9 @@ public class Ics2ACalendarActivity extends Activity {
 	// see http://stackoverflow.com/questions/3721963/how-to-add-calendar-events-in-android
     private static final String CONTENT_TYPE_EVENT = "vnd.android.cursor.item/event";
 	
+    /**
+     * gets file uri from activity intent and opens re-populated "Add Event-To-Calendar"-Activity.
+     */
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,16 +76,19 @@ public class Ics2ACalendarActivity extends Activity {
 		this.finish();
     }
 	
-	static void startCalendarImportActivity(Context context, Uri calendarEventUri) {
-		if (calendarEventUri != null) {
+    /**
+     * opens re-populated "Add Event-To-Calendar"-Activity from contents of file-uri.
+     */
+	static void startCalendarImportActivity(Context context, Uri calendarEventFileUri) {
+		if (calendarEventFileUri != null) {
 			try {
 				if (Global.debugEnabled) {
-					Log.d(TAG, "opening " + calendarEventUri);
+					Log.d(TAG, "opening " + calendarEventFileUri);
 				}
 				
 				//use ical4j to parse the event
 				CalendarBuilder cb = new CalendarBuilder();
-				Calendar calendar = cb.build(getStreamFromOtherSource(context, calendarEventUri));
+				Calendar calendar = cb.build(getStreamFromOtherSource(context, calendarEventFileUri));
 	
 				if (calendar != null) {
 	
@@ -104,12 +111,15 @@ public class Ics2ACalendarActivity extends Activity {
 				}
 	
 			} catch (Exception e) {
-				Log.e(TAG, "error processing " + calendarEventUri + " : " + e);
+				Log.e(TAG, "error processing " + calendarEventFileUri + " : " + e);
 				e.printStackTrace();
 			}
 		}
 	}
 
+	/**
+	 * translates a ical4j-Calendar-Event into Android-"Add Event-To-Calendar"-Intent
+	 */
 	private static Intent createEventIntent(Context context, VEvent _event) {
 		EventDto event = new IcsAsEventDto(_event);
 
@@ -142,7 +152,6 @@ public class Ics2ACalendarActivity extends Activity {
 
 	/**
 	 * Assumes allday if enddate is null or diff between end-start has 0 hours and 0 minutes.<br/>
-	 * calculates enddate from startdate+duration if neccessary.<br/>
 	 */
     private static void addBeginEnd(Intent insertIntent, long startDate,
     		long endDate, String duration) {
@@ -176,18 +185,27 @@ public class Ics2ACalendarActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Assumes allday if enddate is null or diff between end-start has 0 hours and 0 minutes.<br/>
+	 */
 	private static boolean isAllDay(Dur duration) {
 		return duration.getHours() == 0 && duration.getMinutes() == 0;
 	}
 
-	private static int getAccessLevel(Clazz clazz)
+	/**
+	 * translates from ical4jClazz to Android-Accesslevel
+	 */
+	private static int getAccessLevel(Clazz ical4jClazz)
 	{
-		if (clazz == Clazz.CONFIDENTIAL) return CalendarContract.Events.ACCESS_DEFAULT;
-		if (clazz == Clazz.PUBLIC) return CalendarContract.Events.ACCESS_PUBLIC;
-		if (clazz == Clazz.PRIVATE) return CalendarContract.Events.ACCESS_PRIVATE;
+		if (ical4jClazz == Clazz.CONFIDENTIAL) return CalendarContract.Events.ACCESS_DEFAULT;
+		if (ical4jClazz == Clazz.PUBLIC) return CalendarContract.Events.ACCESS_PUBLIC;
+		if (ical4jClazz == Clazz.PRIVATE) return CalendarContract.Events.ACCESS_PRIVATE;
 		return CalendarContract.Events.ACCESS_DEFAULT;
 	}
-	
+
+	/**
+	 * loads filecontents from stream
+	 */
 	protected static InputStream getStreamFromOtherSource(Context context, Uri contentUri) throws FileNotFoundException {
 	    ContentResolver res = context.getApplicationContext().getContentResolver();
 	    Uri uri = Uri.parse(contentUri.toString());

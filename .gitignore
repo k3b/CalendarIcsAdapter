@@ -8,3 +8,5 @@
 /proguard
 /build
 /.gradle
+
+/gradle-app.setting

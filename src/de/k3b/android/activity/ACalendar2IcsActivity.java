@@ -65,6 +65,10 @@ public class ACalendar2IcsActivity extends Activity {
 		return this.getText(R.string.export_filename_ics).toString();
 	}
 	
+    /**
+     * Gets the calendar-event-content-uri from activity intent and exports it to opens re-populated "Add Event-To-Calendar"-Activity.
+     * if Global.USE_MOCK_CALENDAR==true it opens "content://com.android.calendar/events/1" from mock-database
+     */
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +78,7 @@ public class ACalendar2IcsActivity extends Activity {
 		Uri data = intent.getData();
 		
 		if ((Global.USE_MOCK_CALENDAR) && (data == null)) {
-			data = ACalendarCursor.createContentUri("event","1");
+			data = ACalendarCursor.createContentUri("events","1");
 			// data = ACalendarCursor.createContentUri("events");
 		}
 		
@@ -114,6 +118,9 @@ public class ACalendar2IcsActivity extends Activity {
 		this.finish();
     }
 
+	/**
+	 * closes all allocated resources.
+	 */
 	@Override protected void onDestroy() 
 	{
 		if (engine != null) {
@@ -127,6 +134,10 @@ public class ACalendar2IcsActivity extends Activity {
 		super.onDestroy();
 	};
 
+	/**
+	 * calculates mail-subject from event.
+	 * If the ics is send via email-attachment, the send mail app is pre-populated with a mail-subject 
+	 */
 	private String getMailSubject(EventDto event) {
 		if (event != null) {
 			String date = "";
@@ -145,6 +156,10 @@ public class ACalendar2IcsActivity extends Activity {
 		return null;
 	}
 
+	/**
+	 * calculates mail-description from event.
+	 * If the ics is send via email-attachment, the send mail app is pre-populated with content. 
+	 */
 	protected String getMailDescription(EventDto event) {
 		if (event != null) {
 			String date = "";
@@ -164,6 +179,9 @@ public class ACalendar2IcsActivity extends Activity {
 		return null;
 	}
 	
+	/**
+	 * used to add a banner to the mail - content.
+	 */
 	private String getAppVersionName() {
 		String versionName = "";
 		try {
@@ -175,6 +193,9 @@ public class ACalendar2IcsActivity extends Activity {
 		return getString(R.string.app_name) + versionName;
 	}
 
+	/**
+	 * Opens android "sendTo"-chooser with propopulated data:
+	 */
 	private void sendIcsTo(String mailSubject, String mailBody, String mailAttachmentContent) throws IOException {
 		final File icsFIle = this.getOuputFile();
 		// Log.d(ACalendar2IcsEngine.TAG, result.toString());
@@ -208,6 +229,9 @@ public class ACalendar2IcsActivity extends Activity {
 		return uri;
 	}
 
+	/**
+	 * writes attachment-content-to global-readable file
+	 */
 	private  void writeStringToTextFile(File file, String content) throws IOException{
 	    FileOutputStream f1 = new FileOutputStream(file,false); //True = Append to file, false = Overwrite
 	    PrintStream p = new PrintStream(f1);
@@ -217,7 +241,7 @@ public class ACalendar2IcsActivity extends Activity {
 	}
 	
 	/**
-	 * cachefile content.FileProvider specific implementention that does not need local file permissions.<br/>
+	 * get File where attachment-content will be exported to.<br/>
 	 */
 	private File getOuputFile() {
 		final File path = getOutputDir();

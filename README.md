@@ -60,6 +60,6 @@ The project should build as-is using
   * `gradle clean installDebug`
 
 The libraries contained  in this project are taken from the [ical4j project](http://ical4j.sf.net/).
-The app should be available in the android opensource appstore [f-droid](https://f-droid.org/)
+A binary version of the app is [available](https://f-droid.org/wiki/page/de.k3b.android.calendar.ics.adapter) in the android opensource appstore [f-droid](https://f-droid.org/)
 
 If you find any issues look at the [CalendarIcsAdapter issue tracker](https://github.com/k3b/CalendarIcsAdapter/issues)

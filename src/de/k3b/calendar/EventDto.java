@@ -21,6 +21,7 @@ package de.k3b.calendar;
 /**
  * calendar-event-abstraction that is independant from Android-Calendar-Event and form iCal4j-VEvent-ics-Implementation.
  * This class has no direct dependency to android so it can be used in a j2se-junit-integration tests.<br/><br/>
+ * 
  * @author k3b
  */
 public interface EventDto {
@@ -45,5 +46,4 @@ public interface EventDto {
 	public String getOrganizer();
 
 	public String getCalendarId();
-
 }

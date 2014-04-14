@@ -25,14 +25,22 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Simulates the api of an android calendar content provider that is compatibel with Samsung-Android2.2 Calendar.
  * Used internally for testing on emulator that has no calendar-app and no calendar-provder.<br/><br/>
+ * 
  * @author k3b
  */
 public class ACalendarMock extends SQLiteOpenHelper {
+	
+	/**
+	 * Opens Mock-DB. Creates it if it does not exist.
+	 */
 	public ACalendarMock(final Context context) {
 		super(context, "calendar.db", null, 1);
 		context.getDir("databases", Context.MODE_PRIVATE); // create dir if it does not exist
 	}
 
+	/**
+	 * Creates mock database with events-table and sample data using the same columns that my android2.2 has.
+	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE Events (_id INTEGER PRIMARY KEY," +
@@ -83,4 +91,3 @@ public class ACalendarMock extends SQLiteOpenHelper {
 		
 	}
 }
- 
