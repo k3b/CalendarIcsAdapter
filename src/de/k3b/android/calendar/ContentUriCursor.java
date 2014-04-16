@@ -57,7 +57,6 @@ public abstract class ContentUriCursor implements Closeable {
 	 * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db ) 
 	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
 	 */
-	@SuppressWarnings("unchecked")
 	public ContentUriCursor(SQLiteDatabase mockDatabase) {
 		this.mockedCalendarContentDatabase = mockDatabase;
 	}
