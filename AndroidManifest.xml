@@ -2,8 +2,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.k3b.android.calendar.ics.adapter"
-    android:versionCode="9"
-    android:versionName="1.5.3-140410" >
+    android:versionCode="10"
+    android:versionName="1.5.3.10-140416" >
 
 <!-- /*
  * Copyright (C) 2013, 2014 - Daniele Gobbetti and k3b
@@ -50,7 +50,7 @@
             </intent-filter>
         </activity>
 
-        <!-- Hooks into Calendar-gui-view-event : adds "export calendar event" to ics file -->
+        <!-- Hooks into Calendar-gui-view-event : adds "export calendar event" to ical file -->
         <activity
             android:name="de.k3b.android.activity.ACalendar2IcalActivity" android:label="@string/export_chooser_caption_ical">
             <intent-filter>
@@ -82,7 +82,7 @@
                 <data android:scheme="file"  />
                 <data android:scheme="http"  />
                 <data android:scheme="https"  />
-   				<!-- android does not allow to download *.ics-files via bluetooth but it works with other extensiond. 
+   				<!-- android does not allow to download *.ics-files via bluetooth but it works with other extensions. 
    					according to http://en.wikipedia.org/wiki/ICalendar .ical and .icalendar are also used. -->
                 <data android:pathPattern=".*\\.ics" />
                 <data android:pathPattern=".*\\.ical" />

@@ -35,6 +35,7 @@ import net.fortuna.ical4j.model.property.Uid;
  * Facade that makes a ical4j-vevent implementation specific ics appear as EventDto.<br/>
  * 
  * This class has no direct dependency to android so it can be run in a j2se-junit-integration test.<br/><br/>
+ * 
  * @author Daniele Gobbetti and k3b
  */
 public class IcsAsEventDto implements EventDto {

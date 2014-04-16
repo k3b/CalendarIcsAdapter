@@ -21,6 +21,7 @@ package de.k3b.calendar;
 /**
  * Minimal implementation of EventDto to backup values of other EventDto-implementatons.<br/>
  * This class has no direct dependency to android so it can be run in a j2se-junit-integration test.<br/><br/>
+ * 
  * @author k3b
  */
 public class EventDtoSimple implements EventDto {

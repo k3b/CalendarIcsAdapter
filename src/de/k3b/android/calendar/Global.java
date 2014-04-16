@@ -16,34 +16,20 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package de.k3b.calendar;
+package de.k3b.android.calendar;
 
 /**
- * calendar-event-abstraction that is independant from Android-Calendar-Event and form iCal4j-VEvent-ics-Implementation.
- * This class has no direct dependency to android so it can be used in a j2se-junit-integration tests.<br/><br/>
- * 
- * @author k3b
+ * Global settings
  */
-public interface EventDto {
-	public abstract String getId();
+public class Global {
+	/**
+	 * true: add several Log.d(...) to show what is going on
+	 */
+	public static boolean debugEnabled = false; 
 	
-	public abstract long getDtstart();
+	/**
+	 * true: use local calendar db (for testing); false: use contentProvider for production
+	 */
+	public static boolean USE_MOCK_CALENDAR = false;
 
-	public abstract long  getDtend();
-
-	public abstract String getTitle();
-
-	public abstract String getDescription();
-
-	public abstract String getEventLocation();
-
-	public abstract String getEventTimezone();
-
-	public abstract String getDuration();
-
-	public abstract String getRrule();
-
-	public String getOrganizer();
-
-	public String getCalendarId();
 }

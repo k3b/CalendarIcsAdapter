@@ -22,7 +22,7 @@ import de.k3b.android.calendar.ics.adapter.R;
 
 /**
  * this is exactly the the same as ACalendar2IcsActivity except 
- * that is uses a different filename-extension. <br/>
+ * that it uses a different filename-extension. <br/>
  */
 public class ACalendar2IcalActivity extends ACalendar2IcsActivity {
 

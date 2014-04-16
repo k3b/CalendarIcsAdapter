@@ -26,13 +26,14 @@ import android.net.Uri;
 
 /**
  * Baseclass for all Android Calendar-Provider-Cursors.<br/><br/>
+ * 
  * @author k3b
  */
 public abstract class ACalendarCursor extends ContentUriCursor {
 	
-	// uri of content provider. my differ with android version below 4.0
-	// may be dynamically updated
-	protected static String providerAutority = "com.android.calendar"; 
+	// uri of content provider. My differ with android version below 4.0
+	// May be dynamically updated.
+	protected static String providerAutority = null; 
 	/**
 	 * Creates a datasource that uses the ContentResolver from context
 	 */
@@ -52,9 +53,12 @@ public abstract class ACalendarCursor extends ContentUriCursor {
 	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
 	 */
 	public ACalendarCursor(SQLiteDatabase mockDatabase) {
-		super(mockDatabase,"calendar", "event");
+		super(mockDatabase);
 	}
 	
+	/**
+	 * Factory that creates a content uri from its parts
+	 */
 	public static Uri createContentUri(String... urlParts) {
 		StringBuffer uri = new StringBuffer("content://" + providerAutority);
 		for(String urlPart : urlParts) {
@@ -67,11 +71,11 @@ public abstract class ACalendarCursor extends ContentUriCursor {
 	 * @param uri i.e. "content://com.adnroid.calendar/events/608" for event with _id=608.
 	 * @return opend cursor that must be closed by caller
 	 */
-	public Cursor getByContentURI(Uri uri) throws IllegalArgumentException {
+	public Cursor queryByContentURI(Uri uri) throws IllegalArgumentException {
 		if ((uri != null) && (uri.getAuthority() != null)) {
 			providerAutority  = uri.getAuthority();
 		}
 		
-		return super.getByContentURI(uri);
+		return super.queryByContentURI(uri);
 	}
 }

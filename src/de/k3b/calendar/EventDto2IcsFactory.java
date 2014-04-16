@@ -25,8 +25,9 @@ import net.fortuna.ical4j.model.component.*;
 import net.fortuna.ical4j.model.property.*;
 
 /**
- * Factory that converts EventDto to iCal4j-Implementation specific ics.
+ * Factory that converts generic EventDto to iCal4j-Implementation specific ics.
  * This class has no direct dependency to android so it can be run in a j2se-junit-integration test.<br/><br/>
+ * 
  * @author k3b
  */
 public class EventDto2IcsFactory {
@@ -45,6 +46,10 @@ public class EventDto2IcsFactory {
 		this.applicationID = applicationID;
 	}
 	
+	/**
+	 * gets the generated calendar.
+	 * Use getCalendar().toString() to get the ics-file content 
+	 */
 	public Calendar getCalendar() {
 		if (this.calendar == null) {
 			this.calendar = new Calendar();
@@ -55,23 +60,26 @@ public class EventDto2IcsFactory {
 		return calendar;
 	}
 
-	public VEvent addEvent(EventDto data, TimeZone timezone) {
+	/**
+	 * adds a generic EventDto to ical4j-calendar
+	 */
+	public VEvent addEvent(EventDto eventData, TimeZone timezone) {
 		VEvent event = new VEvent();
 		PropertyList eventProperties = event.getProperties();
-		if (data.getId() != null) eventProperties.add(new Uid("acal-"+data.getCalendarId()+"-"+data.getId()));
-		if (data.getDtstart() != 0) eventProperties.add(new DtStart(new DateTime( data.getDtstart())));
-		if (data.getDtend() != 0) eventProperties.add(new DtEnd(new DateTime( data.getDtend())));
+		if (eventData.getId() != null) eventProperties.add(new Uid("acal-"+eventData.getCalendarId()+"-"+eventData.getId()));
+		if (eventData.getDtstart() != 0) eventProperties.add(new DtStart(new DateTime( eventData.getDtstart())));
+		if (eventData.getDtend() != 0) eventProperties.add(new DtEnd(new DateTime( eventData.getDtend())));
 
-		if (data.getTitle() != null) eventProperties.add(new Summary(data.getTitle()));
-		if (data.getDescription() != null) eventProperties.add(new Description(data.getDescription()));
-		if (data.getEventLocation() != null) eventProperties.add(new Location(data.getEventLocation()));
+		if (eventData.getTitle() != null) eventProperties.add(new Summary(eventData.getTitle()));
+		if (eventData.getDescription() != null) eventProperties.add(new Description(eventData.getDescription()));
+		if (eventData.getEventLocation() != null) eventProperties.add(new Location(eventData.getEventLocation()));
 		
 		if (timezone != null) eventProperties.add(timezone);
-		if (data.getDuration() != null) eventProperties.add(new Duration(new Dur( data.getDuration())));
+		if (eventData.getDuration() != null) eventProperties.add(new Duration(new Dur( eventData.getDuration())));
 		
-		if (data.getRrule() != null) {
+		if (eventData.getRrule() != null) {
 			try {
-				eventProperties.add(new RRule(data.getRrule()));
+				eventProperties.add(new RRule(eventData.getRrule()));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}

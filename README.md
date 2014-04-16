@@ -45,10 +45,21 @@ the event details before saving.
  
 ## Building
 
-The project should build as-is using `ant clean release install` or `ant clean debug install`. 
+There are 3 branches in the git repository at https://github.com/k3b/CalendarIcsAdapter.git
+* **master** ics-import only that requires no additional permisions based on [[org.dgtale.icsimport]]
+* **development** current development version for eclipse that include local lib/*.jars and is not suitable for fdroid-builds
+* **release-fdroid** official fdroid build version with gradle-build and not local lib/*.jars.
+  * official fdroid releases are tagged with v*.*.* (for example v1.5.4)
+
+The project should build as-is using 
+* ant
+  * `ant clean release install` or 
+  * `ant clean debug install` or 
+* using Gradle-1.11 and android-buildtoos-19.0.3
+  * `gradle clean installRelease`
+  * `gradle clean installDebug`
 
 The libraries contained  in this project are taken from the [ical4j project](http://ical4j.sf.net/).
-
-The app should be available in the android opensource appstore [f-droid](https://f-droid.org/)
+A binary version of the app is [available](https://f-droid.org/wiki/page/de.k3b.android.calendar.ics.adapter) in the android opensource appstore [f-droid](https://f-droid.org/)
 
 If you find any issues look at the [CalendarIcsAdapter issue tracker](https://github.com/k3b/CalendarIcsAdapter/issues)

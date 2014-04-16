@@ -37,18 +37,38 @@ import android.util.Log;
 
 /**
  * Android specific engine that converts a Android-Calendar-Event to a ics-Calendar-Event string.<br/><br/>
+ * 
  * @author k3b
  */
 public class ACalendar2IcsEngine implements Closeable {
+	/**
+	 * uses as logging-prefix
+	 */
 	public static final String TAG = "ICS-Export";
 
-	final private SQLiteOpenHelper mock;
+	/**
+	 * where data comes from
+	 */
 	final private ACalendarCursorAsEventDto eventData;
 
+	/**
+	 * null if there is not contentprovider-mocking.
+	 */
+	final private SQLiteOpenHelper mock;
+
+	/**
+	 * null if there is not contentprovider-mocking.
+	 */
 	private SQLiteDatabase writableDatabase = null;
 
+	/**
+	 * used to access resources
+	 */
 	private Context ctx;
 	
+	/**
+	 * creates the enginge that either uses mock-database or contentprovider
+	 */
 	public ACalendar2IcsEngine(Context ctx, boolean useMockCalendar) {
 		this.ctx = ctx;
 		mock = (useMockCalendar) ? new ACalendarMock(ctx) : null;
@@ -56,11 +76,14 @@ public class ACalendar2IcsEngine implements Closeable {
 		this.eventData = (mock != null) ? new ACalendarCursorAsEventDto(writableDatabase) : new ACalendarCursorAsEventDto(ctx) ;
 	}
 
+	/**
+	 * converts an android-calendar-event identified by contentUri to ics-Calendar
+	 */
 	public Calendar export(Uri contentUri) {
 		boolean hasData = false;
 		EventDto2IcsFactory factory = new EventDto2IcsFactory(this.ctx.getText(R.string.app_ics_provider_name).toString());
 		// set to null for non mocked production
-		Cursor eventCursor = eventData.getByContentURI(contentUri);
+		Cursor eventCursor = eventData.queryByContentURI(contentUri);
 		
 		if (eventCursor != null) {		
 			// Use the cursor to step through the returned records
@@ -68,7 +91,9 @@ public class ACalendar2IcsEngine implements Closeable {
 				hasData = true;
 				TimeZone timezone = getOrCreateTimeZone(eventData);
 				factory.addEvent(eventData, timezone);
-				Log.d(ACalendar2IcsEngine.TAG, "added event " + eventData.getTitle());
+				if (Global.debugEnabled) {
+					Log.d(ACalendar2IcsEngine.TAG, "added event " + eventData.getTitle());
+				}
 			}
 			eventCursor.close();
 		}
@@ -76,11 +101,18 @@ public class ACalendar2IcsEngine implements Closeable {
 		return (hasData) ? factory.getCalendar() : null;
 	}
 	
+	/**
+	 * Placeholder to infer timezone.<br/>
+	 * Not implemented yet.
+	 */
 	TimeZone getOrCreateTimeZone(EventDto data) {
 		// not implemented yet
 		return null; //??? if (data.getEventTimezone() != null) eventProperties.add(new Timez(data.getEventTimezone()));
 	}
 
+	/**
+	 * closes all allocated resources
+	 */
 	public void close() {
 		if (eventData != null) {
 			eventData.close();
