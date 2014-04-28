@@ -20,13 +20,14 @@ package de.k3b.android.calendar;
 
 
 import java.io.Closeable;
+import java.io.IOException;
 
-import de.k3b.android.calendar.ACalendarCursorAsEventDto;
+import de.k3b.android.calendar.ACalendarCursorAsEventDto2;
 import de.k3b.android.calendar.ACalendarMock;
 import de.k3b.android.calendar.ics.adapter.R;
+import de.k3b.android.compat.Compat;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventDto2IcsFactory;
-
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.TimeZone;
 import android.content.Context;
@@ -73,7 +74,12 @@ public class ACalendar2IcsEngine implements Closeable {
 		this.ctx = ctx;
 		mock = (useMockCalendar) ? new ACalendarMock(ctx) : null;
 		writableDatabase  = (useMockCalendar) ? mock.getWritableDatabase() : null;
-		this.eventData = (mock != null) ? new ACalendarCursorAsEventDto(writableDatabase) : new ACalendarCursorAsEventDto(ctx) ;
+		
+		if (Compat.isCalendarContract4Available()) {
+			this.eventData = (mock != null) ? new ACalendarCursorAsEventDto4(writableDatabase) : new ACalendarCursorAsEventDto4(ctx) ;			
+		} else {
+			this.eventData = (mock != null) ? new ACalendarCursorAsEventDto2(writableDatabase) : new ACalendarCursorAsEventDto2(ctx) ;						
+		}
 	}
 
 	/**
@@ -115,7 +121,10 @@ public class ACalendar2IcsEngine implements Closeable {
 	 */
 	public void close() {
 		if (eventData != null) {
-			eventData.close();
+			try {
+				eventData.close();
+			} catch (IOException e) {
+			}
 		}
 		if (writableDatabase != null) {
 			writableDatabase.close();

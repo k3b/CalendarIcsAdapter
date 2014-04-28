@@ -18,19 +18,17 @@
  */
 package de.k3b.android.calendar;
 
-import java.io.Closeable;
-
-import android.database.Cursor;
-import android.net.Uri;
-import de.k3b.calendar.EventDto;
+import net.fortuna.ical4j.model.component.VEvent;
+import android.content.Context;
+import android.content.Intent;
 
 /**
- * common api for ACalendarCursorAsEventDto2 (for android2.x) and ACalendarCursorAsEventDto4 (for android4.x) 
+ * common api for IcsImportIntentFactory2 (for android2.x) and IcsImportIntentFactory4 (for android4.x) 
  * @author k3b
  *
  */
-public interface ACalendarCursorAsEventDto extends EventDto, Closeable {
+public interface IcsImportIntentFactory {
 
-	Cursor queryByContentURI(Uri contentUri);
+	Intent createImportIntent(Context context, VEvent event);
 
 }
