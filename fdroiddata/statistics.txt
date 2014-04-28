@@ -1,0 +1,116 @@
+file:///C:/Progs.Portable/sdk/eclipse64/android-sdk/docs/reference/android/widget/RelativeLayout.LayoutParams.html
+file:///C:/Progs.Portable/sdk/eclipse64/android-sdk/docs/guide/topics/ui/layout/relative.html
+
+stats
+* https://gitlab.com/fdroid/fdroiddata/blob/master/stats/total_downloads_app.txt
+* https://gitlab.com/fdroid/fdroiddata/blob/master/stats/total_downloads_app_version.txt
+* https://f-droid.org/repository/browse/?fdid=de.k3b.android.calendar.ics.adapter
+* https://f-droid.org/wiki/page/de.k3b.android.calendar.ics.adapter
+* https://gitlab.com/fdroid/fdroiddata/merge_requests/
+* https://gitlab.com/fdroid/fdroiddata/tree/master/stats
+
+de.k3b.android.calendar.ics.adapter
+140428 1582
+140427 1569
+140426 1544
+140425 1529
+140424 1478
+140423 1426
+140422 1358
+140421 1293
+140420 1244
+140419 1165
+140418 1094
+140417 1033
+140416 932
+140414 686
+140413 484
+140412 259
+
+org.dgtale.icsimport_2
+140428 4214
+140427 4201
+140426 4187
+140425 4170
+140424 4158
+140423 4145
+140422 4128
+140421 4113 
+140420 4091
+140419 4077
+140418 4039
+140417 4005
+140416 3975
+
+org.fdroid.fdroid_580
+140428 57563
+140427 57554
+140426 57523
+140425 57515
+140424 57498
+140423 57473
+140422 57456
+140421 57432
+140420 57402
+140419 57382
+140418 57356
+140417 57324
+140416 57301
+140414 57248
+
+org.fdroid.fdroid_630
+140428 47128
+140427 46448
+140426 45857
+140425 45172
+140424 44462
+140423 43707
+140422 42666
+140421 41525
+140420 40312
+140419 38961
+140418 37662
+140417 36242
+140416 34584
+140414 30206
+
+org.fdroid.fdroid_640 
+140428 1518
+140427 1232
+140426 957
+140425 646
+140424 320
+
+com.fsck.k9_20004
+140428 21456
+140427 21323
+140426 20908
+140425 20770
+140424 20639
+140423 20485
+140422 20333
+140421 20178 
+140420 20034
+140419 19891
+140418 19731
+140417 19578
+140416 19405
+
+app-versions
+140428 4171
+140427 4164
+140426 4163
+140425 4160
+140423 4146
+140422 4146
+140421 4142
+140420 4137
+
+com.cyanogenmod.filemanager.ics_1015 19667
+com.michaldabski.filemanager_5 42436
+net.micode.fileexplorer_1 13336
+org.openintents.filemanager_28 13837
+
+apps
+140428 1165
+140414 1151
