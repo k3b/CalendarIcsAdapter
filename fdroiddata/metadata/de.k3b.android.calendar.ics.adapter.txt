@@ -33,10 +33,12 @@ Maintainer Notes:
 Jars used in 1.5.3 are the same ones that were used in org.dgtale.icsimport.
 Check them again if they are changed. Will switch to source libraries or
 gradle deps soon.
+
+note from k3b: new version 1.5.5.11-140428 switched to gradle deps with no more local jars.
 .
 
 Auto Update Mode:None
 Update Check Mode:Tags
-Current Version:1.5.5.11-140428
-Current Version Code:11
+Current Version:1.5.3.10-140416
+Current Version Code:10
 

@@ -1,7 +1,7 @@
 todo.txt for android.calendar.ics.adapter
 =========
 
-- #5 Seperate android2 api from android4 api  
+v #5 Seperate android2 api from android4 api  
 
 v push to f-droid-store
 	v v1.5.1 wrong package name
@@ -19,8 +19,6 @@ v send via bluetooth workaround via public readable file
 
 ? main view with settings and about
 	
-? split a4.0 and a 2.1-
-
 ----------------------
 
 http://developer.android.com/guide/topics/manifest/activity-alias-element.html
