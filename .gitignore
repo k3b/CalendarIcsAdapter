@@ -1,12 +1,4 @@
-/bin
-/gen
-/.classpath
-/.project
-
-/.settings
-/local.properties
-/proguard
 /build
 /.gradle
-
-/gradle-app.setting
+/.idea
+/local.properties
