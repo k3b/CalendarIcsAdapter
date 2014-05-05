@@ -38,9 +38,6 @@ import java.util.Iterator;
 
 import de.k3b.android.calendar.Global;
 import de.k3b.android.calendar.IcsImportIntentFactory;
-import de.k3b.android.calendar.IcsImportIntentFactory2;
-import de.k3b.android.calendar.IcsImportIntentFactory4;
-import de.k3b.android.compat.Compat;
 
 /**
  * Invisible Pseudo-Activity that imports a ics-calendar-event-file into the android Calendar.<br/>
@@ -88,13 +85,7 @@ public class Ics2ACalendarActivity extends Activity {
                 Calendar calendar = cb.build(getStreamFromOtherSource(context, calendarEventFileUri));
 
                 if (calendar != null) {
-                    IcsImportIntentFactory importFactory;
-
-                    if (Compat.isCalendarContract4Available()) {
-                        importFactory = new IcsImportIntentFactory4();
-                    } else {
-                        importFactory = new IcsImportIntentFactory2();
-                    }
+                    IcsImportIntentFactory importFactory = new IcsImportIntentFactory();
 
                     Iterator<?> i = calendar.getComponents(Component.VEVENT).iterator();
 

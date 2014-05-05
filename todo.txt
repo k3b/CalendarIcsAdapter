@@ -1,6 +1,12 @@
 todo.txt for android.calendar.ics.adapter
 =========
 
+- bug export: recurring event:email-subject date should be occurence-start (long-extra-beginTime) instead of rule-start
+	- is there a ical rrule to text function?
+- feature export: instead of 2 activities send ics/ical option dialog with format (ics/ical) and with recurrence event (only this event|all events|this and all further events)
+	- dlg
+	- engine convert eventrule
+
 v #5 Seperate android2 api from android4 api  
 
 v push to f-droid-store
@@ -20,6 +26,7 @@ v send via bluetooth workaround via public readable file
 ? main view with settings and about
 	
 ----------------------
+How to enable/disable intentet filter at runtime via activity-alias
 
 http://developer.android.com/guide/topics/manifest/activity-alias-element.html
 
@@ -79,5 +86,20 @@ introduced in:
     API Level 1
 see also:
     <activity>
+
+---------------------------------
+recurrence transformation (this; all; this and all further)
+
+C:\Users\eve\Downloads\Android\dbAndContent
+
+/**
+ * Returns whether or not a recurrence is defined in this RecurrenceSet.
+ * @return Whether or not a recurrence is defined in this RecurrenceSet.
+ */
+public boolean hasRecurrence() {
+	return (rrules != null || rdates != null);
+}	
+	
+
 
 

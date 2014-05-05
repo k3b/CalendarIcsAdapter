@@ -22,9 +22,11 @@ import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Dur;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.Clazz;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import de.k3b.android.compat.CalendarContract;
+import android.os.Build;
+import android.provider.CalendarContract;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.IcsAsEventDto;
 
@@ -35,7 +37,8 @@ import de.k3b.calendar.IcsAsEventDto;
  * 
  * @author k3b
  */
-public class IcsImportIntentFactory2 implements IcsImportIntentFactory {
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+class IcsImportIntentImpl4 {
 	// see http://stackoverflow.com/questions/3721963/how-to-add-calendar-events-in-android
     private static final String CONTENT_TYPE_EVENT = "vnd.android.cursor.item/event";
 	

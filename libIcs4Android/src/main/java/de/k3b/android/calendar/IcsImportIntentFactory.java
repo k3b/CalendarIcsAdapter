@@ -22,13 +22,30 @@ import net.fortuna.ical4j.model.component.VEvent;
 import android.content.Context;
 import android.content.Intent;
 
+import de.k3b.android.compat.Compat;
+
 /**
  * common api for IcsImportIntentFactory2 (for android2.x) and IcsImportIntentFactory4 (for android4.x) 
  * @author k3b
  *
  */
-public interface IcsImportIntentFactory {
+public class IcsImportIntentFactory {
+    private IcsImportIntentImpl4 imp4 = null;
+    private IcsImportIntentImpl2 imp2 = null;
 
-	Intent createImportIntent(Context context, VEvent event);
+    public IcsImportIntentFactory() {
+        if (Compat.isCalendarContract4Available()) {
+            imp4 = new IcsImportIntentImpl4();
+        } else {
+            imp2 = new IcsImportIntentImpl2();
+        }
+    }
+
+	public Intent createImportIntent(Context context, VEvent event) {
+        if (imp4 != null)
+            return imp4.createImportIntent(context, event);
+        else
+            return imp2.createImportIntent(context, event);
+    }
 
 }
