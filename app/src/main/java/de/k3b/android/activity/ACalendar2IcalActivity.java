@@ -21,23 +21,23 @@ package de.k3b.android.activity;
 import de.k3b.android.calendar.ics.adapter.R;
 
 /**
- * this is exactly the the same as ACalendar2IcsActivity except 
+ * this is exactly the the same as ACalendar2IcsActivity except
  * that it uses a different filename-extension. <br/>
  */
 public class ACalendar2IcalActivity extends ACalendar2IcsActivity {
 
-	/**
-	 * This will differ between ics and ical
-	 */
-	protected CharSequence getChooserCaption() {
-		return this.getText(R.string.export_chooser_caption_ical);
-	}
+    /**
+     * This will differ between ics and ical
+     */
+    protected CharSequence getChooserCaption() {
+        return this.getText(R.string.export_chooser_caption_ical);
+    }
 
-	/**
-	 * This will differ between ics and ical
-	 */
-	protected String getExportFileName() {
-		return this.getText(R.string.export_filename_ical).toString();
-	}
-	
+    /**
+     * This will differ between ics and ical
+     */
+    protected String getExportFileName() {
+        return this.getText(R.string.export_filename_ical).toString();
+    }
+
 }

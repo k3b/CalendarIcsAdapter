@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="export_chooser_caption_ics">Als ics (standard) senden &#8230;</string>
+    <string name="export_chooser_caption_ical">Als ical (Apple, Bluetooth) senden &#8230;</string>
+    <string name="export_mail_subject">%1$s-%2$s</string>
+    <string name="export_mail_content">Wann: %1$s\nWo: %2$s\n\n%3$s\n\n-----------------\nErstellt mit Hilfe von \'%4$s\'</string>
+
+    <string name="import_chooser_caption">"==> Kalender &#8230;"</string>
+</resources>
