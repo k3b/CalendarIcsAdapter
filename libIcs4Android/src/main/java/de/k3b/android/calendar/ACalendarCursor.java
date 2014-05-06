@@ -18,7 +18,7 @@
  */
 package de.k3b.android.calendar;
 
-import de.k3b.android.calendar.ics.adapter.R;
+import de.k3b.android.calendar.ics.R;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;

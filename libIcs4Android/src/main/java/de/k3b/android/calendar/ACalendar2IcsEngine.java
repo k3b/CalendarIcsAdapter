@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import de.k3b.android.calendar.ACalendarCursorAsEventDto2;
 import de.k3b.android.calendar.ACalendarMock;
-import de.k3b.android.calendar.ics.adapter.R;
+import de.k3b.android.calendar.ics.R;
 import de.k3b.android.compat.Compat;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventDto2IcsFactory;
