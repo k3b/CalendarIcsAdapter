@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"  tools:ignore="MissingTranslation">
     <!-- string resources that are not localized -->
     <string name="app_ics_provider_name">"-//de.k3b.calendar.adapter//iCal4j 1.0//EN"</string>
     

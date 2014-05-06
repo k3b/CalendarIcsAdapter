@@ -33,7 +33,7 @@ public abstract class ACalendarCursor extends ContentUriCursor {
 	
 	// uri of content provider. My differ with android version below 4.0
 	// May be dynamically updated.
-	protected static String providerAutority = null; 
+	private static String providerAutority = null;
 	/**
 	 * Creates a datasource that uses the ContentResolver from context
 	 */
@@ -60,7 +60,7 @@ public abstract class ACalendarCursor extends ContentUriCursor {
 	 * Factory that creates a content uri from its parts
 	 */
 	public static Uri createContentUri(String... urlParts) {
-		StringBuffer uri = new StringBuffer("content://" + providerAutority);
+		StringBuilder uri = new StringBuilder("content://" + providerAutority);
 		for(String urlPart : urlParts) {
 			uri.append("/").append(urlPart);
 		}
@@ -68,7 +68,7 @@ public abstract class ACalendarCursor extends ContentUriCursor {
 	}
 	
 	/**
-	 * @param uri i.e. "content://com.adnroid.calendar/events/608" for event with _id=608.
+	 * @param uri i.e. "content://com.android.calendar/events/608" for event with _id=608.
 	 * @return opend cursor that must be closed by caller
 	 */
 	public Cursor queryByContentURI(Uri uri) throws IllegalArgumentException {

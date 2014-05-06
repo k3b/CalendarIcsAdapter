@@ -61,7 +61,7 @@ public class ACalendarCursorAsEventDto4 extends ACalendarCursor implements ACale
 	// Warning: Adding further colums might break android 2.1 compatiblity.
 	// These 11 colums where found in my android2.2 calendar-events-table.
 	// See ACalendarMock.onCreate() for a list of android2.2 calendar-events columns
-	private String[] COLUMS = new String[] {
+	private final String[] COLUMS = new String[] {
 			CalendarContract.Events._ID, 
 			CalendarContract.Events.DTSTART,                           
 			CalendarContract.Events.DTEND,                           

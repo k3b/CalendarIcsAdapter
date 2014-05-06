@@ -46,7 +46,22 @@ import de.k3b.android.calendar.IcsImportIntentFactory;
  * @author k3b
  */
 public class Ics2ACalendarActivity extends Activity {
-    static final String TAG = "ICS-Import";
+    private static final String TAG = "ICS-Import";
+
+    /**
+     * loads filecontents from stream
+     */
+    private static InputStream getStreamFromOtherSource(Context context, Uri contentUri) {
+        ContentResolver res = context.getApplicationContext().getContentResolver();
+        Uri uri = Uri.parse(contentUri.toString());
+        InputStream is;
+        try {
+            is = res.openInputStream(uri);
+        } catch (FileNotFoundException e) {
+            is = new ByteArrayInputStream(new byte[0]);
+        }
+        return is;
+    }
 
     /**
      * gets file uri from activity intent and opens re-populated "Add Event-To-Calendar"-Activity.
@@ -109,20 +124,5 @@ public class Ics2ACalendarActivity extends Activity {
                 e.printStackTrace();
             }
         }
-    }
-
-    /**
-     * loads filecontents from stream
-     */
-    protected static InputStream getStreamFromOtherSource(Context context, Uri contentUri) throws FileNotFoundException {
-        ContentResolver res = context.getApplicationContext().getContentResolver();
-        Uri uri = Uri.parse(contentUri.toString());
-        InputStream is;
-        try {
-            is = res.openInputStream(uri);
-        } catch (FileNotFoundException e) {
-            is = new ByteArrayInputStream(new byte[0]);
-        }
-        return is;
     }
 }

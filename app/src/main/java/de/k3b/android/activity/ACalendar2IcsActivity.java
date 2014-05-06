@@ -20,6 +20,7 @@ package de.k3b.android.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
@@ -136,8 +137,6 @@ public class ACalendar2IcsActivity extends Activity {
         super.onDestroy();
     }
 
-    ;
-
     /**
      * calculates mail-subject from event.
      * If the ics is send via email-attachment, the send mail app is pre-populated with a mail-subject
@@ -148,7 +147,7 @@ public class ACalendar2IcsActivity extends Activity {
 
             long start = event.getDtstart();
             if (start != 0) {
-                Date dtStart = (start == 0) ? null : new Date(start);
+                Date dtStart = new Date(start);
 
                 Locale locale = Locale.getDefault();
                 DateFormat shortTimeformatter = DateFormat.getDateInstance(java.text.DateFormat.SHORT, locale);
@@ -170,7 +169,7 @@ public class ACalendar2IcsActivity extends Activity {
 
             long start = event.getDtstart();
             if (start != 0) {
-                Date dtStart = (start == 0) ? null : new Date(start);
+                Date dtStart = new Date(start);
 
                 Locale locale = Locale.getDefault();
                 DateFormat dateFormatter = DateFormat.getDateInstance(java.text.DateFormat.FULL, locale);
@@ -190,8 +189,11 @@ public class ACalendar2IcsActivity extends Activity {
         String versionName = "";
         try {
 
-            versionName = "-" + this.getPackageManager()
-                    .getPackageInfo(this.getPackageName(), 0).versionName;
+            PackageManager packageManager = this.getPackageManager();
+            if (packageManager != null) {
+                versionName = "-" + packageManager
+                        .getPackageInfo(this.getPackageName(), 0).versionName;
+            }
         } catch (final NameNotFoundException e) {
         }
         return getString(R.string.app_name) + versionName;
@@ -201,7 +203,7 @@ public class ACalendar2IcsActivity extends Activity {
      * Opens android "sendTo"-chooser with propopulated data:
      */
     private void sendIcsTo(String mailSubject, String mailBody, String mailAttachmentContent) throws IOException {
-        final File icsFIle = this.getOuputFile();
+        final File icsFIle = this.getOutputFile();
         // Log.d(ACalendar2IcsEngine.TAG, result.toString());
         this.writeStringToTextFile(icsFIle, mailAttachmentContent.toString());
 
@@ -247,7 +249,7 @@ public class ACalendar2IcsActivity extends Activity {
     /**
      * get File where attachment-content will be exported to.<br/>
      */
-    private File getOuputFile() {
+    private File getOutputFile() {
         final File path = getOutputDir();
         final File icsFIle = new File(path, getExportFileName());
         return icsFIle;

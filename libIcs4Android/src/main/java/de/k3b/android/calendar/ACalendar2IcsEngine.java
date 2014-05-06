@@ -65,10 +65,10 @@ public class ACalendar2IcsEngine implements Closeable {
 	/**
 	 * used to access resources
 	 */
-	private Context ctx;
+	private final Context ctx;
 	
 	/**
-	 * creates the enginge that either uses mock-database or contentprovider
+	 * creates the engige that either uses mock-database or contentprovider
 	 */
 	public ACalendar2IcsEngine(Context ctx, boolean useMockCalendar) {
 		this.ctx = ctx;

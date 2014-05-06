@@ -37,11 +37,11 @@ import android.net.Uri;
  * @author k3b
  */
 public abstract class ContentUriCursor implements Closeable {
-	protected static String sqlFilterToFindById = "(" + CalendarContract.EventsColumns._ID + " = ? )";
+	private final static String sqlFilterToFindById = "(" + CalendarContract.EventsColumns._ID + " = ? )";
 	
 	protected Cursor currentCalendarContentDatabaseCursor = null;
-	protected ContentResolver calendarContentResolver = null;
-	protected SQLiteDatabase mockedCalendarContentDatabase = null;
+	private ContentResolver calendarContentResolver = null;
+	private SQLiteDatabase mockedCalendarContentDatabase = null;
 
 	/**
 	 * Creates a datasource that uses the ContentResolver from context

@@ -44,7 +44,7 @@ public class Compat {
 	/**
 	 * @return true if current runtime support fullClassName
 	 */
-	public static boolean isClassAvailable(String fullClassName) {
+	private static boolean isClassAvailable(String fullClassName) {
 		boolean result = false;
 		try {
 			if (null != Class.forName(fullClassName)) {

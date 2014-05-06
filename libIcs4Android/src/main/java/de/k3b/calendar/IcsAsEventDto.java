@@ -39,7 +39,7 @@ import net.fortuna.ical4j.model.property.Uid;
  * @author Daniele Gobbetti and k3b
  */
 public class IcsAsEventDto implements EventDto {
-	private VEvent event;
+	private final VEvent event;
 
 	public IcsAsEventDto(Calendar calendar) {
 		this.event = (VEvent) calendar.getComponent(Component.VEVENT);
