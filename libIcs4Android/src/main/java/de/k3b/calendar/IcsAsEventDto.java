@@ -27,6 +27,7 @@ import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.Duration;
 import net.fortuna.ical4j.model.property.Location;
 import net.fortuna.ical4j.model.property.Organizer;
+import net.fortuna.ical4j.model.property.RDate;
 import net.fortuna.ical4j.model.property.RRule;
 import net.fortuna.ical4j.model.property.Summary;
 import net.fortuna.ical4j.model.property.Uid;
@@ -60,12 +61,12 @@ public class IcsAsEventDto implements EventDto {
 	}
 
 	@Override
-	public long getDtstart() {
+	public long getDtStart() {
 		return (this.event == null) ? null : getDate(event.getStartDate());
 	}
 
 	@Override
-	public long getDtend() {
+	public long getDtEnd() {
 		return (this.event == null) ? null : getDate(event.getEndDate());
 	}
 
@@ -120,7 +121,7 @@ public class IcsAsEventDto implements EventDto {
 	}
 
 	@Override
-	public String getRrule() {
+	public String getRRule() {
 		RRule value = (this.event == null) ? null :  (RRule) event.getProperty(Property.RRULE);
 		
 		if (value != null) {
@@ -129,7 +130,17 @@ public class IcsAsEventDto implements EventDto {
 		return null;
 	}
 
-	@Override
+    @Override
+    public String getRDate() {
+        RDate value = (this.event == null) ? null :  (RDate) event.getProperty(Property.RDATE);
+
+        if (value != null) {
+            return value.getValue();
+        }
+        return null;
+    }
+
+    @Override
 	public String getOrganizer() {
 		Organizer value = (this.event == null) ? null : event.getOrganizer();
 		

@@ -50,7 +50,7 @@ class IcsImportIntentImpl2  {
 	 */
 	private Intent createEventIntent(Context context, EventDto event) {
 		Intent insertIntent = new Intent(Intent.ACTION_EDIT).setType(CONTENT_TYPE_EVENT);
-		addBeginEnd(insertIntent, event.getDtstart(), event.getDtend(), event.getDuration());
+		addBeginEnd(insertIntent, event.getDtStart(), event.getDtEnd(), event.getDuration());
 		if (event.getTitle() != null)
 			insertIntent.putExtra(CalendarContract.Events.TITLE, event.getTitle());
 
@@ -68,7 +68,7 @@ class IcsImportIntentImpl2  {
 		// X-MICROSOFT-CDO-BUSYSTATUS:BUSY
 
 		
-		String rule = event.getRrule();
+		String rule = event.getRRule();
 		if (rule != null) {
 			insertIntent.putExtra(CalendarContract.Events.RRULE, rule);
 		}

@@ -85,6 +85,11 @@ public class ACalendar2IcsActivity extends Activity {
             // data = ACalendarCursor.createContentUri("events");
         }
 
+        // #6 fix export: recurring event:email-subject date should be occurence-start (long-extra-beginTime) instead of rule-start
+        // CalendarContract.EXTRA_EVENT_BEGIN_TIME or EXTRA_EVENT_END_TIME
+        long beginTime = intent.getLongExtra("beginTime", 0);
+        long endTime = intent.getLongExtra("endTime", 0);
+
         if (data != null) {
             try {
                 if (engine == null) {
@@ -102,7 +107,7 @@ public class ACalendar2IcsActivity extends Activity {
                 if (calendarEvent != null) {
                     EventDto event = new IcsAsEventDto(calendarEvent);
 
-                    String mailSubject = getMailSubject(event);
+                    String mailSubject = getMailSubject(event, beginTime);
                     String description = getMailDescription(event);
                     if (Global.debugEnabled) {
                         Log.d(ACalendar2IcsEngine.TAG, "sending '" + mailSubject + "'");
@@ -141,11 +146,11 @@ public class ACalendar2IcsActivity extends Activity {
      * calculates mail-subject from event.
      * If the ics is send via email-attachment, the send mail app is pre-populated with a mail-subject
      */
-    private String getMailSubject(EventDto event) {
+    private String getMailSubject(EventDto event, long beginTime) {
         if (event != null) {
             String date = "";
 
-            long start = event.getDtstart();
+            long start = (hasRecurrence(event)) ? event.getDtStart() : beginTime;
             if (start != 0) {
                 Date dtStart = new Date(start);
 
@@ -159,6 +164,17 @@ public class ACalendar2IcsActivity extends Activity {
         return null;
     }
 
+    private static boolean hasRecurrence(EventDto event) {
+        if (event != null) {
+            return !isEmpty(event.getRRule()) || !isEmpty(event.getRDate()) ;
+        }
+        return false;
+    }
+
+    private static boolean isEmpty(String value) {
+        return ((value == null) || (value.length() == 0));
+    }
+
     /**
      * calculates mail-description from event.
      * If the ics is send via email-attachment, the send mail app is pre-populated with content.
@@ -167,7 +183,7 @@ public class ACalendar2IcsActivity extends Activity {
         if (event != null) {
             String date = "";
 
-            long start = event.getDtstart();
+            long start = event.getDtStart();
             if (start != 0) {
                 Date dtStart = new Date(start);
 

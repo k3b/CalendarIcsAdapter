@@ -51,74 +51,78 @@ public class ACalendarCursorAsEventDto4 extends ACalendarCursor implements ACale
 		super(mockDatabase);
 	}
 
-	/**
-	 * gets the colums that belong to this ContentUriCursor
-	 */
-	@Override
-	protected String[] getColums() { return COLUMS; }	
+    /**
+     * gets the colums that belong to this ContentUriCursor
+     */
+    @Override
+    protected String[] getColums() { return COLUMS; }
 
-	// collumn names must match order in the getters below.
-	// Warning: Adding further colums might break android 2.1 compatiblity.
-	// These 11 colums where found in my android2.2 calendar-events-table.
-	// See ACalendarMock.onCreate() for a list of android2.2 calendar-events columns
-	private final String[] COLUMS = new String[] {
-			CalendarContract.Events._ID, 
-			CalendarContract.Events.DTSTART,                           
-			CalendarContract.Events.DTEND,                           
-			CalendarContract.Events.TITLE,
-			CalendarContract.Events.DESCRIPTION,                           
-			CalendarContract.Events.EVENT_LOCATION,                  
-			CalendarContract.Events.EVENT_TIMEZONE,                           
-			CalendarContract.Events.DURATION,                           
-			CalendarContract.Events.RRULE,
-			CalendarContract.Events.ORGANIZER,
-			CalendarContract.Events.CALENDAR_ID                          
-		};
+    // collumn names must match order in the getters below.
+    // Warning: Adding further colums might break android 2.1 compatiblity.
+    // These 11 colums where found in my android2.2 calendar-events-table.
+    // See ACalendarMock.onCreate() for a list of android2.2 calendar-events columns
+    private final String[] COLUMS = new String[] {
+            CalendarContract.Events._ID,
+            CalendarContract.Events.DTSTART,
+            CalendarContract.Events.DTEND,
+            CalendarContract.Events.TITLE,
+            CalendarContract.Events.DESCRIPTION,
+            CalendarContract.Events.EVENT_LOCATION,
+            CalendarContract.Events.EVENT_TIMEZONE,
+            CalendarContract.Events.DURATION,
+            CalendarContract.Events.RRULE,
+            CalendarContract.Events.RDATE,
+            CalendarContract.Events.ORGANIZER,
+            CalendarContract.Events.CALENDAR_ID
+    };
 
-	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getDtstart()
-	 */
-	@Override
-	public long getDtstart() {return currentCalendarContentDatabaseCursor.getLong(1);}
-	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getDtend()
-	 */
-	@Override
-	public long getDtend() {return currentCalendarContentDatabaseCursor.getLong(2);}
-	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getTitle()
-	 */
-	@Override
-	public String getTitle() {return currentCalendarContentDatabaseCursor.getString(3);}
-	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getDescription()
-	 */
-	@Override
-	public String getDescription() {return currentCalendarContentDatabaseCursor.getString(4);}
-	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getEventLocation()
-	 */
-	@Override
-	public String getEventLocation() {return currentCalendarContentDatabaseCursor.getString(5);}
-	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getEventTimezone()
-	 */
-	@Override
-	public String getEventTimezone() {return currentCalendarContentDatabaseCursor.getString(6);}
-	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getDuration()
-	 */
-	@Override
-	public String getDuration() {return currentCalendarContentDatabaseCursor.getString(7);}
-	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getRrule()
-	 */
-	@Override
-	public String getRrule() {return currentCalendarContentDatabaseCursor.getString(8);}
+    /* (non-Javadoc)
+     * @see de.k3b.calendar.adapter.EventData#getDtStart()
+     */
+    @Override
+    public long getDtStart() {return currentCalendarContentDatabaseCursor.getLong(1);}
+    /* (non-Javadoc)
+     * @see de.k3b.calendar.adapter.EventData#getDtEnd()
+     */
+    @Override
+    public long getDtEnd() {return currentCalendarContentDatabaseCursor.getLong(2);}
+    /* (non-Javadoc)
+     * @see de.k3b.calendar.adapter.EventData#getTitle()
+     */
+    @Override
+    public String getTitle() {return currentCalendarContentDatabaseCursor.getString(3);}
+    /* (non-Javadoc)
+     * @see de.k3b.calendar.adapter.EventData#getDescription()
+     */
+    @Override
+    public String getDescription() {return currentCalendarContentDatabaseCursor.getString(4);}
+    /* (non-Javadoc)
+     * @see de.k3b.calendar.adapter.EventData#getEventLocation()
+     */
+    @Override
+    public String getEventLocation() {return currentCalendarContentDatabaseCursor.getString(5);}
+    /* (non-Javadoc)
+     * @see de.k3b.calendar.adapter.EventData#getEventTimezone()
+     */
+    @Override
+    public String getEventTimezone() {return currentCalendarContentDatabaseCursor.getString(6);}
+    /* (non-Javadoc)
+     * @see de.k3b.calendar.adapter.EventData#getDuration()
+     */
+    @Override
+    public String getDuration() {return currentCalendarContentDatabaseCursor.getString(7);}
+    /* (non-Javadoc)
+     * @see de.k3b.calendar.adapter.EventData#getRRule()
+     */
+    @Override
+    public String getRRule() {return currentCalendarContentDatabaseCursor.getString(8);}
 
-	@Override
-	public String getOrganizer() {return currentCalendarContentDatabaseCursor.getString(9);}
+    @Override
+    public String getRDate() {return currentCalendarContentDatabaseCursor.getString(9);}
 
-	@Override
-	public String getCalendarId() {return currentCalendarContentDatabaseCursor.getString(10);}
+    @Override
+    public String getOrganizer() {return currentCalendarContentDatabaseCursor.getString(10);}
+
+    @Override
+    public String getCalendarId() {return currentCalendarContentDatabaseCursor.getString(11);}
 }

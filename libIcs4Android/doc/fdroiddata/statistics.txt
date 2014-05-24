@@ -10,6 +10,7 @@ stats
 * https://gitlab.com/fdroid/fdroiddata/tree/master/stats
 
 de.k3b.android.calendar.ics.adapter
+140509 1767
 140429 1596
 140428 1582
 140427 1569
@@ -29,6 +30,7 @@ de.k3b.android.calendar.ics.adapter
 140412 259
 
 org.dgtale.icsimport_2
+140509 4357
 140429 4231
 140428 4214
 140427 4201
@@ -86,7 +88,11 @@ org.fdroid.fdroid_640
 140425 646
 140424 320
 
+org.fdroid.fdroid_660
+140509 19031
+
 com.fsck.k9_20004
+140509 23065
 140429 21617
 140428 21456
 140427 21323

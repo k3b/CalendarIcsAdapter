@@ -25,7 +25,7 @@ package de.k3b.calendar;
  * @author k3b
  */
 public class EventDtoSimple implements EventDto {
-	public String getId() {
+    public String getId() {
 		return Id;
 	}
 
@@ -34,115 +34,127 @@ public class EventDtoSimple implements EventDto {
 		return this;
 	}
 
-	public long getDtstart() {
-		return Dtstart;
+	public long getDtStart() {
+		return dtStart;
 	}
 
-	public EventDtoSimple setDtstart(long dtstart) {
-		Dtstart = dtstart;
+	public EventDtoSimple setDtStart(long dtStart) {
+		this.dtStart = dtStart;
 		return this;
 	}
 
-	public long getDtend() {
-		return Dtend;
+	public long getDtEnd() {
+		return dtEnd;
 	}
 
-	public EventDtoSimple setDtend(long dtend) {
-		Dtend = dtend;
+	public EventDtoSimple setDtEnd(long dtEnd) {
+		this.dtEnd = dtEnd;
 		return this;
 	}
 
 	public String getTitle() {
-		return Title;
+		return title;
 	}
 
 	public EventDtoSimple setTitle(String title) {
-		Title = title;
+		this.title = title;
 		return this;
 	}
 
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 
 	public EventDtoSimple setDescription(String description) {
-		Description = description;
+		this.description = description;
 		return this;
 	}
 
 	public String getEventLocation() {
-		return EventLocation;
+		return eventLocation;
 	}
 
 	public EventDtoSimple setEventLocation(String eventLocation) {
-		EventLocation = eventLocation;
+		this.eventLocation = eventLocation;
 		return this;
 	}
 
 	public String getEventTimezone() {
-		return EventTimezone;
+		return eventTimezone;
 	}
 
 	public EventDtoSimple setEventTimezone(String eventTimezone) {
-		EventTimezone = eventTimezone;
+		this.eventTimezone = eventTimezone;
 		return this;
 	}
 
 	public String getDuration() {
-		return Duration;
+		return duration;
 	}
 
 	public EventDtoSimple setDuration(String duration) {
-		Duration = duration;
+		this.duration = duration;
 		return this;
 	}
 
-	public String getRrule() {
-		return Rrule;
+	public String getRRule() {
+		return rRule;
 	}
 
-	public EventDtoSimple setRrule(String rrule) {
-		Rrule = rrule;
+    public EventDtoSimple setRRule(String rRule) {
+		this.rRule = rRule;
 		return this;
 	}
 
-	public String getOrganizer() {
-		return Organizer;
+    @Override
+    public String getRDate() {
+        return rDate;
+    }
+
+    public EventDtoSimple setRDate(String rDate) {
+        this.rDate = rDate;
+        return this;
+    }
+
+    public String getOrganizer() {
+		return organizer;
 	}
 
 	public EventDtoSimple setOrganizer(String organizer) {
-		Organizer = organizer;
+		this.organizer = organizer;
 		return this;
 	}
 
 	public String getCalendarId() {
-		return CalendarId;
+		return calendarId;
 	}
 
 	public EventDtoSimple setCalendarId(String calendarId) {
-		this.CalendarId = calendarId;
+		this.calendarId = calendarId;
 		return this;
 	}
 
 	String Id;
 	
-	long Dtstart;
+	long dtStart;
 
-	long  Dtend;
+	long dtEnd;
 
-	String Title;
+	String title;
 
-	String Description;
+	String description;
 
-	String EventLocation;
+	String eventLocation;
 
-	String EventTimezone;
+	String eventTimezone;
 
-	String Duration;
+	String duration;
 
-	String Rrule;
+	String rRule;
 
-	String Organizer;
+    private String rDate;
 
-	String CalendarId;
+    String organizer;
+
+	String calendarId;
 }

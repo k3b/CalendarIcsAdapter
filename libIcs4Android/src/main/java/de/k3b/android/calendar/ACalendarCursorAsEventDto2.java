@@ -69,20 +69,21 @@ public class ACalendarCursorAsEventDto2 extends ACalendarCursor implements ACale
 			CalendarContract.Events.EVENT_TIMEZONE,                           
 			CalendarContract.Events.DURATION,                           
 			CalendarContract.Events.RRULE,
+            CalendarContract.Events.RDATE,
 			CalendarContract.Events.ORGANIZER,
 			CalendarContract.Events.CALENDAR_ID                          
 		};
 
 	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getDtstart()
+	 * @see de.k3b.calendar.adapter.EventData#getDtStart()
 	 */
 	@Override
-	public long getDtstart() {return currentCalendarContentDatabaseCursor.getLong(1);}
+	public long getDtStart() {return currentCalendarContentDatabaseCursor.getLong(1);}
 	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getDtend()
+	 * @see de.k3b.calendar.adapter.EventData#getDtEnd()
 	 */
 	@Override
-	public long getDtend() {return currentCalendarContentDatabaseCursor.getLong(2);}
+	public long getDtEnd() {return currentCalendarContentDatabaseCursor.getLong(2);}
 	/* (non-Javadoc)
 	 * @see de.k3b.calendar.adapter.EventData#getTitle()
 	 */
@@ -109,14 +110,17 @@ public class ACalendarCursorAsEventDto2 extends ACalendarCursor implements ACale
 	@Override
 	public String getDuration() {return currentCalendarContentDatabaseCursor.getString(7);}
 	/* (non-Javadoc)
-	 * @see de.k3b.calendar.adapter.EventData#getRrule()
+	 * @see de.k3b.calendar.adapter.EventData#getRRule()
 	 */
 	@Override
-	public String getRrule() {return currentCalendarContentDatabaseCursor.getString(8);}
+	public String getRRule() {return currentCalendarContentDatabaseCursor.getString(8);}
+
+    @Override
+    public String getRDate() {return currentCalendarContentDatabaseCursor.getString(9);}
+
+    @Override
+	public String getOrganizer() {return currentCalendarContentDatabaseCursor.getString(10);}
 
 	@Override
-	public String getOrganizer() {return currentCalendarContentDatabaseCursor.getString(9);}
-
-	@Override
-	public String getCalendarId() {return currentCalendarContentDatabaseCursor.getString(10);}
+	public String getCalendarId() {return currentCalendarContentDatabaseCursor.getString(11);}
 }

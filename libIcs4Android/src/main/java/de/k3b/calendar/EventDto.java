@@ -27,9 +27,9 @@ package de.k3b.calendar;
 public interface EventDto {
 	public abstract String getId();
 	
-	public abstract long getDtstart();
+	public abstract long getDtStart();
 
-	public abstract long  getDtend();
+	public abstract long getDtEnd();
 
 	public abstract String getTitle();
 
@@ -41,9 +41,11 @@ public interface EventDto {
 
 	public abstract String getDuration();
 
-	public abstract String getRrule();
+	public abstract String getRRule();
 
-	public String getOrganizer();
+    public abstract String getRDate();
 
-	public String getCalendarId();
+    public abstract String getOrganizer();
+
+    public abstract String getCalendarId();
 }

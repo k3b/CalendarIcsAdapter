@@ -67,8 +67,8 @@ public class EventDto2IcsFactory {
 		VEvent event = new VEvent();
 		PropertyList eventProperties = event.getProperties();
 		if (eventData.getId() != null) eventProperties.add(new Uid("acal-"+eventData.getCalendarId()+"-"+eventData.getId()));
-		if (eventData.getDtstart() != 0) eventProperties.add(new DtStart(new DateTime( eventData.getDtstart())));
-		if (eventData.getDtend() != 0) eventProperties.add(new DtEnd(new DateTime( eventData.getDtend())));
+		if (eventData.getDtStart() != 0) eventProperties.add(new DtStart(new DateTime( eventData.getDtStart())));
+		if (eventData.getDtEnd() != 0) eventProperties.add(new DtEnd(new DateTime( eventData.getDtEnd())));
 
 		if (eventData.getTitle() != null) eventProperties.add(new Summary(eventData.getTitle()));
 		if (eventData.getDescription() != null) eventProperties.add(new Description(eventData.getDescription()));
@@ -77,9 +77,9 @@ public class EventDto2IcsFactory {
 		if (timezone != null) eventProperties.add(timezone);
 		if (eventData.getDuration() != null) eventProperties.add(new Duration(new Dur( eventData.getDuration())));
 		
-		if (eventData.getRrule() != null) {
+		if (eventData.getRRule() != null) {
 			try {
-				eventProperties.add(new RRule(eventData.getRrule()));
+				eventProperties.add(new RRule(eventData.getRRule()));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
