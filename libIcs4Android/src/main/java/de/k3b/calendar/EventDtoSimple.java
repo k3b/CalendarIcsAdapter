@@ -18,6 +18,8 @@
  */
 package de.k3b.calendar;
 
+import java.util.List;
+
 /**
  * Minimal implementation of EventDto to backup values of other EventDto-implementations.<br/>
  * This class has no direct dependency to android so it can be run in a j2se-junit-integration test.<br/><br/>
@@ -25,6 +27,25 @@ package de.k3b.calendar;
  * @author k3b
  */
 public class EventDtoSimple implements EventDto {
+    public EventDtoSimple() {};
+    public EventDtoSimple(EventDto src) {
+        if (src!= null) {
+            setId(src.getId());
+            setAlarmMinutesBeforeEvent(src.getAlarmMinutesBeforeEvent());
+            setCalendarId(src.getCalendarId());
+            setDescription(src.getDescription());
+            setDtEnd(src.getDtEnd());
+            setDtStart(src.getDtStart());
+            setDuration(src.getDuration());
+            setEventLocation(src.getEventLocation());
+            setEventTimezone(src.getEventTimezone());
+            setOrganizer(src.getOrganizer());
+            setRDate(src.getRDate());
+            setRRule(src.getRRule());
+            setTitle(src.getTitle());
+        }
+    }
+
     public String getId() {
 		return Id;
 	}
@@ -134,7 +155,16 @@ public class EventDtoSimple implements EventDto {
 		return this;
 	}
 
-	String Id;
+    /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. */
+    public List<Integer> getAlarmMinutesBeforeEvent() {return alarmMinutesBeforeEvent;}
+
+    /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. */
+    public EventDtoSimple  setAlarmMinutesBeforeEvent(List<Integer>  alarmMinutesBeforeEvent) {
+        this.alarmMinutesBeforeEvent = alarmMinutesBeforeEvent;
+        return this;
+    }
+
+    String Id;
 	
 	long dtStart;
 
@@ -157,4 +187,6 @@ public class EventDtoSimple implements EventDto {
     String organizer;
 
 	String calendarId;
+
+    List<Integer> alarmMinutesBeforeEvent;
 }

@@ -39,8 +39,8 @@ class IcsImportIntentImpl2  {
 	// see http://stackoverflow.com/questions/3721963/how-to-add-calendar-events-in-android
     private static final String CONTENT_TYPE_EVENT = "vnd.android.cursor.item/event";
 	
-	public Intent createImportIntent(Context context, VEvent event) {
-		Intent insertIntent = createEventIntent(context, new IcsAsEventDto(event));
+	public Intent createImportIntent(Context context, final EventDto eventDto, VEvent event) {
+		Intent insertIntent = createEventIntent(context, eventDto);
 		insertIntent.putExtra(CalendarContract.Events.ACCESS_LEVEL, getAccessLevel(event.getClassification()));
 		return insertIntent;
 	}

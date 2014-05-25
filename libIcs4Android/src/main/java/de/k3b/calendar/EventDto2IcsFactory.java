@@ -19,6 +19,7 @@
 package de.k3b.calendar;
 
 import java.text.ParseException;
+import java.util.List;
 
 import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.*;
@@ -64,8 +65,7 @@ public class EventDto2IcsFactory {
 	 * adds a generic EventDto to ical4j-calendar
 	 */
 	public VEvent addEvent(EventDto eventData, TimeZone timezone) {
-		VEvent event = new VEvent();
-		PropertyList eventProperties = event.getProperties();
+		PropertyList eventProperties = new PropertyList(); // event.getProperties();
 		if (eventData.getId() != null) eventProperties.add(new Uid("acal-"+eventData.getCalendarId()+"-"+eventData.getId()));
 		if (eventData.getDtStart() != 0) eventProperties.add(new DtStart(new DateTime( eventData.getDtStart())));
 		if (eventData.getDtEnd() != 0) eventProperties.add(new DtEnd(new DateTime( eventData.getDtEnd())));
@@ -85,6 +85,19 @@ public class EventDto2IcsFactory {
 			}
 		}
 
+
+        // #9
+        ComponentList valarms = null;
+        List<Integer> alarms = eventData.getAlarmMinutesBeforeEvent();
+        if (alarms != null) {
+            valarms = new ComponentList();
+            for (Integer alarm : alarms) {
+                Dur durationInMinutes = new Dur(0,0,- alarm, 0);
+                valarms.add(new VAlarm(durationInMinutes));
+            }
+        }
+
+        VEvent event = new VEvent(eventProperties, valarms);
 		getCalendar().getComponents().add(event);
 		return event;
 	}

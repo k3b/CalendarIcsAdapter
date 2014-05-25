@@ -1,7 +1,29 @@
 todo.txt for android.calendar.ics.adapter
 =========
+- #9 Add Support to import/export alarm-reminders
+	String alarms="10_1;" // 10*1 Minute vor dem event
+            // CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/reminders");
+            select * from reminders where event_id=780
+                    minutes 30
+                    Method 1
+                          methods : DEFAULT=0,ALERT=1,EMAIL,SMS,ALARM
+                    A trigger set 15 minutes prior to the start of the event or
+                    to-do.
 
-- #6 bug export: recurring event:email-subject date should be occurence-start (long-extra-beginTime) instead of rule-start
+                      TRIGGER:-P15M
+
+- #8 acalendar properties trasfer alarms
+	// douplicate mode
+	Long calendar_id = 1
+	String title = Shermeier
+	Integer availabilityStatus = 0
+	Boolean allDay = false
+	Integer visibility = 0
+
+                    // nur bei edit
+                    Boolean editMode=true
+
+v #6 bug export: recurring event:email-subject date should be occurence-start (long-extra-beginTime) instead of rule-start
 	- is there a ical rRule to text function?
 - #7 feature export: instead of 2 activities send ics/ical option dialog with format (ics/ical) and with recurrence event (only this event|all events|this and all further events)
 	- dlg

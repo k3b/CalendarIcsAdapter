@@ -29,6 +29,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * Baseclass for cursor based dataaccess via content-uri.<br/>
@@ -110,11 +111,26 @@ public abstract class ContentUriCursor implements Closeable {
 	 * Local Query executor that queries either the ContentResolver or the mocked database
 	 */
 	protected Cursor queryByContentURI(Uri uri, String tableName,
-			String sqlWhere, String[] sqlWhereparameters) {
-		if (calendarContentResolver != null) {
-			currentCalendarContentDatabaseCursor = calendarContentResolver.query(uri, getColums(), sqlWhere, sqlWhereparameters, null);
+			String sqlWhere, String... sqlWhereParameters) {
+        if (Global.debugEnabled) {
+            StringBuilder debugMessage = new StringBuilder()
+                    .append("queryByContentURI(uri='").append(uri)
+                    .append("', tableName='").append(tableName)
+                    .append("', sqlWhere='").append(sqlWhere)
+                    .append("', params=");
+            if (sqlWhereParameters != null) {
+                for(String p:sqlWhereParameters) {
+                    debugMessage.append("'") .append(p).append("', ");
+                }
+            }
+            debugMessage.append(")");
+            Log.d(ACalendar2IcsEngine.TAG, debugMessage.toString());
+        }
+
+        if (calendarContentResolver != null) {
+			currentCalendarContentDatabaseCursor = calendarContentResolver.query(uri, getColums(), sqlWhere, sqlWhereParameters, null);
 		} else {
-			currentCalendarContentDatabaseCursor = this.mockedCalendarContentDatabase.query(tableName, getColums(), sqlWhere, sqlWhereparameters, null,null,null);			
+			currentCalendarContentDatabaseCursor = this.mockedCalendarContentDatabase.query(tableName, getColums(), sqlWhere, sqlWhereParameters, null,null,null);
 		}
 		return currentCalendarContentDatabaseCursor;
 	}

@@ -220,7 +220,6 @@ public class ACalendar2IcsActivity extends Activity {
      */
     private void sendIcsTo(String mailSubject, String mailBody, String mailAttachmentContent) throws IOException {
         final File icsFIle = this.getOutputFile();
-        // Log.d(ACalendar2IcsEngine.TAG, result.toString());
         this.writeStringToTextFile(icsFIle, mailAttachmentContent.toString());
 
         final Uri uri = this.getUriForFile(icsFIle);
@@ -240,6 +239,9 @@ public class ACalendar2IcsActivity extends Activity {
             outIntent.putExtra(android.content.Intent.EXTRA_TEXT, mailBody);
         }
 
+        if (Global.debugEnabled) {
+            Log.d(ACalendar2IcsEngine.TAG, "Starting intent " + outIntent);
+        }
         this.startActivity(Intent.createChooser(outIntent, getChooserCaption()));
     }
 
@@ -255,6 +257,10 @@ public class ACalendar2IcsActivity extends Activity {
      * writes attachment-content-to global-readable file
      */
     private void writeStringToTextFile(File file, String content) throws IOException {
+        if (Global.debugEnabled) {
+            Log.d(ACalendar2IcsEngine.TAG, "Creating file " + file);
+        }
+
         FileOutputStream f1 = new FileOutputStream(file, false); //True = Append to file, false = Overwrite
         PrintStream p = new PrintStream(f1);
         p.print(content);

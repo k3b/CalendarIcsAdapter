@@ -18,19 +18,14 @@
  */
 package de.k3b.calendar;
 
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
-import net.fortuna.ical4j.model.property.DateProperty;
-import net.fortuna.ical4j.model.property.Description;
-import net.fortuna.ical4j.model.property.Duration;
-import net.fortuna.ical4j.model.property.Location;
-import net.fortuna.ical4j.model.property.Organizer;
-import net.fortuna.ical4j.model.property.RDate;
-import net.fortuna.ical4j.model.property.RRule;
-import net.fortuna.ical4j.model.property.Summary;
-import net.fortuna.ical4j.model.property.Uid;
+import net.fortuna.ical4j.model.property.*;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Facade that makes a ical4j-vevent implementation specific ics appear as EventDto.<br/>
@@ -162,8 +157,42 @@ public class IcsAsEventDto implements EventDto {
 		*/
 		return null;
 	}
-	
-	private long getDate(DateProperty date) {
+
+    /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. */
+    @Override
+    public List<Integer> getAlarmMinutesBeforeEvent() {
+        // VEvent.Alarms[].Trigger as negatige Duration in minutes
+        List<Integer> alarmMinutesBeforeEvent = null;
+        ComponentList alarms = (this.event == null) ? null : event.getAlarms();
+
+        if ((alarms != null) && (alarms.size() > 0)) {
+            alarmMinutesBeforeEvent = new ArrayList<Integer>();
+            final Iterator iterator = alarms.iterator();
+            while (iterator.hasNext()) {
+                final Component component = (Component) iterator.next();
+
+                if ((component instanceof VAlarm)) {
+                    // http://www.kanzaki.com/docs/ical/trigger.html
+                    // Example TRIGGER:-P15M
+                    // A trigger set 15 minutes prior to the start of the event or to-do.
+                    Trigger trigger = ((VAlarm) component).getTrigger();
+
+                    Dur duration = (trigger != null) ? trigger.getDuration() : null;
+                    if (duration != null) {
+                        int minutes = duration.getMinutes();
+                        if (minutes <= 0) {
+                            // minutes before event
+                            alarmMinutesBeforeEvent.add(-minutes);
+                        }
+                    }
+                }
+
+            }
+        }
+        return alarmMinutesBeforeEvent;
+    }
+
+    private long getDate(DateProperty date) {
 		return (date != null) ? date.getDate().getTime() : 0;
 	}
 }

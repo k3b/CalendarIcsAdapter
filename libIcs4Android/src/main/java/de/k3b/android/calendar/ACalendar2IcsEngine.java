@@ -21,6 +21,7 @@ package de.k3b.android.calendar;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.List;
 
 import de.k3b.android.calendar.ACalendarCursorAsEventDto2;
 import de.k3b.android.calendar.ACalendarMock;
@@ -28,6 +29,8 @@ import de.k3b.android.calendar.ics.R;
 import de.k3b.android.compat.Compat;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventDto2IcsFactory;
+import de.k3b.calendar.EventDtoSimple;
+
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.TimeZone;
 import android.content.Context;
@@ -88,26 +91,32 @@ public class ACalendar2IcsEngine implements Closeable {
 	public Calendar export(Uri contentUri) {
 		boolean hasData = false;
 		EventDto2IcsFactory factory = new EventDto2IcsFactory(this.ctx.getText(R.string.app_ics_provider_name).toString());
-		// set to null for non mocked production
-		Cursor eventCursor = eventData.queryByContentURI(contentUri);
-		
-		if (eventCursor != null) {		
-			// Use the cursor to step through the returned records
-			while (eventCursor.moveToNext()) {
-				hasData = true;
-				TimeZone timezone = getOrCreateTimeZone(eventData);
-				factory.addEvent(eventData, timezone);
-				if (Global.debugEnabled) {
-					Log.d(ACalendar2IcsEngine.TAG, "added event " + eventData.getTitle());
-				}
-			}
-			eventCursor.close();
-		}
-		
-		return (hasData) ? factory.getCalendar() : null;
+        Cursor eventCursor = null;
+        try {
+            // set to null for non mocked production
+            eventCursor = eventData.queryByContentURI(contentUri);
+
+            if (eventCursor != null) {
+                // Use the cursor to step through the returned records
+                while (eventCursor.moveToNext()) {
+                    hasData = true;
+                    EventDtoSimple data = new EventDtoSimple(eventData);
+                    TimeZone timezone = getOrCreateTimeZone(data);
+                    eventData.addAlarms(data.getId(), data.getAlarmMinutesBeforeEvent());
+                    factory.addEvent(data, timezone);
+                    if (Global.debugEnabled) {
+                        Log.d(ACalendar2IcsEngine.TAG, "added event " + data.getTitle());
+                    }
+                }
+            }
+        } finally {
+            if (eventCursor != null) {
+                eventCursor.close();
+            }
+        }
+        return (hasData) ? factory.getCalendar() : null;
 	}
-	
-	/**
+    /**
 	 * Placeholder to infer timezone.<br/>
 	 * Not implemented yet.
 	 */

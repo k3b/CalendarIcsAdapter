@@ -23,6 +23,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import de.k3b.android.compat.Compat;
+import de.k3b.calendar.EventDto;
+import de.k3b.calendar.IcsAsEventDto;
 
 /**
  * common api for IcsImportIntentFactory2 (for android2.x) and IcsImportIntentFactory4 (for android4.x) 
@@ -41,11 +43,15 @@ public class IcsImportIntentFactory {
         }
     }
 
-	public Intent createImportIntent(Context context, VEvent event) {
+	public Intent createImportIntent(Context context, final EventDto eventDto, VEvent event) {
+        Intent result;
         if (imp4 != null)
-            return imp4.createImportIntent(context, event);
+            result = imp4.createImportIntent(context, eventDto, event);
         else
-            return imp2.createImportIntent(context, event);
+            result = imp2.createImportIntent(context, eventDto, event);
+
+        return result;
+
     }
 
 }

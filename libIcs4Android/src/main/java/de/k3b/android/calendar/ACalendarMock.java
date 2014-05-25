@@ -21,6 +21,7 @@ package de.k3b.android.calendar;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Simulates the api of an android calendar content provider that is compatibel with Samsung-Android2.2 Calendar.
@@ -34,7 +35,7 @@ public class ACalendarMock extends SQLiteOpenHelper {
 	 * Opens Mock-DB. Creates it if it does not exist.
 	 */
 	public ACalendarMock(final Context context) {
-		super(context, "calendar.db", null, 1);
+		super(context, "calendar.db", null, 2);
 		context.getDir("databases", Context.MODE_PRIVATE); // create dir if it does not exist
 	}
 
@@ -43,6 +44,10 @@ public class ACalendarMock extends SQLiteOpenHelper {
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
+        if (Global.debugEnabled) {
+            Log.d(ACalendar2IcsEngine.TAG,"Creating mock database");
+
+        }
 		db.execSQL("CREATE TABLE Events (_id INTEGER PRIMARY KEY," +
 				"_sync_account TEXT,_sync_account_type TEXT,_sync_id TEXT,_sync_version TEXT,_sync_time TEXT,_sync_local_id INTEGER,_sync_dirty INTEGER,_sync_mark INTEGER," +
 				"calendar_id INTEGER NOT NULL,htmlUri TEXT,title TEXT,eventLocation TEXT,description TEXT,eventStatus INTEGER,selfAttendeeStatus INTEGER NOT NULL DEFAULT 0," +
@@ -67,7 +72,6 @@ public class ACalendarMock extends SQLiteOpenHelper {
 		db.execSQL("CREATE TABLE EventsRawTimes (_id INTEGER PRIMARY KEY,event_id INTEGER NOT NULL,dtstart2445 TEXT,dtend2445 TEXT,originalInstanceTime2445 TEXT,lastDate2445 TEXT,UNIQUE (event_id))");
 		db.execSQL("CREATE TABLE ExtendedProperties (_id INTEGER PRIMARY KEY,event_id INTEGER,name TEXT,value TEXT)");
 		db.execSQL("CREATE TABLE Instances (_id INTEGER PRIMARY KEY,event_id INTEGER,begin INTEGER,end INTEGER,startDay INTEGER,endDay INTEGER,startMinute INTEGER,endMinute INTEGER,UNIQUE (event_id, begin, end))");
-		db.execSQL("CREATE TABLE Reminders (_id INTEGER PRIMARY KEY,event_id INTEGER,minutes INTEGER,method INTEGER NOT NULL DEFAULT 0)");
 		db.execSQL("CREATE TABLE _sync_state (_id INTEGER PRIMARY KEY,account_name TEXT NOT NULL,account_type TEXT NOT NULL,data TEXT,UNIQUE(account_name, account_type))");
 		db.execSQL("CREATE TABLE _sync_state_metadata (version INTEGER)");
 		db.execSQL("CREATE TABLE android_metadata (locale TEXT)");
@@ -87,7 +91,18 @@ public class ACalendarMock extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
-		
+        if (Global.debugEnabled) {
+            Log.d(ACalendar2IcsEngine.TAG,"Upradeing mock database from "+oldVersion+" to "+newVersion );
+        }
+		if (oldVersion == 1) {
+			db.execSQL("CREATE TABLE Reminders (_id INTEGER PRIMARY KEY,event_id INTEGER,minutes INTEGER,method INTEGER NOT NULL DEFAULT 0)");
+			
+			db.execSQL("update Events set hasAlarm = 1 where _ID = 1");
+			
+			db.execSQL("INSERT INTO Reminders(_ID, event_id,minutes,method) " +
+				"VALUES(1,1,30,1)");
+			db.execSQL("INSERT INTO Reminders(_ID, event_id,minutes,method) " +
+				"VALUES(2,1,120,1)");
+		}
 	}
 }

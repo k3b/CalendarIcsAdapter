@@ -25,11 +25,11 @@ public class Global {
 	/**
 	 * true: add several Log.d(...) to show what is going on
 	 */
-	public static boolean debugEnabled = false; 
+	public static boolean debugEnabled = true;
 	
 	/**
 	 * true: use local calendar db (for testing); false: use contentProvider for production
 	 */
-	public static boolean USE_MOCK_CALENDAR = false;
+	public static boolean USE_MOCK_CALENDAR = true;
 
 }

@@ -35,9 +35,12 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Iterator;
+import java.util.List;
 
 import de.k3b.android.calendar.Global;
 import de.k3b.android.calendar.IcsImportIntentFactory;
+import de.k3b.calendar.EventDto;
+import de.k3b.calendar.IcsAsEventDto;
 
 /**
  * Invisible Pseudo-Activity that imports a ics-calendar-event-file into the android Calendar.<br/>
@@ -110,8 +113,20 @@ public class Ics2ACalendarActivity extends Activity {
                         if (Global.debugEnabled) {
                             Log.d(TAG, "processing event " + event.getName());
                         }
+                        EventDto eventDto = new IcsAsEventDto(event);
 
-                        Intent insertIntent = importFactory.createImportIntent(context, event);
+                        Intent insertIntent = importFactory.createImportIntent(context, eventDto, event);
+
+                        List<Integer> alarms = eventDto.getAlarmMinutesBeforeEvent();
+
+                        // #9 #8 acalendar specific alarms
+                        if (alarms != null) {
+                            StringBuilder param = new StringBuilder();
+                            for (Integer alarmValue : alarms) {
+                                param.append(alarmValue).append("_1;");
+                            }
+                            insertIntent.putExtra("alarms", param.toString());
+                        }
 
 
                         context.startActivity(insertIntent);

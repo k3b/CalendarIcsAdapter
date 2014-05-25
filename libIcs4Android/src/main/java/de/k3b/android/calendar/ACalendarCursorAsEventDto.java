@@ -19,6 +19,7 @@
 package de.k3b.android.calendar;
 
 import java.io.Closeable;
+import java.util.List;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -33,4 +34,6 @@ public interface ACalendarCursorAsEventDto extends EventDto, Closeable {
 
 	Cursor queryByContentURI(Uri contentUri);
 
+    /** #9 Load alarms from seperate table Reminder */
+    void addAlarms(final String eventId, final List<Integer> alarmMinutesBeforeEvent);
 }

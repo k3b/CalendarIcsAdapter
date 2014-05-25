@@ -20,9 +20,14 @@ package de.k3b.android.calendar;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Facade that make a android-calendar-event-cursor appear as EventDto.<br/>
@@ -32,24 +37,27 @@ import android.provider.CalendarContract;
  * @author k3b
  */
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-public class ACalendarCursorAsEventDto4 extends ACalendarCursor implements ACalendarCursorAsEventDto { // ACalendarCursorAsEventDto2 extends ACalendarCursor implements EventDto
-	/**
-	 * Creates a datasource that uses the ContentResolver from context
-	 */
-	public ACalendarCursorAsEventDto4(Context ctx) {
-		super(ctx);
-	}
-	
-	/**
-	 * Creates a datasource that uses a
-	 * mockimplementation for testing with local copy of events database. This way real events are not at risc or you can test it on an 
-	 * emulator with no calendar.<br/>
-	 * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db ) 
-	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
-	 */
-	public ACalendarCursorAsEventDto4(SQLiteDatabase mockDatabase) {
-		super(mockDatabase);
-	}
+public class ACalendarCursorAsEventDto4 extends ACalendarCursor implements ACalendarCursorAsEventDto { 
+    private ReminderCursor reminderCursor;
+    /**
+     * Creates a datasource that uses the ContentResolver from context
+     */
+    public ACalendarCursorAsEventDto4(Context ctx) {
+        super(ctx);
+        reminderCursor = new ReminderCursor(ctx);
+    }
+
+    /**
+     * Creates a datasource that uses a
+     * mockimplementation for testing with local copy of events database. This way real events are not at risc or you can test it on an
+     * emulator with no calendar.<br/>
+     * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db )
+     * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
+     */
+    public ACalendarCursorAsEventDto4(SQLiteDatabase mockDatabase) {
+        super(mockDatabase);
+        reminderCursor = new ReminderCursor(mockDatabase);
+    }
 
     /**
      * gets the colums that belong to this ContentUriCursor
@@ -73,7 +81,8 @@ public class ACalendarCursorAsEventDto4 extends ACalendarCursor implements ACale
             CalendarContract.Events.RRULE,
             CalendarContract.Events.RDATE,
             CalendarContract.Events.ORGANIZER,
-            CalendarContract.Events.CALENDAR_ID
+            CalendarContract.Events.CALENDAR_ID,
+            CalendarContract.Events.HAS_ALARM,
     };
 
     /* (non-Javadoc)
@@ -125,4 +134,76 @@ public class ACalendarCursorAsEventDto4 extends ACalendarCursor implements ACale
 
     @Override
     public String getCalendarId() {return currentCalendarContentDatabaseCursor.getString(11);}
+
+    /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. Not loaded yet */
+    @Override
+    public List<Integer> getAlarmMinutesBeforeEvent() {return (currentCalendarContentDatabaseCursor.getInt(12) != 0) ? new ArrayList<Integer>():null;}
+
+    /************* #9 alarm-reminder ********************/
+    @Override
+    public void addAlarms(final String eventId, final List<Integer> alarmMinutesBeforeEvent) {
+        if (alarmMinutesBeforeEvent != null) {
+            Cursor eventCursor = null;
+            try {
+                // set to null for non mocked production
+                eventCursor = reminderCursor.queryByContentURI(eventId);
+
+                if (eventCursor != null) {
+                    // Use the cursor to step through the returned records
+                    while (eventCursor.moveToNext()) {
+                        alarmMinutesBeforeEvent.add(reminderCursor.getMinutes());
+                    }
+                }
+            } finally {
+                if (eventCursor != null) {
+                    eventCursor.close();
+                }
+            }
+        }
+    }
+
+	// #9
+    private class ReminderCursor extends  ContentUriCursor {
+
+        public ReminderCursor(final Context ctx) {
+            super(ctx);
+        }
+        public ReminderCursor(final SQLiteDatabase mockDatabase) {
+            super(mockDatabase);
+        }
+
+        // collumn names must match order in the getters below.
+        // Warning: Adding further colums might break android 2.1 compatiblity.
+        private final String[] COLUMS = new String[]{
+                CalendarContract.Reminders._ID,
+                CalendarContract.Reminders.MINUTES,
+//              CalendarContract.Reminders.EVENT_ID,
+//              CalendarContract.Reminders.METHOD
+        };
+
+        @Override
+        protected String[] getColums() {
+            return COLUMS;
+        }
+
+        public int getMinutes() {
+            return currentCalendarContentDatabaseCursor.getInt(1);
+        }
+
+        String eventId;
+
+        public Cursor queryByContentURI(final String eventId) {
+            this.eventId = eventId;
+            return super.queryByContentURI(CalendarContract.Reminders.CONTENT_URI);
+        }
+
+        @Override
+        protected Cursor queryByContentURI(Uri uri, String tableName,
+                                           String sqlWhere, String... sqlWhereParameters) {
+            sqlWhere = CalendarContract.Reminders.EVENT_ID + "=? and " + CalendarContract.Reminders.METHOD + "=?";
+
+            return super.queryByContentURI(uri, tableName, sqlWhere
+                    , this.eventId, Integer.toString(1));
+        }
+    }
 }

@@ -18,6 +18,8 @@
  */
 package de.k3b.calendar;
 
+import java.util.List;
+
 /**
  * calendar-event-abstraction that is independant from Android-Calendar-Event and form iCal4j-VEvent-ics-Implementation.
  * This class has no direct dependency to android so it can be used in a j2se-junit-integration tests.<br/><br/>
@@ -48,4 +50,7 @@ public interface EventDto {
     public abstract String getOrganizer();
 
     public abstract String getCalendarId();
+
+    /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. Corresponds to VEvent.Alarms[].Trigger */
+    public abstract List<Integer> getAlarmMinutesBeforeEvent();
 }
