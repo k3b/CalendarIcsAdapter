@@ -183,6 +183,8 @@ public class IcsAsEventDto implements EventDto {
                         if (minutes <= 0) {
                             // minutes before event
                             alarmMinutesBeforeEvent.add(-minutes);
+                        } else {
+                            alarmMinutesBeforeEvent.add(minutes);
                         }
                     }
                 }

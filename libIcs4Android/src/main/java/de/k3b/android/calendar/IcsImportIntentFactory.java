@@ -21,6 +21,9 @@ package de.k3b.android.calendar;
 import net.fortuna.ical4j.model.component.VEvent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+
+import java.util.List;
 
 import de.k3b.android.compat.Compat;
 import de.k3b.calendar.EventDto;
@@ -32,6 +35,8 @@ import de.k3b.calendar.IcsAsEventDto;
  *
  */
 public class IcsImportIntentFactory {
+    public static final String TAG = "ICS-Import";
+
     private IcsImportIntentImpl4 imp4 = null;
     private IcsImportIntentImpl2 imp2 = null;
 
@@ -49,6 +54,20 @@ public class IcsImportIntentFactory {
             result = imp4.createImportIntent(context, eventDto, event);
         else
             result = imp2.createImportIntent(context, eventDto, event);
+
+
+        // #9 #8 acalendar specific alarms
+        List<Integer> alarms = eventDto.getAlarmMinutesBeforeEvent();
+        if (alarms != null) {
+            StringBuilder param = new StringBuilder();
+            for (Integer alarmValue : alarms) {
+                param.append(alarmValue).append("_1;");
+            }
+            result.putExtra("alarms", param.toString());
+            if (Global.debugEnabled) {
+                Log.d(IcsImportIntentFactory.TAG, "added ACalendar alarms " + param.toString());
+            }
+        }
 
         return result;
 

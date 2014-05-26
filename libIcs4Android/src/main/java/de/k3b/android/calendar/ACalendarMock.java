@@ -30,12 +30,14 @@ import android.util.Log;
  * @author k3b
  */
 public class ACalendarMock extends SQLiteOpenHelper {
-	
-	/**
+
+    public static final int CURRENT_DB_VERSION = 2;
+
+    /**
 	 * Opens Mock-DB. Creates it if it does not exist.
 	 */
 	public ACalendarMock(final Context context) {
-		super(context, "calendar.db", null, 2);
+		super(context, "calendar.db", null, CURRENT_DB_VERSION);
 		context.getDir("databases", Context.MODE_PRIVATE); // create dir if it does not exist
 	}
 
@@ -87,6 +89,8 @@ public class ACalendarMock extends SQLiteOpenHelper {
 		db.execSQL("CREATE TRIGGER events_insert AFTER INSERT ON Events BEGIN UPDATE Events SET _sync_account=(SELECT _sync_account FROM Calendars WHERE Calendars._id=new.calendar_id),_sync_account_type=(SELECT _sync_account_type FROM Calendars WHERE Calendars._id=new.calendar_id) WHERE Events._id=new._id;END");
 		db.execSQL("CREATE TRIGGER events_cleanup_delete DELETE ON Events BEGIN DELETE FROM Instances WHERE event_id = old._id;DELETE FROM EventsRawTimes WHERE event_id = old._id;DELETE FROM Attendees WHERE event_id = old._id;DELETE FROM Reminders WHERE event_id = old._id;DELETE FROM CalendarAlerts WHERE event_id = old._id;DELETE FROM ExtendedProperties WHERE event_id = old._id;END");
 		*/
+
+        onUpgrade(db, 0, CURRENT_DB_VERSION);
 	}
 
 	@Override
@@ -94,7 +98,7 @@ public class ACalendarMock extends SQLiteOpenHelper {
         if (Global.debugEnabled) {
             Log.d(ACalendar2IcsEngine.TAG,"Upradeing mock database from "+oldVersion+" to "+newVersion );
         }
-		if (oldVersion == 1) {
+		if (oldVersion < 2) {
 			db.execSQL("CREATE TABLE Reminders (_id INTEGER PRIMARY KEY,event_id INTEGER,minutes INTEGER,method INTEGER NOT NULL DEFAULT 0)");
 			
 			db.execSQL("update Events set hasAlarm = 1 where _ID = 1");

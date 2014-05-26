@@ -19,18 +19,25 @@
 package de.k3b.android.calendar;
 
 import android.annotation.TargetApi;
+
+import de.k3b.calendar.EventDto;
+import de.k3b.calendar.EventDtoSimple;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.CalendarContract;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Facade that make a android-calendar-event-cursor appear as EventDto.<br/>
+ * Facade that make a android-calendar-event-cursor appear as EventDto.
+ * To load data with depenent data use loadFull().
+ * <br/>
  * Note: ACalendarCursorAsEventDto2 for android2.x and ACalendarCursorAsEventDto4 for android4.x are identical, except
  * that 2.x uses de.k3b.android.compat.CalendarContract and 4.x uses android.provider.CalendarContract;
  * 
@@ -135,14 +142,27 @@ public class ACalendarCursorAsEventDto4 extends ACalendarCursor implements ACale
     @Override
     public String getCalendarId() {return currentCalendarContentDatabaseCursor.getString(11);}
 
-    /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. Not loaded yet */
+    /** #9 the alarm(s) should trigger x menutes before the event.
+     * null means no alarms. This Method does not load the alarms */
     @Override
     public List<Integer> getAlarmMinutesBeforeEvent() {return (currentCalendarContentDatabaseCursor.getInt(12) != 0) ? new ArrayList<Integer>():null;}
 
     /************* #9 alarm-reminder ********************/
+    /** #9 creates a copy of the data and downlownloads dependent subdata */
     @Override
-    public void addAlarms(final String eventId, final List<Integer> alarmMinutesBeforeEvent) {
+    public EventDto loadFull() {
+        EventDtoSimple data = new EventDtoSimple(this);
+        this.addAlarms(data.getId(), data.getAlarmMinutesBeforeEvent());
+        return data;
+    }
+
+    /** #9 downloads dependant data */
+    private void addAlarms(final String eventId, final List<Integer> alarmMinutesBeforeEvent) {
         if (alarmMinutesBeforeEvent != null) {
+            if (Global.debugEnabled) {
+                Log.d(ACalendar2IcsEngine.TAG, "Downloading Reminders for Event " + eventId);
+            }
+
             Cursor eventCursor = null;
             try {
                 // set to null for non mocked production
@@ -158,6 +178,10 @@ public class ACalendarCursorAsEventDto4 extends ACalendarCursor implements ACale
                 if (eventCursor != null) {
                     eventCursor.close();
                 }
+            }
+        } else {
+            if (Global.debugEnabled) {
+                Log.d(ACalendar2IcsEngine.TAG, "No Reminders for Event " + eventId);
             }
         }
     }

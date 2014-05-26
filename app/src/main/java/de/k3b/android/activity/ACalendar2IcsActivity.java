@@ -259,6 +259,7 @@ public class ACalendar2IcsActivity extends Activity {
     private void writeStringToTextFile(File file, String content) throws IOException {
         if (Global.debugEnabled) {
             Log.d(ACalendar2IcsEngine.TAG, "Creating file " + file);
+            Log.d(ACalendar2IcsEngine.TAG, "content");
         }
 
         FileOutputStream f1 = new FileOutputStream(file, false); //True = Append to file, false = Overwrite

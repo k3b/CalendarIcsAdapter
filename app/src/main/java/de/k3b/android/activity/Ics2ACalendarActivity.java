@@ -49,7 +49,6 @@ import de.k3b.calendar.IcsAsEventDto;
  * @author k3b
  */
 public class Ics2ACalendarActivity extends Activity {
-    private static final String TAG = "ICS-Import";
 
     /**
      * loads filecontents from stream
@@ -78,11 +77,11 @@ public class Ics2ACalendarActivity extends Activity {
         Uri data = intent.getData();
 
         if (Global.debugEnabled) {
-            Log.d(TAG, "Ics2ACalendarActivity begin " + data);
+            Log.d(IcsImportIntentFactory.TAG, "Ics2ACalendarActivity begin " + data);
         }
         startCalendarImportActivity(this, data);
         if (Global.debugEnabled) {
-            Log.d(TAG, "Ics2ACalendarActivity done" + data);
+            Log.d(IcsImportIntentFactory.TAG, "Ics2ACalendarActivity done" + data);
         }
 
         this.finish();
@@ -95,12 +94,15 @@ public class Ics2ACalendarActivity extends Activity {
         if (calendarEventFileUri != null) {
             try {
                 if (Global.debugEnabled) {
-                    Log.d(TAG, "opening " + calendarEventFileUri);
+                    Log.d(IcsImportIntentFactory.TAG, "opening " + calendarEventFileUri);
                 }
 
                 //use ical4j to parse the event
                 CalendarBuilder cb = new CalendarBuilder();
                 Calendar calendar = cb.build(getStreamFromOtherSource(context, calendarEventFileUri));
+                if (Global.debugEnabled) {
+                    Log.d(IcsImportIntentFactory.TAG, "loaded " + calendar);
+                }
 
                 if (calendar != null) {
                     IcsImportIntentFactory importFactory = new IcsImportIntentFactory();
@@ -111,31 +113,18 @@ public class Ics2ACalendarActivity extends Activity {
                         VEvent event = (VEvent) i.next();
 
                         if (Global.debugEnabled) {
-                            Log.d(TAG, "processing event " + event.getName());
+                            Log.d(IcsImportIntentFactory.TAG, "processing event " + event.getName());
                         }
                         EventDto eventDto = new IcsAsEventDto(event);
 
                         Intent insertIntent = importFactory.createImportIntent(context, eventDto, event);
 
-                        List<Integer> alarms = eventDto.getAlarmMinutesBeforeEvent();
-
-                        // #9 #8 acalendar specific alarms
-                        if (alarms != null) {
-                            StringBuilder param = new StringBuilder();
-                            for (Integer alarmValue : alarms) {
-                                param.append(alarmValue).append("_1;");
-                            }
-                            insertIntent.putExtra("alarms", param.toString());
-                        }
-
-
                         context.startActivity(insertIntent);
-
                     }
                 }
 
             } catch (Exception e) {
-                Log.e(TAG, "error processing " + calendarEventFileUri + " : " + e);
+                Log.e(IcsImportIntentFactory.TAG, "error processing " + calendarEventFileUri + " : " + e);
                 e.printStackTrace();
             }
         }

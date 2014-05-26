@@ -21,10 +21,7 @@ package de.k3b.android.calendar;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.List;
 
-import de.k3b.android.calendar.ACalendarCursorAsEventDto2;
-import de.k3b.android.calendar.ACalendarMock;
 import de.k3b.android.calendar.ics.R;
 import de.k3b.android.compat.Compat;
 import de.k3b.calendar.EventDto;
@@ -100,9 +97,8 @@ public class ACalendar2IcsEngine implements Closeable {
                 // Use the cursor to step through the returned records
                 while (eventCursor.moveToNext()) {
                     hasData = true;
-                    EventDtoSimple data = new EventDtoSimple(eventData);
+                    EventDto data = eventData.loadFull();
                     TimeZone timezone = getOrCreateTimeZone(data);
-                    eventData.addAlarms(data.getId(), data.getAlarmMinutesBeforeEvent());
                     factory.addEvent(data, timezone);
                     if (Global.debugEnabled) {
                         Log.d(ACalendar2IcsEngine.TAG, "added event " + data.getTitle());
@@ -116,6 +112,7 @@ public class ACalendar2IcsEngine implements Closeable {
         }
         return (hasData) ? factory.getCalendar() : null;
 	}
+
     /**
 	 * Placeholder to infer timezone.<br/>
 	 * Not implemented yet.

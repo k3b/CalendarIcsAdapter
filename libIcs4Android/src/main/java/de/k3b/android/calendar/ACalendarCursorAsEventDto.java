@@ -34,6 +34,6 @@ public interface ACalendarCursorAsEventDto extends EventDto, Closeable {
 
 	Cursor queryByContentURI(Uri contentUri);
 
-    /** #9 Load alarms from seperate table Reminder */
-    void addAlarms(final String eventId, final List<Integer> alarmMinutesBeforeEvent);
+    /** #9 creates a copy of the data and downlownloads dependent subdata */
+    EventDto loadFull();
 }
