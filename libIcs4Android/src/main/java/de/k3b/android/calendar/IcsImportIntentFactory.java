@@ -19,6 +19,8 @@
 package de.k3b.android.calendar;
 
 import net.fortuna.ical4j.model.component.VEvent;
+import net.fortuna.ical4j.model.property.Clazz;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -55,8 +57,7 @@ public class IcsImportIntentFactory {
         else
             result = imp2.createImportIntent(context, eventDto, event);
 
-
-        // #9 #8 acalendar specific alarms
+        // #9acalendar specific alarms
         List<Integer> alarms = eventDto.getAlarmMinutesBeforeEvent();
         if (alarms != null) {
             StringBuilder param = new StringBuilder();
@@ -69,8 +70,37 @@ public class IcsImportIntentFactory {
             }
         }
 
+        /* #8 additional extras supported by ACalendar according to "Intent Intercept  2.0.3.apk"
+            - Long calendar_id = 1
+            ? Integer availabilityStatus = 0
+                    // android value
+                    public static final int AVAILABILITY_BUSY = 0;
+                    public static final int AVAILABILITY_FREE = 1;
+                    public static final int AVAILABILITY_TENTATIVE = 2;
+                VEvent
+                    http://www.kanzaki.com/docs/ical/freebusy
+                    http://www.kanzaki.com/docs/ical/vfreebusy.html (outside of to vevent)
+                    VEvent.status
+                        NEEDS-ACTION;COMPLETED;IN-PROCESS;CANCELLED
+                X-MICROSOFT-CDO-BUSYSTATUS:FREE|TENTATIVE|BUSY
+            v Integer visibility = 0
+            - Boolean editMode=true
+            v alarms=30_1;                // 30 mins before event with method 1 (Alarm)
+         */
+        result.putExtra("visibility", getAccessLevel(event.getClassification()));
+
         return result;
 
     }
 
+    /**
+     * translates from ical4jClazz to Android-Accesslevel
+     */
+    private int getAccessLevel(Clazz ical4jClazz)
+    {
+        if (ical4jClazz == Clazz.CONFIDENTIAL) return 1;
+        if (ical4jClazz == Clazz.PUBLIC) return 3;
+        if (ical4jClazz == Clazz.PRIVATE) return 2;
+        return 0;
+    }
 }

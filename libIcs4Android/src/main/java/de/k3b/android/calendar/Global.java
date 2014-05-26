@@ -30,6 +30,6 @@ public class Global {
 	/**
 	 * true: use local calendar db (for testing); false: use contentProvider for production
 	 */
-	public static boolean USE_MOCK_CALENDAR = true;
+	public static boolean USE_MOCK_CALENDAR = false;
 
 }
