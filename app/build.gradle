@@ -1,4 +1,9 @@
+// android.calendar.ics.adapter/app/build.gradle"
 apply plugin: 'android'
+
+configurations {
+    compile.exclude group: 'commons-logging' // referenced in some portable lib. use android internal instead
+}
 
 android {
     compileSdkVersion 19
@@ -16,6 +21,10 @@ android {
 
     buildTypes {
         release {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+        debug {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
