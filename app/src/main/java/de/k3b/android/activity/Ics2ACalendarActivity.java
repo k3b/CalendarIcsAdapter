@@ -35,7 +35,6 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Iterator;
-import java.util.List;
 
 import de.k3b.android.calendar.Global;
 import de.k3b.android.calendar.IcsImportIntentFactory;

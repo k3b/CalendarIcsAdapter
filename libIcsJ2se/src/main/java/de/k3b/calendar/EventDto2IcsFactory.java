@@ -25,6 +25,8 @@ import net.fortuna.ical4j.model.*;
 import net.fortuna.ical4j.model.component.*;
 import net.fortuna.ical4j.model.property.*;
 
+import de.k3b.util.DateTimeUtil;
+
 /**
  * Factory that converts generic EventDto to iCal4j-Implementation specific ics.
  * This class has no direct dependency to android so it can be run in a j2se-junit-integration test.<br/><br/>
@@ -61,7 +63,7 @@ public class EventDto2IcsFactory {
 		return calendar;
 	}
 
-	/**
+    /**
 	 * adds a generic EventDto to ical4j-calendar
 	 */
 	public VEvent addEvent(EventDto eventData, TimeZone timezone) {
@@ -76,19 +78,23 @@ public class EventDto2IcsFactory {
 		
 		if (timezone != null) eventProperties.add(timezone);
 		if (eventData.getDuration() != null) eventProperties.add(new Duration(new Dur( eventData.getDuration())));
-		
-		if (eventData.getRRule() != null) {
-			try {
-				eventProperties.add(new RRule(eventData.getRRule()));
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
 
+        addRRules(eventProperties, eventData.getRRule());
+
+        // #11 exDate export
+        addExDates(eventProperties, eventData.getExtDates());
 
         // #9
+        ComponentList valarms = getVAlarms(eventData.getAlarmMinutesBeforeEvent());
+
+        VEvent event = new VEvent(eventProperties, valarms);
+		getCalendar().getComponents().add(event);
+		return event;
+	}
+
+    // #9
+    private ComponentList getVAlarms(final List<Integer> alarms) {
         ComponentList valarms = null;
-        List<Integer> alarms = eventData.getAlarmMinutesBeforeEvent();
         if (alarms != null) {
             valarms = new ComponentList();
             for (Integer alarm : alarms) {
@@ -96,9 +102,33 @@ public class EventDto2IcsFactory {
                 valarms.add(new VAlarm(durationInMinutes));
             }
         }
+        return valarms;
+    }
 
-        VEvent event = new VEvent(eventProperties, valarms);
-		getCalendar().getComponents().add(event);
-		return event;
-	}
+    // #11 exDate export
+    private void addExDates(final PropertyList eventProperties, final String exDates) {
+        if (exDates != null) {
+            DateList dates = new DateList();
+            for (String exDate : exDates.split(",")) {
+                try {
+                    dates.add(new DateTime(DateTimeUtil.parseIsoDate(exDate)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (dates.size() > 0) {
+                eventProperties.add(new ExDate(dates));
+            }
+        }
+    }
+
+    private void addRRules(final PropertyList eventProperties, final String rRule) {
+        if (rRule != null) {
+			try {
+				eventProperties.add(new RRule(rRule));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+    }
 }

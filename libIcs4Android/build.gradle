@@ -20,6 +20,8 @@ task jar(type: Jar) {
 }
 
 dependencies {
+//    testCompile 'junit:junit:4.+'
+    compile project(':libIcsJ2se')
     compile 'org.mnode.ical4j:ical4j:1.0.5'
     compile 'backport-util-concurrent:backport-util-concurrent:3.1'
     compile 'commons-codec:commons-codec:1.8'

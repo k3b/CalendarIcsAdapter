@@ -88,6 +88,7 @@ public class ACalendarCursorAsEventDto2 extends ACalendarCursor implements ACale
 			CalendarContract.Events.ORGANIZER,
 			CalendarContract.Events.CALENDAR_ID,
             CalendarContract.Events.HAS_ALARM,
+            CalendarContract.Events.EXDATE, // #11
 		};
 
 	/* (non-Javadoc)
@@ -144,6 +145,12 @@ public class ACalendarCursorAsEventDto2 extends ACalendarCursor implements ACale
      * null means no alarms. This Method does not load the alarms */
     @Override
     public List<Integer> getAlarmMinutesBeforeEvent() {return (currentCalendarContentDatabaseCursor.getInt(12) != 0) ? new ArrayList<Integer>():null;}
+
+    /** #11 formatted as komma seperated list of iso-utc-dates. Example: '20090103T093000Z,20110101T093000Z' */
+    @Override
+    public String getExtDates() {
+        return currentCalendarContentDatabaseCursor.getString(13);
+    }
 
     /************* #9 alarm-reminder ********************/
     /** #9 creates a copy of the data and downlownloads dependent subdata */

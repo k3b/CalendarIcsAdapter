@@ -27,6 +27,8 @@ import java.util.List;
  * @author k3b
  */
 public class EventDtoSimple implements EventDto {
+    private String extDates;
+
     public EventDtoSimple() {};
     public EventDtoSimple(EventDto src) {
         if (src!= null) {
@@ -43,6 +45,7 @@ public class EventDtoSimple implements EventDto {
             setRDate(src.getRDate());
             setRRule(src.getRRule());
             setTitle(src.getTitle());
+            setExtDates(src.getExtDates()); // #11
         }
     }
 
@@ -130,6 +133,18 @@ public class EventDtoSimple implements EventDto {
     @Override
     public String getRDate() {
         return rDate;
+    }
+
+    /** #11 formatted as komma seperated list of iso-utc-dates. Example: '20090103T093000Z,20110101T093000Z' */
+    @Override
+    public String getExtDates() {
+        return this.extDates;
+    }
+
+    /** #11 formatted as komma seperated list of iso-utc-dates. Example: '20090103T093000Z,20110101T093000Z' */
+    public EventDtoSimple setExtDates(String value) {
+        this.extDates = value;
+        return this;
     }
 
     public EventDtoSimple setRDate(String rDate) {

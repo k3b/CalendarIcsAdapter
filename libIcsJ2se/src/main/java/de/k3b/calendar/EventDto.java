@@ -47,6 +47,9 @@ public interface EventDto {
 
     public abstract String getRDate();
 
+    /** #11 formatted as komma seperated list of iso-utc-dates. Example: '20090103T093000Z,20110101T093000Z' */
+    public abstract String getExtDates();
+
     public abstract String getOrganizer();
 
     public abstract String getCalendarId();

@@ -19,13 +19,15 @@
 package de.k3b.calendar;
 
 import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.Date;
 import net.fortuna.ical4j.model.component.VAlarm;
 import net.fortuna.ical4j.model.component.VEvent;
 import net.fortuna.ical4j.model.property.*;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
+import de.k3b.util.DateTimeUtil;
 
 /**
  * Facade that makes a ical4j-vevent implementation specific ics appear as EventDto.<br/>
@@ -131,6 +133,29 @@ public class IcsAsEventDto implements EventDto {
 
         if (value != null) {
             return value.getValue();
+        }
+        return null;
+    }
+
+    /** #11 formatted as komma seperated list of iso-utc-dates. Example: '20090103T093000Z,20110101T093000Z' */
+    @Override
+    public String getExtDates() {
+        PropertyList exdates = (this.event != null) ? this.event.getProperties(ExDate.EXDATE) : null;
+
+        if ((exdates != null) && (exdates.size() > 0)) {
+            StringBuilder sb = new StringBuilder();
+            for(Object _ex : exdates) {
+                ExDate ex = (ExDate) _ex;
+                DateList dates = ex.getDates();
+
+                for(Object _date : dates) {
+                    if (sb.length() > 0) {
+                        sb.append(",");
+                    }
+                    sb.append(DateTimeUtil.toIsoDate((Date) _date));
+                }
+            }
+            return sb.toString();
         }
         return null;
     }

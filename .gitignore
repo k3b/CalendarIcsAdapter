@@ -3,3 +3,5 @@ build
 .idea
 local.properties
 gradle-app.setting
+/eve/*.apk
+/eve/*.apk

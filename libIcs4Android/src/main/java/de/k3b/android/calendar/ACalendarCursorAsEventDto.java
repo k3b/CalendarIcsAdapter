@@ -19,7 +19,6 @@
 package de.k3b.android.calendar;
 
 import java.io.Closeable;
-import java.util.List;
 
 import android.database.Cursor;
 import android.net.Uri;

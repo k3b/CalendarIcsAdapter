@@ -4,4 +4,4 @@
 // print "has internet " + isReachable
 
 
-include ':app', ':libIcs4Android'
+include ':app', ':libIcs4Android', ':libIcsJ2se'
