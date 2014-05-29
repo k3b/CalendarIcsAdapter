@@ -25,7 +25,9 @@ import android.net.Uri;
 import de.k3b.calendar.EventDto;
 
 /**
- * common api for ACalendarCursorAsEventDto2 (for android2.x) and ACalendarCursorAsEventDto4 (for android4.x) 
+ * Let an android specific calendarEvent cursor appear as a EventDto.
+ * common api for ACalendarCursorAsEventDto2 (for android2.x) and ACalendarCursorAsEventDto4 (for android4.x)
+ *
  * @author k3b
  *
  */

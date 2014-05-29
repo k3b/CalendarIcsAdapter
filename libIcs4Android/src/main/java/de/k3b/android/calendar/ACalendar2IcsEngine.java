@@ -37,7 +37,7 @@ import android.net.Uri;
 import android.util.Log;
 
 /**
- * Android specific engine that converts a Android-Calendar-Event to a ics-Calendar-Event string.<br/><br/>
+ * Android specific export engine that converts Android-Calendar-Event(s) to a ics-Calendar-Event string.<br/><br/>
  * 
  * @author k3b
  */

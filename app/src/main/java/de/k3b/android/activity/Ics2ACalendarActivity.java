@@ -42,7 +42,8 @@ import de.k3b.calendar.EventDto;
 import de.k3b.calendar.IcsAsEventDto;
 
 /**
- * Invisible Pseudo-Activity that imports a ics-calendar-event-file into the android Calendar.<br/>
+ * Invisible Pseudo-Activity that imports a ics-calendar-event-file into the android Calendar via
+ * propopulated Android-Create-Event-Form.<br/>
  * Supports Android 4.0 and up. Runs on most Android 2.1 and up that have a calendar and a calendar provider.<br/><br/>
  *
  * @author k3b
