@@ -18,10 +18,13 @@
  */
 package de.k3b.calendar;
 
+import java.net.URISyntaxException;
 import java.text.ParseException;
-import java.util.List;
+import java.util.*;
 
 import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.component.*;
 import net.fortuna.ical4j.model.property.*;
 
@@ -68,18 +71,27 @@ public class EventDto2IcsFactory {
 	 */
 	public VEvent addEvent(EventDto eventData, TimeZone timezone) {
 		PropertyList eventProperties = new PropertyList(); // event.getProperties();
-		if (eventData.getId() != null) eventProperties.add(new Uid("acal-"+eventData.getCalendarId()+"-"+eventData.getId()));
-		if (eventData.getDtStart() != 0) eventProperties.add(new DtStart(new DateTime( eventData.getDtStart())));
-		if (eventData.getDtEnd() != 0) eventProperties.add(new DtEnd(new DateTime( eventData.getDtEnd())));
+		if (eventData.getId() != null) eventProperties.add(new Uid(eventData.getId()));
+		if (eventData.getDtStart() != 0) eventProperties.add(new DtStart(new DateTime(eventData.getDtStart())));
+		if (eventData.getDtEnd() != 0) eventProperties.add(new DtEnd(new DateTime(eventData.getDtEnd())));
 
 		if (eventData.getTitle() != null) eventProperties.add(new Summary(eventData.getTitle()));
 		if (eventData.getDescription() != null) eventProperties.add(new Description(eventData.getDescription()));
 		if (eventData.getEventLocation() != null) eventProperties.add(new Location(eventData.getEventLocation()));
-		
-		if (timezone != null) eventProperties.add(timezone);
-		if (eventData.getDuration() != null) eventProperties.add(new Duration(new Dur( eventData.getDuration())));
+        if (eventData.getOrganizer() != null) {
+            try {
+                eventProperties.add(new Organizer(eventData.getOrganizer()));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (timezone != null) eventProperties.add(timezone);
+		if (eventData.getDuration() != null) eventProperties.add(new Duration(new Dur(eventData.getDuration())));
 
         addRRules(eventProperties, eventData.getRRule());
+
+        addRDates(eventProperties, eventData.getRDate());
 
         // #11 exDate export
         addExDates(eventProperties, eventData.getExtDates());
@@ -88,15 +100,21 @@ public class EventDto2IcsFactory {
         ComponentList valarms = getVAlarms(eventData.getAlarmMinutesBeforeEvent());
 
         VEvent event = new VEvent(eventProperties, valarms);
-		getCalendar().getComponents().add(event);
+
+        Calendar vcalendar = getCalendar();
+        if ((eventData.getCalendarId() != null) && (null == vcalendar.getProperty(Uid.NAME))) {
+            vcalendar.getProperties().add(new Uid(eventData.getCalendarId()));
+        }
+
+        vcalendar.getComponents().add(event);
 		return event;
 	}
 
+    /** returns an empty list if there are no alarms */
     // #9
     private ComponentList getVAlarms(final List<Integer> alarms) {
-        ComponentList valarms = null;
-        if (alarms != null) {
-            valarms = new ComponentList();
+        final ComponentList valarms = new ComponentList();
+        if ((alarms != null) && (alarms.size() > 0)) {
             for (Integer alarm : alarms) {
                 Dur durationInMinutes = new Dur(0,0,- alarm, 0);
                 valarms.add(new VAlarm(durationInMinutes));
@@ -106,20 +124,34 @@ public class EventDto2IcsFactory {
     }
 
     // #11 exDate export
-    private void addExDates(final PropertyList eventProperties, final String exDates) {
-        if (exDates != null) {
-            DateList dates = new DateList();
-            for (String exDate : exDates.split(",")) {
-                try {
-                    dates.add(new DateTime(DateTimeUtil.parseIsoDate(exDate)));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            }
+    private void addExDates(final PropertyList eventProperties, final String strDates) {
+        if (strDates != null) {
+            DateList dates = getDateList(strDates);
             if (dates.size() > 0) {
                 eventProperties.add(new ExDate(dates));
             }
         }
+    }
+
+    private void addRDates(final PropertyList eventProperties, final String strDates) {
+        if (strDates != null) {
+            DateList dates = getDateList(strDates);
+            if (dates.size() > 0) {
+                eventProperties.add(new RDate(dates));
+            }
+        }
+    }
+
+    private DateList getDateList(final String strDates) {
+        DateList dates = new DateList();
+        for (String exDate : strDates.split(",")) {
+            try {
+                dates.add(new DateTime(DateTimeUtil.parseIsoDate(exDate)));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return dates;
     }
 
     private void addRRules(final PropertyList eventProperties, final String rRule) {

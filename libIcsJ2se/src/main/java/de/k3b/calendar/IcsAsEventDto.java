@@ -37,17 +37,21 @@ import de.k3b.util.DateTimeUtil;
  * @author Daniele Gobbetti and k3b
  */
 public class IcsAsEventDto implements EventDto {
-	private final VEvent event;
+	private VEvent event;
+    private String calendarId = null;
 
-	public IcsAsEventDto(Calendar calendar) {
-		this.event = (VEvent) calendar.getComponent(Component.VEVENT);
+    public IcsAsEventDto(Calendar calendar) {
+        Property calendarId = calendar.getProperty(Property.UID);
+        this.calendarId = (calendarId != null) ? calendarId.getValue() : null;
+        set((VEvent) calendar.getComponent(Component.VEVENT));
 	}
 
-	public IcsAsEventDto(VEvent event) {
-		this.event = event;
-	}
+    public IcsAsEventDto set(final VEvent event) {
+        this.event = event;
+        return this;
+    }
 
-	@Override
+    @Override
 	public String getId() {
 		Uid value = (this.event == null) ? null : event.getUid();
 		
@@ -129,23 +133,22 @@ public class IcsAsEventDto implements EventDto {
 
     @Override
     public String getRDate() {
-        RDate value = (this.event == null) ? null :  (RDate) event.getProperty(Property.RDATE);
-
-        if (value != null) {
-            return value.getValue();
-        }
-        return null;
+        PropertyList strDates = (this.event != null) ? this.event.getProperties(ExDate.RDATE) : null;
+        return getDates(strDates);
     }
 
     /** #11 formatted as komma seperated list of iso-utc-dates. Example: '20090103T093000Z,20110101T093000Z' */
     @Override
     public String getExtDates() {
-        PropertyList exdates = (this.event != null) ? this.event.getProperties(ExDate.EXDATE) : null;
+        PropertyList strDates = (this.event != null) ? this.event.getProperties(ExDate.EXDATE) : null;
+        return getDates(strDates);
+    }
 
-        if ((exdates != null) && (exdates.size() > 0)) {
+    private String getDates(final PropertyList strDates) {
+        if ((strDates != null) && (strDates.size() > 0)) {
             StringBuilder sb = new StringBuilder();
-            for(Object _ex : exdates) {
-                ExDate ex = (ExDate) _ex;
+            for(Object _ex : strDates) {
+                DateListProperty ex = (DateListProperty) _ex;
                 DateList dates = ex.getDates();
 
                 for(Object _date : dates) {
@@ -173,14 +176,7 @@ public class IcsAsEventDto implements EventDto {
 	// not supported by ics-calendar
 	@Override
 	public String getCalendarId() {
-		/*
-		Uid value = (this.event == null) ? null : event.getUid();
-		
-		if (value != null) {
-			return value.getValue();
-		}
-		*/
-		return null;
+		return calendarId;
 	}
 
     /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. */

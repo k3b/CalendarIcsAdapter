@@ -18,6 +18,8 @@
  */
 package de.k3b.calendar;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,19 +35,21 @@ public class EventDtoSimple implements EventDto {
     public EventDtoSimple(EventDto src) {
         if (src!= null) {
             setId(src.getId());
-            setAlarmMinutesBeforeEvent(src.getAlarmMinutesBeforeEvent());
             setCalendarId(src.getCalendarId());
+            setTitle(src.getTitle());
             setDescription(src.getDescription());
+            setEventLocation(src.getEventLocation());
+            setOrganizer(src.getOrganizer());
+
             setDtEnd(src.getDtEnd());
             setDtStart(src.getDtStart());
             setDuration(src.getDuration());
-            setEventLocation(src.getEventLocation());
             setEventTimezone(src.getEventTimezone());
-            setOrganizer(src.getOrganizer());
-            setRDate(src.getRDate());
+
             setRRule(src.getRRule());
-            setTitle(src.getTitle());
+            setRDate(src.getRDate());
             setExtDates(src.getExtDates()); // #11
+            setAlarmMinutesBeforeEvent(src.getAlarmMinutesBeforeEvent());
         }
     }
 
@@ -173,6 +177,16 @@ public class EventDtoSimple implements EventDto {
     /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. */
     public List<Integer> getAlarmMinutesBeforeEvent() {return alarmMinutesBeforeEvent;}
 
+    public EventDtoSimple  setAlarmMinutesBeforeEvent(int...  alarmMinutesBeforeEvent) {
+        if (alarmMinutesBeforeEvent != null) {
+            ArrayList<Integer> items = new ArrayList<Integer>();
+            for(int al : alarmMinutesBeforeEvent)
+                items.add(Integer.valueOf(al));
+
+            setAlarmMinutesBeforeEvent(items);
+        }
+        return this;
+    }
     /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. */
     public EventDtoSimple  setAlarmMinutesBeforeEvent(List<Integer>  alarmMinutesBeforeEvent) {
         this.alarmMinutesBeforeEvent = alarmMinutesBeforeEvent;

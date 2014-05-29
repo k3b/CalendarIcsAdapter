@@ -99,15 +99,16 @@ public class Ics2ACalendarActivity extends Activity {
 
                 //use ical4j to parse the event
                 CalendarBuilder cb = new CalendarBuilder();
-                Calendar calendar = cb.build(getStreamFromOtherSource(context, calendarEventFileUri));
+                Calendar vcalendar = cb.build(getStreamFromOtherSource(context, calendarEventFileUri));
                 if (Global.debugEnabled) {
-                    Log.d(IcsImportIntentFactory.TAG, "loaded " + calendar);
+                    Log.d(IcsImportIntentFactory.TAG, "loaded " + vcalendar);
                 }
 
-                if (calendar != null) {
+                if (vcalendar != null) {
                     IcsImportIntentFactory importFactory = new IcsImportIntentFactory();
 
-                    Iterator<?> i = calendar.getComponents(Component.VEVENT).iterator();
+                    EventDto eventDto = new IcsAsEventDto(vcalendar);
+                    Iterator<?> i = vcalendar.getComponents(Component.VEVENT).iterator();
 
                     while (i.hasNext()) {
                         VEvent event = (VEvent) i.next();
@@ -115,7 +116,7 @@ public class Ics2ACalendarActivity extends Activity {
                         if (Global.debugEnabled) {
                             Log.d(IcsImportIntentFactory.TAG, "processing event " + event.getName());
                         }
-                        EventDto eventDto = new IcsAsEventDto(event);
+                        eventDto.set(event);
 
                         Intent insertIntent = importFactory.createImportIntent(context, eventDto, event);
 

@@ -23,12 +23,18 @@ public class DateTimeUtil {
         return c.getTime();
     }
 
-    /** compatibel to parseIsoDate with iso date format yyyy-MM-dd'T'HH:mm:ssZ */
+
+    /** compatibel to parseIsoDate with iso date format yyyyMMdd'T'HHmmss'Z' */
+    public static String toIsoDate(final long date) {
+        return toIsoDate(new Date(date));
+    }
+
+    /** compatibel to parseIsoDate with iso date format yyyyMMdd'T'HHmmss'Z' */
     public static String toIsoDate(final Date date) {
         return isoDateTimeformatter.format(date);
     }
 
-    /** compatibel to toIsoDate with iso date format yyyy-MM-dd'T'HH:mm:ssZ */
+    /** compatibel to toIsoDate with iso date format yyyyMMdd'T'HHmmss'Z' */
     public static  Date parseIsoDate(final String mDateSelectedForAdd)
             throws ParseException {
         return isoDateTimeformatter.parse(mDateSelectedForAdd);

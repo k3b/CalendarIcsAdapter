@@ -102,17 +102,17 @@ public class ACalendar2IcsActivity extends Activity {
                 if (Global.debugEnabled) {
                     Log.d(ACalendar2IcsEngine.TAG, "opening " + data);
                 }
-                Calendar calendarEvent = engine.export(data);
+                Calendar vcalendar = engine.export(data);
 
-                if (calendarEvent != null) {
-                    EventDto event = new IcsAsEventDto(calendarEvent);
+                if (vcalendar != null) {
+                    EventDto event = new IcsAsEventDto(vcalendar);
 
                     String mailSubject = getMailSubject(event, beginTime);
                     String description = getMailDescription(event);
                     if (Global.debugEnabled) {
                         Log.d(ACalendar2IcsEngine.TAG, "sending '" + mailSubject + "'");
                     }
-                    sendIcsTo(mailSubject, description, calendarEvent.toString());
+                    sendIcsTo(mailSubject, description, vcalendar.toString());
                 }
 
             } catch (Exception e) {
