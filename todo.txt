@@ -1,5 +1,7 @@
 todo.txt for android.calendar.ics.adapter
 =========
+
+- #11 Add Support for RDate
 - #9 Add Support to import/export alarm-reminders
 	String alarms="10_1;" // 10*1 Minute vor dem event
             // CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/reminders");

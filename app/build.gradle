@@ -12,6 +12,9 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
+
+        //!!! andoird buildToolsVersion 19.0.3 does not support exclude with wildcards yet :-(
+        exclude('org/apache/commons/codec/language/bm/*.txt')		//  124 files (uncompressed 215kb) with unused language specific rules
     }
 
     defaultConfig {

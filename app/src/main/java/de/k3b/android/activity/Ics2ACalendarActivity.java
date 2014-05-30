@@ -107,7 +107,7 @@ public class Ics2ACalendarActivity extends Activity {
                 if (vcalendar != null) {
                     IcsImportIntentFactory importFactory = new IcsImportIntentFactory();
 
-                    EventDto eventDto = new IcsAsEventDto(vcalendar);
+                    IcsAsEventDto eventDto = new IcsAsEventDto(vcalendar);
                     Iterator<?> i = vcalendar.getComponents(Component.VEVENT).iterator();
 
                     while (i.hasNext()) {

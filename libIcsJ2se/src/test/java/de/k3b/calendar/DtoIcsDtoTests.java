@@ -38,6 +38,7 @@ public class DtoIcsDtoTests {
 				.setDuration("P1D")
 				.setRDate("19610901T045612Z,19630901T045612Z")
                 .setExtDates("19710901T045612Z,19730901T045612Z")
+                .setEventTimezone("Australia/Sydney")
 				.setRRule("FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU");
     }
 
@@ -96,13 +97,6 @@ public class DtoIcsDtoTests {
     }
 
     @Test
-    public void shouldConvertEventTimezone() throws IOException, ParserException {
-        src.setEventTimezone("some value");
-        EventDto result = executeTest(src);
-        Assert.assertEquals(this.lastIcs, src.getEventTimezone(), result.getEventTimezone());
-    }
-
-    @Test
     public void shouldConvertOrganizer() throws IOException, ParserException {
         src.setOrganizer("mailto:theo.test@url.org");
         EventDto result = executeTest(src);
@@ -144,6 +138,13 @@ public class DtoIcsDtoTests {
         Assert.assertEquals(this.lastIcs, src.getAlarmMinutesBeforeEvent(), result.getAlarmMinutesBeforeEvent());
     }
 
+    @Test
+    public void shouldConvertTimeZone() throws IOException, ParserException {
+        src.setEventTimezone("Europe/Berlin");
+        EventDto result = executeTest(src);
+        Assert.assertEquals(this.lastIcs, src.getEventTimezone(), result.getEventTimezone());
+    }
+
     /** local helper to executeTest dto -> ics -> dto */
     private EventDto executeTest(final EventDtoSimple src) throws IOException, ParserException {
         String ics = getIcs(src);
@@ -162,7 +163,7 @@ public class DtoIcsDtoTests {
         EventDto2IcsFactory dto2Ics = new EventDto2IcsFactory("jUnit-Tests");
         if (events != null) {
             for(EventDto event : events) {
-                dto2Ics.addEvent(event, null);
+                dto2Ics.addEvent(event);
             }
         }
         return dto2Ics.getCalendar().toString();

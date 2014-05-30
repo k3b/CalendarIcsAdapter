@@ -44,7 +44,10 @@ public class EventDto2IcsFactory {
 	
 	private Calendar calendar = null;
 
-	/**
+    /** used to translate timezone-name to timezone-structure */
+    private final TimeZoneRegistry tzregistry = TimeZoneRegistryFactory.getInstance().createRegistry();
+
+    /**
 	 * creates a calendar
 	 * @param applicationID used to identify the datasource i.e. "-//Ben Fortuna//iCal4j 1.0//EN"
 	 */
@@ -69,11 +72,16 @@ public class EventDto2IcsFactory {
     /**
 	 * adds a generic EventDto to ical4j-calendar
 	 */
-	public VEvent addEvent(EventDto eventData, TimeZone timezone) {
-		PropertyList eventProperties = new PropertyList(); // event.getProperties();
+	public VEvent addEvent(EventDto eventData) {
+        Calendar vcalendar = getCalendar();
+
+        String timezoneName = eventData.getEventTimezone();
+        TimeZone timezone = getTimeZone(vcalendar, timezoneName);
+
+        PropertyList eventProperties = new PropertyList(); // event.getProperties();
 		if (eventData.getId() != null) eventProperties.add(new Uid(eventData.getId()));
-		if (eventData.getDtStart() != 0) eventProperties.add(new DtStart(new DateTime(eventData.getDtStart())));
-		if (eventData.getDtEnd() != 0) eventProperties.add(new DtEnd(new DateTime(eventData.getDtEnd())));
+		if (eventData.getDtStart() != 0) eventProperties.add(d(new DtStart(new DateTime(eventData.getDtStart())),timezone));
+		if (eventData.getDtEnd() != 0) eventProperties.add(d(new DtEnd(new DateTime(eventData.getDtEnd())),timezone));
 
 		if (eventData.getTitle() != null) eventProperties.add(new Summary(eventData.getTitle()));
 		if (eventData.getDescription() != null) eventProperties.add(new Description(eventData.getDescription()));
@@ -86,7 +94,6 @@ public class EventDto2IcsFactory {
             }
         }
 
-        if (timezone != null) eventProperties.add(timezone);
 		if (eventData.getDuration() != null) eventProperties.add(new Duration(new Dur(eventData.getDuration())));
 
         addRRules(eventProperties, eventData.getRRule());
@@ -101,14 +108,37 @@ public class EventDto2IcsFactory {
 
         VEvent event = new VEvent(eventProperties, valarms);
 
-        Calendar vcalendar = getCalendar();
-        if ((eventData.getCalendarId() != null) && (null == vcalendar.getProperty(Uid.NAME))) {
+        if ((eventData.getCalendarId() != null) && (null == vcalendar.getProperty(Property.UID))) {
             vcalendar.getProperties().add(new Uid(eventData.getCalendarId()));
         }
 
         vcalendar.getComponents().add(event);
 		return event;
 	}
+
+    private TimeZone getTimeZone(Calendar vcalendar, final String timezoneName) {
+        TimeZone result = null;
+        if (timezoneName != null) {
+            /*
+            ComponentList timezones = vcalendar.getComponents(Component.VTIMEZONE);
+            if (timezones != null) {
+                for (Object _check : timezones) {
+                    VTimeZone check = (VTimeZone) _check;
+                    if (timezoneName.compareToIgnoreCase(check.getTimeZoneId()) == 0)
+                }
+            }
+            VTimeZone
+            */
+            result = tzregistry.getTimeZone(timezoneName);
+            if ((result != null) && (result.getVTimeZone() != null)) vcalendar.getComponents().add(result.getVTimeZone());
+        }
+        return result;
+    }
+
+    private DateProperty d(final DateProperty date, final TimeZone timezone) {
+        if (timezone != null) date.setTimeZone(timezone);
+        return date;
+    }
 
     /** returns an empty list if there are no alarms */
     // #9

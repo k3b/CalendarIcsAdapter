@@ -98,8 +98,7 @@ public class ACalendar2IcsEngine implements Closeable {
                 while (eventCursor.moveToNext()) {
                     hasData = true;
                     EventDto data = eventData.loadFull();
-                    TimeZone timezone = getOrCreateTimeZone(data);
-                    factory.addEvent(data, timezone);
+                    factory.addEvent(data);
                     if (Global.debugEnabled) {
                         Log.d(ACalendar2IcsEngine.TAG, "added event " + data.getTitle());
                     }
@@ -111,15 +110,6 @@ public class ACalendar2IcsEngine implements Closeable {
             }
         }
         return (hasData) ? factory.getCalendar() : null;
-	}
-
-    /**
-	 * Placeholder to infer timezone.<br/>
-	 * Not implemented yet.
-	 */
-	TimeZone getOrCreateTimeZone(EventDto data) {
-		// not implemented yet
-		return null; //??? if (data.getEventTimezone() != null) eventProperties.add(new Timez(data.getEventTimezone()));
 	}
 
 	/**
