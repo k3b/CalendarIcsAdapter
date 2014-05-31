@@ -25,11 +25,10 @@ import java.io.IOException;
 import de.k3b.android.calendar.ics.R;
 import de.k3b.android.compat.Compat;
 import de.k3b.calendar.EventDto;
-import de.k3b.calendar.EventDto2IcsFactory;
-import de.k3b.calendar.EventDtoSimple;
+import de.k3b.calendar.ics.EventDto2IcsFactory;
 
 import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.TimeZone;
+
 import android.content.Context;
 import android.database.*;
 import android.database.sqlite.*;

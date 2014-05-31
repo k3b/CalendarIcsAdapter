@@ -19,7 +19,6 @@
 package de.k3b.calendar;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

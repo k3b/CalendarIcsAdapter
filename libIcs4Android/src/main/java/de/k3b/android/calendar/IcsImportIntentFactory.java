@@ -29,7 +29,6 @@ import java.util.List;
 
 import de.k3b.android.compat.Compat;
 import de.k3b.calendar.EventDto;
-import de.k3b.calendar.IcsAsEventDto;
 
 /**
  * common api for IcsImportIntentFactory2 (for android2.x) and IcsImportIntentFactory4 (for android4.x) 

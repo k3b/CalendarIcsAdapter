@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package de.k3b.calendar;
+package de.k3b.calendar.ics;
 
 import java.net.URISyntaxException;
 import java.text.ParseException;
@@ -28,6 +28,7 @@ import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.component.*;
 import net.fortuna.ical4j.model.property.*;
 
+import de.k3b.calendar.EventDto;
 import de.k3b.util.DateTimeUtil;
 
 /**

@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.Intent;
 import de.k3b.android.compat.CalendarContract;
 import de.k3b.calendar.EventDto;
-import de.k3b.calendar.IcsAsEventDto;
 
 /**
  * Factory to convert ics to calendar import Intent.<br/>

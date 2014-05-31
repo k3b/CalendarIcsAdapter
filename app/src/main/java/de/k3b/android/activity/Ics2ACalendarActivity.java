@@ -38,8 +38,7 @@ import java.util.Iterator;
 
 import de.k3b.android.calendar.Global;
 import de.k3b.android.calendar.IcsImportIntentFactory;
-import de.k3b.calendar.EventDto;
-import de.k3b.calendar.IcsAsEventDto;
+import de.k3b.calendar.ics.IcsAsEventDto;
 
 /**
  * Invisible Pseudo-Activity that imports a ics-calendar-event-file into the android Calendar via

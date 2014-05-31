@@ -42,7 +42,7 @@ import de.k3b.android.calendar.ACalendarCursor;
 import de.k3b.android.calendar.Global;
 import de.k3b.android.calendar.ics.adapter.R;
 import de.k3b.calendar.EventDto;
-import de.k3b.calendar.IcsAsEventDto;
+import de.k3b.calendar.ics.IcsAsEventDto;
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 
 /**

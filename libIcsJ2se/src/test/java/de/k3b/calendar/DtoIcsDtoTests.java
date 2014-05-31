@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Date;
 
+import de.k3b.calendar.ics.EventDto2IcsFactory;
+import de.k3b.calendar.ics.IcsAsEventDto;
 import de.k3b.util.DateTimeUtil;
 
 /**
@@ -44,7 +46,9 @@ public class DtoIcsDtoTests {
 
     @Test
     public void showIcs() throws IOException, ParserException {
+        System.out.println("showIcs");
         System.out.println(this.getIcs(src));
+        System.out.println();
     }
 
     @Test
@@ -126,7 +130,7 @@ public class DtoIcsDtoTests {
 
     @Test
     public void shouldConvertExtDates() throws IOException, ParserException {
-        src.setExtDates(xmasNoonString+","+xmasNoonString);
+        src.setExtDates(xmasNoonString + "," + xmasNoonString);
         EventDto result = executeTest(src);
         Assert.assertEquals(this.lastIcs, src.getExtDates(), result.getExtDates());
     }
@@ -145,6 +149,25 @@ public class DtoIcsDtoTests {
         Assert.assertEquals(this.lastIcs, src.getEventTimezone(), result.getEventTimezone());
     }
 
+
+    @Test
+    public void shouldNotHave2IdenticalTimeZones() throws IOException, ParserException {
+        EventDtoSimple src2 = new EventDtoSimple()
+                .setId("4712")
+                .setCalendarId(src.getCalendarId())
+                .setTitle("test title2")
+                .setDtStart(DateTimeUtil.createDate(2001, 5, 1, 12, 34, 56).getTime())
+                .setDtEnd(DateTimeUtil.createDate(2001, 5, 1, 17, 12, 34).getTime())
+                .setEventTimezone(src.getEventTimezone());
+
+        this.lastIcs = this.getIcs(src, src2);
+
+        Calendar vcalendar = getVCalendar(this.lastIcs);
+
+        Assert.assertEquals(this.lastIcs, 3, vcalendar.getComponents().size());
+    }
+
+
     /** local helper to executeTest dto -> ics -> dto */
     private EventDto executeTest(final EventDtoSimple src) throws IOException, ParserException {
         String ics = getIcs(src);
@@ -153,10 +176,14 @@ public class DtoIcsDtoTests {
     }
 
     private EventDto getDto(final String ics) throws IOException, ParserException {
+        Calendar vcalendar = getVCalendar(ics);
+        return new EventDtoSimple(new IcsAsEventDto(vcalendar));
+    }
+
+    private Calendar getVCalendar(final String ics) throws IOException, ParserException {
         CalendarBuilder cb = new CalendarBuilder();
         StringReader reader = new StringReader(ics);
-        Calendar vcalendar = cb.build(reader);
-        return new EventDtoSimple(new IcsAsEventDto(vcalendar));
+        return cb.build(reader);
     }
 
     private String getIcs(final EventDto... events) {
