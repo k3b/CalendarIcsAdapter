@@ -1,4 +1,5 @@
 apply plugin: 'android-library'
+//!! apply plugin: 'android-test'
 
 android {
     compileSdkVersion 19
@@ -11,7 +12,10 @@ android {
 
     defaultConfig {
         minSdkVersion 7
-        targetSdkVersion 19
+        targetSdkVersion 18 // roboelectric does not support 19 yet
+
+//!!        versionCode 2
+//!!        versionName "1.0.0-SNAPSHOT"
     }
 }
 
@@ -26,4 +30,8 @@ dependencies {
     compile 'commons-codec:commons-codec:1.8'
     compile 'commons-lang:commons-lang:2.6'
     // compile 'commons-logging:commons-logging:1.1.3'
+
+//!!    androidTestCompile 'junit:junit:4.+'
+//!!    androidTestCompile 'org.robolectric:robolectric:2.3+'
+//!!    androidTestCompile 'com.squareup:fest-android:1.0.+'
 }
