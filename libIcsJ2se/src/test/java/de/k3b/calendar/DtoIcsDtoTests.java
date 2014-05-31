@@ -32,6 +32,7 @@ public class DtoIcsDtoTests {
         src = new EventDtoSimple()
                 .setId("4711")
                 .setCalendarId("3")
+                .setDescription("bla bla bla")
                 .setTitle("test title")
                 .setDtStart(DateTimeUtil.createDate(2000, 5, 1, 12,34,56).getTime())
                 .setDtEnd(DateTimeUtil.createDate(2000, 5, 1, 17,12,34).getTime())
@@ -41,7 +42,8 @@ public class DtoIcsDtoTests {
 				.setRDate("19610901T045612Z,19630901T045612Z")
                 .setExtDates("19710901T045612Z,19730901T045612Z")
                 .setEventTimezone("Australia/Sydney")
-				.setRRule("FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU");
+				.setRRule("FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU")
+                .setAlarmMinutesBeforeEvent(5,10);
     }
 
     @Test

@@ -23,6 +23,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import de.k3b.util.DateTimeUtil;
+
 /**
  * Simulates the api of an android calendar content provider that is compatibel with Samsung-Android2.2 Calendar.
  * Used internally for testing on emulator that has no calendar-app and no calendar-provder.<br/><br/>
@@ -31,7 +33,7 @@ import android.util.Log;
  */
 public class ACalendarMock extends SQLiteOpenHelper {
 
-    public static final int CURRENT_DB_VERSION = 2;
+    public static final int CURRENT_DB_VERSION = 3;
 
     /**
 	 * Opens Mock-DB. Creates it if it does not exist.
@@ -108,5 +110,15 @@ public class ACalendarMock extends SQLiteOpenHelper {
 			db.execSQL("INSERT INTO Reminders(_ID, event_id,minutes,method) " +
 				"VALUES(2,1,120,1)");
 		}
+
+        if (oldVersion < 3) {
+            db.execSQL("update Events " +
+                    "set eventTimezone = 'Australia/Sydney', duration='P1D', " +
+                    "dtstart='"+ DateTimeUtil.createDate(2000, 5, 1, 12, 34, 56).getTime() + "'," +
+                    "dtend='"+ DateTimeUtil.createDate(2000, 5, 1, 17,12,34).getTime() + "'," +
+                    "rrule = 'FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU', rdate ='19610901T045612Z,19630901T045612Z'," +
+                    "exdate='19710901T045612Z,19730901T045612Z', organizer='mailto:max.mustermann@url.org'" +
+                    "where _ID = 1");
+        }
 	}
 }

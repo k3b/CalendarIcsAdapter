@@ -35,7 +35,7 @@ public class Compat {
 	 */
 	public static boolean isCalendarContract4Available() {
 		if (Global.USE_MOCK_CALENDAR) {
-			Assert.assertEquals(true, isClassAvailable("de.k3b.android.compat.CalendarContract"));
+			Assert.assertEquals(true, isClassAvailable(Compat.class.getName()));
 			Assert.assertEquals(false, isClassAvailable("hello.World"));
 		}
 		return isClassAvailable("android.provider.CalendarContract"); // production implementation
@@ -50,8 +50,7 @@ public class Compat {
 			if (null != Class.forName(fullClassName)) {
 				result = true;
 			}
-		} catch (ClassNotFoundException e) {
-			// ignore
+		} catch (Exception e) {
 		}
 		if (Global.debugEnabled) {
 			Log.d(ACalendar2IcsEngine.TAG, "Compat.isClassAvailable('"

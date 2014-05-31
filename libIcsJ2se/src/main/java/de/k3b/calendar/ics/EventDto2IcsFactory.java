@@ -109,8 +109,8 @@ public class EventDto2IcsFactory {
 
         VEvent event = new VEvent(eventProperties, valarms);
 
-        if ((eventData.getCalendarId() != null) && (null == vcalendar.getProperty(Property.UID))) {
-            vcalendar.getProperties().add(new Uid(eventData.getCalendarId()));
+        if (eventData.getCalendarId() != null) {
+            IcsUtil.setCalId(vcalendar, eventData.getCalendarId());
         }
 
         vcalendar.getComponents().add(event);
@@ -120,16 +120,9 @@ public class EventDto2IcsFactory {
     private TimeZone getTimeZone(Calendar vcalendar, final String timezoneName) {
         TimeZone result = null;
         if (timezoneName != null) {
-            /*
-            ComponentList timezones = vcalendar.getComponents(Component.VTIMEZONE);
-            if (timezones != null) {
-                for (Object _check : timezones) {
-                    VTimeZone check = (VTimeZone) _check;
-                    if (timezoneName.compareToIgnoreCase(check.getTimeZoneId()) == 0)
-                }
-            }
-            VTimeZone
-            */
+            VTimeZone existing = IcsUtil.getTimeZone(vcalendar,timezoneName);
+            if (existing != null) return new TimeZone(existing);
+
             result = tzregistry.getTimeZone(timezoneName);
             if ((result != null) && (result.getVTimeZone() != null)) vcalendar.getComponents().add(result.getVTimeZone());
         }
