@@ -1,3 +1,21 @@
+/*
+ * Copyright (C) 2014- k3b
+ *
+ * This file is part of android.calendar.ics.adapter.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program. If not, see <http://www.gnu.org/licenses/>
+ */
 package de.k3b.calendar;
 
 import net.fortuna.ical4j.data.ParserException;
@@ -11,10 +29,34 @@ import java.io.IOException;
 /**
  * Checks if outcome of ics export is the same as with last release.<br/>
  * If this test fails manually check if the result is still ok and
- * copy te new result from "but was ...." into this test.
- * This test must be updated if TestDataUtils generate different(additional) data.
+ * copy the new result from "but was ...." into this test.
+ * This test must be updated if
+ *  - TestDataUtils generate different(additional) data.
+ *  - ical4j is updated to new australian timezone-info.
+ *
  * Created by k3b on 02.06.2014.
  */
+
+/*
+Note: if you see this in android-studio-logcat when running this test:
+
+	INFO: ical4j.properties not found.
+	02.06.2014 10:56:17 net.fortuna.ical4j.model.TimeZoneRegistryImpl updateDefinition
+	WARNUNG: Unable to retrieve updates for timezone: Australia/Sydney
+	java.net.UnknownHostException: tzurl.org
+		...
+		at sun.net.www.http.HttpClient.openServer(HttpClient.java:395)
+		...
+		at net.fortuna.ical4j.model.TimeZoneRegistryImpl.updateDefinition(TimeZoneRegistryImpl.java:212)
+		...
+		at de.k3b.calendar.ics.EventDto2IcsFactory.getTimeZone(EventDto2IcsFactory.java:141)
+
+This is due to that android studio 0.5.8 does not support resources in junit-tests.
+Executing this test with gradle does not show this.
+
+ical4j.properties tells ical4j not to use the internet to update timezone-infos.
+
+*/
 public class DtoIcRegressonsTests {
     public static final long ONE_DAY_IN_MILLISECS = 24 * 60 * 60 *1000;
     private EventDtoSimple src = null;
