@@ -1,5 +1,4 @@
 apply plugin: 'android-library'
-//!! apply plugin: 'android-test'
 
 android {
     compileSdkVersion 19
