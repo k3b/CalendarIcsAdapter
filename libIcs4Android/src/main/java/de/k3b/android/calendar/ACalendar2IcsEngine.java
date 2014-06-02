@@ -102,7 +102,7 @@ public class ACalendar2IcsEngine implements Closeable {
                 // Use the cursor to step through the returned records
                 while (eventCursor.moveToNext()) {
                     hasData = true;
-                    EventDto data = eventData.loadFull();
+                    EventDto data = eventData.loadFull(this.filter);
                     factory.addEvent(data);
                     if (Global.debugEnabled) {
                         Log.d(ACalendar2IcsEngine.TAG, "added event " + data.getTitle());

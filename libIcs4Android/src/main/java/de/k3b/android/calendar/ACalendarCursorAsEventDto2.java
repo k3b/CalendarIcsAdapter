@@ -22,6 +22,7 @@ package de.k3b.android.calendar;
 import de.k3b.android.compat.CalendarContract;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventDtoSimple;
+import de.k3b.calendar.EventFilter;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -153,10 +154,11 @@ public class ACalendarCursorAsEventDto2 extends ACalendarCursor implements ACale
     }
 
     /************* #9 alarm-reminder ********************/
-    /** #9 creates a copy of the data and downlownloads dependent subdata */
+    /** #9 creates a copy of the data and downlownloads dependent subdata
+     * @param filter*/
     @Override
-    public EventDto loadFull() {
-        EventDtoSimple data = new EventDtoSimple(this);
+    public EventDto loadFull(final EventFilter filter) {
+        EventDtoSimple data = new EventDtoSimple(this, filter);
         this.addAlarms(data.getId(), data.getAlarmMinutesBeforeEvent());
         return data;
     }

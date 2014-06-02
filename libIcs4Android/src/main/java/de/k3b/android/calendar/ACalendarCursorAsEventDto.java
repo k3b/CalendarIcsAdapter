@@ -23,6 +23,7 @@ import java.io.Closeable;
 import android.database.Cursor;
 import android.net.Uri;
 import de.k3b.calendar.EventDto;
+import de.k3b.calendar.EventFilter;
 
 /**
  * Let an android specific calendarEvent cursor appear as a EventDto.
@@ -35,6 +36,7 @@ public interface ACalendarCursorAsEventDto extends EventDto, Closeable {
 
 	Cursor queryByContentURI(Uri contentUri);
 
-    /** #9 creates a copy of the data and downlownloads dependent subdata */
-    EventDto loadFull();
+    /** #9 creates a copy of the data and downlownloads dependent subdata
+     * @param filter*/
+    EventDto loadFull(final EventFilter filter);
 }
