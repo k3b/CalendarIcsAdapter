@@ -6,15 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import net.fortuna.ical4j.model.Calendar;
-
+/*!!!
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
-/**
- * Created by k3b on 31.05.2014.
- */
 @RunWith(RobolectricTestRunner.class)
 public class ExportTest {
     // @Test
@@ -33,3 +30,4 @@ public class ExportTest {
     public void testDatabaseMock() {
     }
 }
+*/

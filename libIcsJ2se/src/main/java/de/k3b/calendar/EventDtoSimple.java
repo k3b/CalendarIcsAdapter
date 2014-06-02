@@ -24,130 +24,138 @@ import java.util.List;
 /**
  * Minimal implementation of EventDto to backup values of other EventDto-implementations.<br/>
  * This class has no direct dependency to android so it can be run in a j2se-junit-integration test.<br/><br/>
- * 
+ *
  * @author k3b
  */
 public class EventDtoSimple implements EventDto {
+    private String Id;
+    private long dtStart;
+    private long dtEnd;
+    private String title;
+    private String description;
+    private String eventLocation;
+    private String eventTimezone;
+    private String duration;
+    private String rRule;
+    private String organizer;
+    private String calendarId;
+    private List<Integer> alarmMinutesBeforeEvent;
     private String extDates;
+    private String rDate;
 
-    public EventDtoSimple() {};
+    public EventDtoSimple() {
+    }
+
     public EventDtoSimple(EventDto src) {
-        if (src!= null) {
-            setId(src.getId());
-            setCalendarId(src.getCalendarId());
-            setTitle(src.getTitle());
-            setDescription(src.getDescription());
-            setEventLocation(src.getEventLocation());
-            setOrganizer(src.getOrganizer());
+        this(src, EventFilterDto.ALL);
+    }
 
+    public EventDtoSimple(EventDto src, EventFilter filter) {
+        if (src != null) {
+            setId(getValueOrNull(src.getId(), filter.getId()));
+            setCalendarId(getValueOrNull(src.getCalendarId(), filter.getCalendarId()));
             setDtEnd(src.getDtEnd());
             setDtStart(src.getDtStart());
-            setDuration(src.getDuration());
-            setEventTimezone(src.getEventTimezone());
+            setTitle(getValueOrNull(src.getTitle(), true));
+            setDescription(getValueOrNull(src.getDescription(), true));
+            setEventLocation(getValueOrNull(src.getEventLocation(), filter.getEventLocation()));
+            setOrganizer(getValueOrNull(src.getOrganizer(), filter.getOrganizer()));
 
-            setRRule(src.getRRule());
-            setRDate(src.getRDate());
-            setExtDates(src.getExtDates()); // #11
-            setAlarmMinutesBeforeEvent(src.getAlarmMinutesBeforeEvent());
+            setDuration(getValueOrNull(src.getDuration(), true));
+            setEventTimezone(getValueOrNull(src.getEventTimezone(), filter.getEventTimezone()));
+
+            boolean copyRecurrence = filter.getRecurrenceType() != EventFilter.RecurrenceType.ThisEvent;
+            setRRule(getValueOrNull(src.getRRule(), copyRecurrence));
+            setRDate(getValueOrNull(src.getRDate(), copyRecurrence));
+            setExtDates(getValueOrNull(src.getExtDates(), copyRecurrence));
+            setAlarmMinutesBeforeEvent((filter.getAlarms()) ? src.getAlarmMinutesBeforeEvent() : null);
         }
     }
 
     public String getId() {
-		return Id;
-	}
+        return Id;
+    }
 
-	public EventDtoSimple setId(String id) {
-		Id = id;
-		return this;
-	}
+    public EventDtoSimple setId(String id) {
+        Id = id;
+        return this;
+    }
 
-	public long getDtStart() {
-		return dtStart;
-	}
+    public long getDtStart() {
+        return dtStart;
+    }
 
-	public EventDtoSimple setDtStart(long dtStart) {
-		this.dtStart = dtStart;
-		return this;
-	}
+    public EventDtoSimple setDtStart(long dtStart) {
+        this.dtStart = dtStart;
+        return this;
+    }
 
-	public long getDtEnd() {
-		return dtEnd;
-	}
+    public long getDtEnd() {
+        return dtEnd;
+    }
 
-	public EventDtoSimple setDtEnd(long dtEnd) {
-		this.dtEnd = dtEnd;
-		return this;
-	}
+    public EventDtoSimple setDtEnd(long dtEnd) {
+        this.dtEnd = dtEnd;
+        return this;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public EventDtoSimple setTitle(String title) {
-		this.title = title;
-		return this;
-	}
+    public EventDtoSimple setTitle(String title) {
+        this.title = title;
+        return this;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public EventDtoSimple setDescription(String description) {
-		this.description = description;
-		return this;
-	}
+    public EventDtoSimple setDescription(String description) {
+        this.description = description;
+        return this;
+    }
 
-	public String getEventLocation() {
-		return eventLocation;
-	}
+    public String getEventLocation() {
+        return eventLocation;
+    }
 
-	public EventDtoSimple setEventLocation(String eventLocation) {
-		this.eventLocation = eventLocation;
-		return this;
-	}
+    public EventDtoSimple setEventLocation(String eventLocation) {
+        this.eventLocation = eventLocation;
+        return this;
+    }
 
-	public String getEventTimezone() {
-		return eventTimezone;
-	}
+    public String getEventTimezone() {
+        return eventTimezone;
+    }
 
-	public EventDtoSimple setEventTimezone(String eventTimezone) {
-		this.eventTimezone = eventTimezone;
-		return this;
-	}
+    public EventDtoSimple setEventTimezone(String eventTimezone) {
+        this.eventTimezone = eventTimezone;
+        return this;
+    }
 
-	public String getDuration() {
-		return duration;
-	}
+    public String getDuration() {
+        return duration;
+    }
 
-	public EventDtoSimple setDuration(String duration) {
-		this.duration = duration;
-		return this;
-	}
+    public EventDtoSimple setDuration(String duration) {
+        this.duration = duration;
+        return this;
+    }
 
-	public String getRRule() {
-		return rRule;
-	}
+    public String getRRule() {
+        return rRule;
+    }
 
     public EventDtoSimple setRRule(String rRule) {
-		this.rRule = rRule;
-		return this;
-	}
+        this.rRule = rRule;
+        return this;
+    }
 
     @Override
     public String getRDate() {
         return rDate;
-    }
-
-    /** #11 formatted as komma seperated list of iso-utc-dates. Example: '20090103T093000Z,20110101T093000Z' */
-    @Override
-    public String getExtDates() {
-        return this.extDates;
-    }
-
-    /** #11 formatted as komma seperated list of iso-utc-dates. Example: '20090103T093000Z,20110101T093000Z' */
-    public EventDtoSimple setExtDates(String value) {
-        this.extDates = value;
-        return this;
     }
 
     public EventDtoSimple setRDate(String rDate) {
@@ -155,66 +163,71 @@ public class EventDtoSimple implements EventDto {
         return this;
     }
 
+    /**
+     * #11 formatted as komma seperated list of iso-utc-dates. Example: '20090103T093000Z,20110101T093000Z'
+     */
+    @Override
+    public String getExtDates() {
+        return this.extDates;
+    }
+
+    /**
+     * #11 formatted as komma seperated list of iso-utc-dates. Example: '20090103T093000Z,20110101T093000Z'
+     */
+    public EventDtoSimple setExtDates(String value) {
+        this.extDates = value;
+        return this;
+    }
+
     public String getOrganizer() {
-		return organizer;
-	}
+        return organizer;
+    }
 
-	public EventDtoSimple setOrganizer(String organizer) {
-		this.organizer = organizer;
-		return this;
-	}
+    public EventDtoSimple setOrganizer(String organizer) {
+        this.organizer = organizer;
+        return this;
+    }
 
-	public String getCalendarId() {
-		return calendarId;
-	}
+    public String getCalendarId() {
+        return calendarId;
+    }
 
-	public EventDtoSimple setCalendarId(String calendarId) {
-		this.calendarId = calendarId;
-		return this;
-	}
+    public EventDtoSimple setCalendarId(String calendarId) {
+        this.calendarId = calendarId;
+        return this;
+    }
 
-    /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. */
-    public List<Integer> getAlarmMinutesBeforeEvent() {return alarmMinutesBeforeEvent;}
+    /**
+     * #9 the alarm(s) should trigger x menutes before the event. null means no alarms.
+     */
+    public List<Integer> getAlarmMinutesBeforeEvent() {
+        return alarmMinutesBeforeEvent;
+    }
 
-    public EventDtoSimple  setAlarmMinutesBeforeEvent(int...  alarmMinutesBeforeEvent) {
+    /**
+     * #9 the alarm(s) should trigger x menutes before the event. null means no alarms.
+     */
+    public EventDtoSimple setAlarmMinutesBeforeEvent(List<Integer> alarmMinutesBeforeEvent) {
+        this.alarmMinutesBeforeEvent = alarmMinutesBeforeEvent;
+        return this;
+    }
+
+    public EventDtoSimple setAlarmMinutesBeforeEvent(int... alarmMinutesBeforeEvent) {
         if (alarmMinutesBeforeEvent != null) {
             ArrayList<Integer> items = new ArrayList<Integer>();
-            for(int al : alarmMinutesBeforeEvent)
+            for (int al : alarmMinutesBeforeEvent)
                 items.add(Integer.valueOf(al));
 
             setAlarmMinutesBeforeEvent(items);
         }
         return this;
     }
-    /** #9 the alarm(s) should trigger x menutes before the event. null means no alarms. */
-    public EventDtoSimple  setAlarmMinutesBeforeEvent(List<Integer>  alarmMinutesBeforeEvent) {
-        this.alarmMinutesBeforeEvent = alarmMinutesBeforeEvent;
-        return this;
+
+    private String getValueOrNull(final String value, final boolean enabled) {
+        if (enabled && (value != null) && (value.length() > 0)) {
+            return value;
+        }
+        return null;
     }
 
-    String Id;
-	
-	long dtStart;
-
-	long dtEnd;
-
-	String title;
-
-	String description;
-
-	String eventLocation;
-
-	String eventTimezone;
-
-	String duration;
-
-	String rRule;
-
-    private String rDate;
-
-    String organizer;
-
-	String calendarId;
-
-    List<Integer> alarmMinutesBeforeEvent;
 }
