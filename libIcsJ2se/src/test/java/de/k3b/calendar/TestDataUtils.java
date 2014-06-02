@@ -26,10 +26,15 @@ public class TestDataUtils {
     }
 
     public static String getIcs(final EventFilter filter, final EventDto... events) {
+        return getIcs(filter, 0,0, events);
+    }
+
+    public static String getIcs(final EventFilter filter, long dtStart, long dtEnd, final EventDto... events) {
+
         EventDto2IcsFactory dto2Ics = new EventDto2IcsFactory(filter, "jUnit-Tests");
         if (events != null) {
             for(EventDto event : events) {
-                dto2Ics.addEvent(event);
+                dto2Ics.addEvent(event, dtStart, dtEnd);
             }
         }
         return dto2Ics.getCalendar().toString();

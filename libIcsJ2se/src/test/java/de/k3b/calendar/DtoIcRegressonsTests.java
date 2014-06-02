@@ -16,6 +16,7 @@ import java.io.IOException;
  * Created by k3b on 02.06.2014.
  */
 public class DtoIcRegressonsTests {
+    public static final long ONE_DAY_IN_MILLISECS = 24 * 60 * 60 *1000;
     private EventDtoSimple src = null;
 
     @Before
@@ -33,6 +34,52 @@ public class DtoIcRegressonsTests {
             "SUMMARY:test title\n" +
             "DESCRIPTION:bla bla bla\n" +
             "DURATION:P1D\n" +
+            "END:VEVENT\n" +
+            "END:VCALENDAR");
+
+    /** same as lastMininal but with start/end one day later */
+    private static final String lastMininalThisEvent = normalize("BEGIN:VCALENDAR\n" +
+            "PRODID:jUnit-Tests\n" +
+            "VERSION:2.0\n" +
+            "CALSCALE:GREGORIAN\n" +
+            "BEGIN:VEVENT\n" +
+            "DTSTART:20000502T123456\n" + //!!!
+            "DTEND:20000502T171234\n" + //!!!
+            "SUMMARY:test title\n" +
+            "DESCRIPTION:bla bla bla\n" +
+            "DURATION:P1D\n" +
+            "END:VEVENT\n" +
+            "END:VCALENDAR");
+    /** same as lastMininalThisEvent but with recurrence data added */
+    private static final String lastMininalThisAndAllFurtherEvents = normalize("BEGIN:VCALENDAR\n" +
+            "PRODID:jUnit-Tests\n" +
+            "VERSION:2.0\n" +
+            "CALSCALE:GREGORIAN\n" +
+            "BEGIN:VEVENT\n" +
+            "DTSTART:20000502T123456\n" + //!!!
+            "DTEND:20000502T171234\n" + //!!!
+            "SUMMARY:test title\n" +
+            "DESCRIPTION:bla bla bla\n" +
+            "DURATION:P1D\n" +
+            "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\n" + //!!!
+            "RDATE:19610901T045612,19630901T045612\n" + //!!!
+            "EXDATE:19710901T045612,19730901T045612\n" + //!!!
+            "END:VEVENT\n" +
+            "END:VCALENDAR");
+    /** same as lastMininal but with recurrence data added. Note: start/end should be original and not updated */
+    private static final String lastMininalAllEvents = normalize("BEGIN:VCALENDAR\n" +
+            "PRODID:jUnit-Tests\n" +
+            "VERSION:2.0\n" +
+            "CALSCALE:GREGORIAN\n" +
+            "BEGIN:VEVENT\n" +
+            "DTSTART:20000501T123456\n" + //!!!
+            "DTEND:20000501T171234\n" + //!!!
+            "SUMMARY:test title\n" +
+            "DESCRIPTION:bla bla bla\n" +
+            "DURATION:P1D\n" +
+            "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\n" +
+            "RDATE:19610901T045612,19630901T045612\n" +
+            "EXDATE:19710901T045612,19730901T045612\n" +
             "END:VEVENT\n" +
             "END:VCALENDAR");
     private static final String lastdefault = normalize("BEGIN:VCALENDAR\n" +
@@ -202,28 +249,54 @@ public class DtoIcRegressonsTests {
             "END:VCALENDAR");
     @Test
     public void shouldBeSameMinimal() throws IOException, ParserException {
-        EventDtoSimple sut = new EventDtoSimple(src,EventFilterDto.MINIMAL);
-        String result = getIcs(sut);
+        EventFilterDto filter = EventFilterDto.MINIMAL;
+        EventDtoSimple sut = new EventDtoSimple(src, filter);
+        String result = getIcs(sut, filter);
         Assert.assertEquals(lastMininal, result);
     }
     @Test
     public void shouldBeSameDefault() throws IOException, ParserException {
-        EventDtoSimple sut = new EventDtoSimple(src,EventFilterDto.DEFAULTS);
-        String result = getIcs(sut);
+        EventFilterDto filter = EventFilterDto.DEFAULTS;
+        EventDtoSimple sut = new EventDtoSimple(src, filter);
+        String result = getIcs(sut, filter);
         Assert.assertEquals(lastdefault, result);
     }
 
     @Test
     public void shouldBeSameMaximal() throws IOException, ParserException {
-        EventDtoSimple sut = new EventDtoSimple(src,EventFilterDto.ALL);
-        String result = getIcs(sut);
+        final EventFilter filter = EventFilterDto.ALL;
+        EventDtoSimple sut = new EventDtoSimple(src,filter);
+        String result = getIcs(sut, filter);
         Assert.assertEquals(lastMaximal, result);
     }
 
-    /** controls, wich data elements will be exported. */
-    private final EventFilter filter = EventFilterDto.ALL;
+    @Test
+    public void shouldBeSameFixThisEvent() throws IOException, ParserException {
+        EventFilterDto filter = new EventFilterDto(EventFilterDto.MINIMAL).setRecurrenceType(EventFilter.RecurrenceType.ThisEvent);
+        String result = getIcsWithDatePlusOneDay(filter);
+        Assert.assertEquals(lastMininalThisEvent, result);
+    }
 
-    private String getIcs(final EventDtoSimple sut) {
+    @Test
+    public void shouldBeSameFixThisAndAllFurtherEvents() throws IOException, ParserException {
+        EventFilterDto filter = new EventFilterDto(EventFilterDto.MINIMAL).setRecurrenceType(EventFilter.RecurrenceType.ThisAndAllFurtherEvents);
+        String result = getIcsWithDatePlusOneDay(filter);
+        Assert.assertEquals(lastMininalThisAndAllFurtherEvents, result);
+    }
+
+    @Test
+    public void shouldBeSameFixAllEvents() throws IOException, ParserException {
+        EventFilterDto filter = new EventFilterDto(EventFilterDto.MINIMAL).setRecurrenceType(EventFilter.RecurrenceType.AllEvents);
+        String result = getIcsWithDatePlusOneDay(filter);
+        Assert.assertEquals(lastMininalAllEvents, result);
+    }
+
+    private String getIcsWithDatePlusOneDay(final EventFilterDto filter) {
+        EventDtoSimple sut = new EventDtoSimple(src, filter);
+        return normalize(TestDataUtils.getIcs(filter, sut.getDtStart() + ONE_DAY_IN_MILLISECS, sut.getDtEnd() + ONE_DAY_IN_MILLISECS, sut));
+    }
+
+    private String getIcs(final EventDtoSimple sut, final EventFilter filter) {
         return normalize(TestDataUtils.getIcs(filter, sut));
     }
 

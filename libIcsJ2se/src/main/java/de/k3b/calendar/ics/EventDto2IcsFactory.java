@@ -29,6 +29,7 @@ import net.fortuna.ical4j.model.component.*;
 import net.fortuna.ical4j.model.property.*;
 
 import de.k3b.calendar.EventDto;
+import de.k3b.calendar.EventDtoSimple;
 import de.k3b.calendar.EventFilter;
 import de.k3b.calendar.EventFilterDto;
 import de.k3b.util.DateTimeUtil;
@@ -77,7 +78,17 @@ public class EventDto2IcsFactory {
     /**
 	 * adds a generic EventDto to ical4j-calendar
 	 */
-	public VEvent addEvent(EventDto eventData) {
+	public VEvent addEvent(final EventDto _eventData, long dtStart, long dtEnd) {
+        final EventDtoSimple eventData = new EventDtoSimple(_eventData, filter);
+
+        // fix recurrence rule, if requested
+        if (filter.getRecurrenceType() != EventFilter.RecurrenceType.AllEvents) {
+            if (dtStart != 0)
+                eventData.setDtStart(dtStart);
+            if (dtEnd != 0)
+                eventData.setDtEnd(dtEnd);
+        }
+
         Calendar vcalendar = getCalendar();
 
         String timezoneName = eventData.getEventTimezone();

@@ -108,7 +108,7 @@ public class ACalendar2IcsActivity extends Activity {
                 if (Global.debugEnabled) {
                     Log.d(ACalendar2IcsEngine.TAG, "opening " + data);
                 }
-                Calendar vcalendar = engine.export(data);
+                Calendar vcalendar = engine.export(data, beginTime, endTime);
 
                 if (vcalendar != null) {
                     EventDto event = new IcsAsEventDto(vcalendar);

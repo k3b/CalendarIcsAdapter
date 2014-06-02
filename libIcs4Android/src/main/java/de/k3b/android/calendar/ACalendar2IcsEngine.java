@@ -90,7 +90,7 @@ public class ACalendar2IcsEngine implements Closeable {
 	/**
 	 * converts an android-calendar-event identified by contentUri to ics-Calendar
 	 */
-	public Calendar export(Uri contentUri) {
+	public Calendar export(Uri contentUri, long dtStart, long dtEnd) {
 		boolean hasData = false;
 		EventDto2IcsFactory factory = new EventDto2IcsFactory(filter, this.ctx.getText(R.string.app_ics_provider_name).toString());
         Cursor eventCursor = null;
@@ -103,7 +103,7 @@ public class ACalendar2IcsEngine implements Closeable {
                 while (eventCursor.moveToNext()) {
                     hasData = true;
                     EventDto data = eventData.loadFull(this.filter);
-                    factory.addEvent(data);
+                    factory.addEvent(data, dtStart, dtEnd);
                     if (Global.debugEnabled) {
                         Log.d(ACalendar2IcsEngine.TAG, "added event " + data.getTitle());
                     }
