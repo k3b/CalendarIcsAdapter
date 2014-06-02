@@ -29,6 +29,8 @@ import net.fortuna.ical4j.model.component.*;
 import net.fortuna.ical4j.model.property.*;
 
 import de.k3b.calendar.EventDto;
+import de.k3b.calendar.EventFilter;
+import de.k3b.calendar.EventFilterDto;
 import de.k3b.util.DateTimeUtil;
 
 /**
@@ -48,12 +50,14 @@ public class EventDto2IcsFactory {
     /** used to translate timezone-name to timezone-structure */
     private final TimeZoneRegistry tzregistry = TimeZoneRegistryFactory.getInstance().createRegistry();
 
+    private final EventFilter filter;
     /**
 	 * creates a calendar
 	 * @param applicationID used to identify the datasource i.e. "-//Ben Fortuna//iCal4j 1.0//EN"
 	 */
-	public EventDto2IcsFactory(String applicationID) {
+	public EventDto2IcsFactory(EventFilter filter, String applicationID) {
 		this.applicationID = applicationID;
+        this.filter = filter;
 	}
 	
 	/**

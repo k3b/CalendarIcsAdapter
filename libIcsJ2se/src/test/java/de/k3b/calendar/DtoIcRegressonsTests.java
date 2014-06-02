@@ -220,8 +220,11 @@ public class DtoIcRegressonsTests {
         Assert.assertEquals(lastMaximal, result);
     }
 
+    /** controls, wich data elements will be exported. */
+    private final EventFilter filter = EventFilterDto.ALL;
+
     private String getIcs(final EventDtoSimple sut) {
-        return normalize(TestDataUtils.getIcs(sut));
+        return normalize(TestDataUtils.getIcs(filter, sut));
     }
 
     private static String normalize(String s) {

@@ -42,6 +42,8 @@ import de.k3b.android.calendar.ACalendarCursor;
 import de.k3b.android.calendar.Global;
 import de.k3b.android.calendar.ics.adapter.R;
 import de.k3b.calendar.EventDto;
+import de.k3b.calendar.EventFilter;
+import de.k3b.calendar.EventFilterDto;
 import de.k3b.calendar.ics.IcsAsEventDto;
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 
@@ -53,6 +55,10 @@ import de.k3b.calendar.ics.IcsAsEventDto;
  */
 public class ACalendar2IcsActivity extends Activity {
     private ACalendar2IcsEngine engine = null;
+
+    /** controls, wich data elements will be exported.
+     * TODO: make configurable via gui */
+    private final EventFilter filter = EventFilterDto.ALL;
 
     /**
      * This will differ between ics and ical
@@ -96,7 +102,7 @@ public class ACalendar2IcsActivity extends Activity {
                     if (Global.debugEnabled) {
                         Log.d(ACalendar2IcsEngine.TAG, "creating ACalendar2IcsEngine");
                     }
-                    engine = new ACalendar2IcsEngine(this.getApplication(), Global.USE_MOCK_CALENDAR);
+                    engine = new ACalendar2IcsEngine(this.getApplication(), filter, Global.USE_MOCK_CALENDAR);
                 }
 
                 if (Global.debugEnabled) {

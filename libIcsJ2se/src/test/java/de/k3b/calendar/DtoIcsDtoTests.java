@@ -24,6 +24,9 @@ public class DtoIcsDtoTests {
     private final Date xmasNoonDate = DateTimeUtil.createDate(2000, 12, 24, 12,0,0);
     private final String xmasNoonString = "20001224T120000Z";
 
+    /** controls, wich data elements will be exported. */
+    private final EventFilter filter = EventFilterDto.ALL;
+
     private EventDtoSimple src = null;
     private String lastIcs;
 
@@ -141,7 +144,7 @@ public class DtoIcsDtoTests {
                 .setDtEnd(DateTimeUtil.createDate(2001, 5, 1, 17, 12, 34).getTime())
                 .setEventTimezone(src.getEventTimezone());
 
-        this.lastIcs = TestDataUtils.getIcs(src, src2);
+        this.lastIcs = TestDataUtils.getIcs(filter, src, src2);
 
         Calendar vcalendar = getVCalendar(this.lastIcs);
 
@@ -151,7 +154,7 @@ public class DtoIcsDtoTests {
 
     /** local helper to executeTest dto -> ics -> dto */
     private EventDto executeTest(final EventDtoSimple src) throws IOException, ParserException {
-        String ics = TestDataUtils.getIcs(src);
+        String ics = TestDataUtils.getIcs(filter, src);
         this.lastIcs = ics;
         return getDto(ics);
     }

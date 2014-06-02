@@ -25,6 +25,8 @@ import java.io.IOException;
 import de.k3b.android.calendar.ics.R;
 import de.k3b.android.compat.Compat;
 import de.k3b.calendar.EventDto;
+import de.k3b.calendar.EventFilter;
+import de.k3b.calendar.EventFilterDto;
 import de.k3b.calendar.ics.EventDto2IcsFactory;
 
 import net.fortuna.ical4j.model.Calendar;
@@ -51,7 +53,10 @@ public class ACalendar2IcsEngine implements Closeable {
 	 */
 	final private ACalendarCursorAsEventDto eventData;
 
-	/**
+    /** controls, wich data elements will be exported */
+    private final EventFilter filter;
+
+    /**
 	 * null if there is not contentprovider-mocking.
 	 */
 	final private SQLiteOpenHelper mock;
@@ -65,12 +70,13 @@ public class ACalendar2IcsEngine implements Closeable {
 	 * used to access resources
 	 */
 	private final Context ctx;
-	
+
 	/**
 	 * creates the engige that either uses mock-database or contentprovider
 	 */
-	public ACalendar2IcsEngine(Context ctx, boolean useMockCalendar) {
+	public ACalendar2IcsEngine(Context ctx, final EventFilter filter, boolean useMockCalendar) {
 		this.ctx = ctx;
+        this.filter = filter;
 		mock = (useMockCalendar) ? new ACalendarMock(ctx) : null;
 		writableDatabase  = (useMockCalendar) ? mock.getWritableDatabase() : null;
 		
@@ -86,7 +92,7 @@ public class ACalendar2IcsEngine implements Closeable {
 	 */
 	public Calendar export(Uri contentUri) {
 		boolean hasData = false;
-		EventDto2IcsFactory factory = new EventDto2IcsFactory(this.ctx.getText(R.string.app_ics_provider_name).toString());
+		EventDto2IcsFactory factory = new EventDto2IcsFactory(filter, this.ctx.getText(R.string.app_ics_provider_name).toString());
         Cursor eventCursor = null;
         try {
             // set to null for non mocked production

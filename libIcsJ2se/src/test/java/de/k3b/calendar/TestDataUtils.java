@@ -25,8 +25,8 @@ public class TestDataUtils {
                 .setAlarmMinutesBeforeEvent(5,10);
     }
 
-    public static String getIcs(final EventDto... events) {
-        EventDto2IcsFactory dto2Ics = new EventDto2IcsFactory("jUnit-Tests");
+    public static String getIcs(final EventFilter filter, final EventDto... events) {
+        EventDto2IcsFactory dto2Ics = new EventDto2IcsFactory(filter, "jUnit-Tests");
         if (events != null) {
             for(EventDto event : events) {
                 dto2Ics.addEvent(event);
