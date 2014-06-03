@@ -81,9 +81,9 @@ public class ACalendar2IcsEngine implements Closeable {
 		writableDatabase  = (useMockCalendar) ? mock.getWritableDatabase() : null;
 		
 		if (Compat.isCalendarContract4Available()) {
-			this.eventData = (mock != null) ? new ACalendarCursorAsEventDto4(writableDatabase) : new ACalendarCursorAsEventDto4(ctx) ;			
+			this.eventData = new ACalendarCursorAsEventDto4(ctx, writableDatabase);
 		} else {
-			this.eventData = (mock != null) ? new ACalendarCursorAsEventDto2(writableDatabase) : new ACalendarCursorAsEventDto2(ctx) ;						
+			this.eventData = new ACalendarCursorAsEventDto2(ctx, writableDatabase) ;
 		}
 	}
 
@@ -122,10 +122,7 @@ public class ACalendar2IcsEngine implements Closeable {
 	 */
 	public void close() {
 		if (eventData != null) {
-			try {
-				eventData.close();
-			} catch (IOException e) {
-			}
+			eventData.close();
 		}
 		if (writableDatabase != null) {
 			writableDatabase.close();

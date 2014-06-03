@@ -22,8 +22,6 @@ import java.io.Closeable;
 import java.util.Date;
 import java.util.List;
 
-import de.k3b.android.compat.CalendarContract;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -38,30 +36,28 @@ import android.util.Log;
  * @author k3b
  */
 public abstract class ContentUriCursor implements Closeable {
-	private final static String sqlFilterToFindById = "(" + CalendarContract.EventsColumns._ID + " = ? )";
-	
+    protected static final int col_ID = 0;
+
+    // collumn names must match order of the consts col_XXX.
+    protected final String[] COLUMS;
+
 	protected Cursor currentCalendarContentDatabaseCursor = null;
 	private ContentResolver calendarContentResolver = null;
 	private SQLiteDatabase mockedCalendarContentDatabase = null;
 
 	/**
-	 * Creates a datasource that uses the ContentResolver from context
+	 * Creates a datasource that uses the ContentResolver from context or mock database if not null.
+     * mockimplementation is for testing with local copy of events database. This way real events are not at risc or you can test it on an
+     * emulator with no calendar.<br/>
+     * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db )
+     * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
 	 */
-	public ContentUriCursor(Context ctx) {
-		this.calendarContentResolver = ctx.getContentResolver();
-	}
+	public ContentUriCursor(Context ctx, SQLiteDatabase mockDatabase,String... sqlColumnNames) {
+		this.calendarContentResolver = (mockDatabase == null) ? ctx.getContentResolver() : null;
+        this.mockedCalendarContentDatabase = mockDatabase;
+        COLUMS = sqlColumnNames;
+    }
 	
-	/**
-	 * Creates a datasource that uses a
-	 * mockimplementation for testing with local copy of events database. This way real events are not at risc or you can test it on an 
-	 * emulator with no calendar.<br/>
-	 * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db ) 
-	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
-	 */
-	public ContentUriCursor(SQLiteDatabase mockDatabase) {
-		this.mockedCalendarContentDatabase = mockDatabase;
-	}
-
 	/**
 	 * frees all allocated resources
 	 */
@@ -76,13 +72,8 @@ public abstract class ContentUriCursor implements Closeable {
 			mockedCalendarContentDatabase.close();
 		}
 	}
-	
-	/**
-	 * gets the colums that belong to this ContentUriCursor.
-	 * col 0 should be "_id"
-	 */
-	abstract protected String[] getColums();	
 
+    protected String getSqlFilterToFindById() { return "(" + COLUMS[col_ID]  + " = ? )"; };
 
 	/**
 	 * @param uri i.e. "content://com.adnroid.calendar/events/608" for event with _id=608.
@@ -101,7 +92,7 @@ public abstract class ContentUriCursor implements Closeable {
 		String tableName = uriSegments.get(0);
 		String id = (uriSegments.size() == 1) ? null : uriSegments.get(1);
 
-		String sqlWhere = (id == null) ? null : sqlFilterToFindById; // all or one certain item
+		String sqlWhere = (id == null) ? null : getSqlFilterToFindById(); // all or one certain item
 		String[] sqlWhereparameters = (id == null) ? null : new String[] {id};
 
 		return queryByContentURI(uri, tableName, sqlWhere, sqlWhereparameters);
@@ -128,9 +119,9 @@ public abstract class ContentUriCursor implements Closeable {
         }
 
         if (calendarContentResolver != null) {
-			currentCalendarContentDatabaseCursor = calendarContentResolver.query(uri, getColums(), sqlWhere, sqlWhereParameters, null);
+			currentCalendarContentDatabaseCursor = calendarContentResolver.query(uri, COLUMS, sqlWhere, sqlWhereParameters, null);
 		} else {
-			currentCalendarContentDatabaseCursor = this.mockedCalendarContentDatabase.query(tableName, getColums(), sqlWhere, sqlWhereParameters, null,null,null);
+			currentCalendarContentDatabaseCursor = this.mockedCalendarContentDatabase.query(tableName, COLUMS, sqlWhere, sqlWhereParameters, null,null,null);
 		}
 		return currentCalendarContentDatabaseCursor;
 	}

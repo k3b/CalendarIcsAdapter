@@ -37,23 +37,12 @@ public abstract class ACalendarCursor extends ContentUriCursor {
 	/**
 	 * Creates a datasource that uses the ContentResolver from context
 	 */
-	public ACalendarCursor(Context ctx) {
-		super(ctx);
+	public ACalendarCursor(final Context ctx, final SQLiteDatabase mockDatabase,String... sqlColumnNames) {
+		super(ctx, mockDatabase, sqlColumnNames);
 		
 		if (providerAutority == null) {
 			providerAutority = ctx.getText(R.string.app_android_calendar_defaultprovider).toString();
 		}
-	}
-	
-	/**
-	 * Creates a datasource that uses a
-	 * mockimplementation for testing with local copy of events database. This way real events are not at risc or you can test it on an 
-	 * emulator with no calendar.<br/>
-	 * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db ) 
-	 * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
-	 */
-	public ACalendarCursor(SQLiteDatabase mockDatabase) {
-		super(mockDatabase);
 	}
 	
 	/**
