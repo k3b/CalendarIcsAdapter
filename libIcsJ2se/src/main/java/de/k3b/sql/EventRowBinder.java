@@ -14,20 +14,21 @@ import de.k3b.calendar.EventFilter;
  * Created by k3b on 04.06.2014.
  */
 public class EventRowBinder implements EventDto {
-    protected static final int col_ID = 0;
-    protected static final int col_DtStart = 1;
-    protected static final int col_DtEnd = 2;
-    protected static final int col_Title = 3;
-    protected static final int col_Description = 4;
-    protected static final int col_EventLocation = 5;
-    protected static final int col_EventTimezone = 6;
-    protected static final int col_Duration = 7;
-    protected static final int col_RRule = 8;
-    protected static final int col_RDate = 9;
-    protected static final int col_Organizer = 10;
-    protected static final int col_CalendarId = 11;
-    protected static final int col_Alarm = 12;
-    protected static final int col_ExtDates = 13;
+    private static final int col_ID = 0;
+    private static final int col_DtStart = 1;
+    private static final int col_DtEnd = 2;
+    private static final int col_Title = 3;
+    private static final int col_Description = 4;
+    private static final int col_EventLocation = 5;
+    private static final int col_EventTimezone = 6;
+    private static final int col_Duration = 7;
+    private static final int col_RRule = 8;
+    private static final int col_RDate = 9;
+    private static final int col_Organizer = 10;
+    private static final int col_CalendarId = 11;
+    private static final int col_Alarm = 12;
+    private static final int col_ExtDates = 13;
+    public static final int COLUMN_COUNT = 14;
 
     private final ColumnBinder columnBinder;
 
@@ -101,10 +102,10 @@ public class EventRowBinder implements EventDto {
     }
 
     public void bind(final EventDto src, final EventFilter filter) {
-        set(col_ID,  src.getId(), filter.getId());
+//      set(col_ID,  src.getId(), filter.getId());
         set(col_CalendarId,  src.getCalendarId(), filter.getCalendarId());
-        set(col_DtStart,  src.getDtEnd(), true);
-        set(col_DtEnd,  src.getDtStart(), true);
+        set(col_DtStart,  src.getDtStart(), true);
+        set(col_DtEnd,  src.getDtEnd(), true);
         set(col_Title,  src.getTitle(), true);
         set(col_Description,  src.getDescription(), true);
         set(col_EventLocation,  src.getEventLocation(), filter.getEventLocation());

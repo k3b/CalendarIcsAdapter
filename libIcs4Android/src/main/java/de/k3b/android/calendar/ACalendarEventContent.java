@@ -19,6 +19,7 @@
 package de.k3b.android.calendar;
 
 import java.io.Closeable;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -56,6 +57,9 @@ public abstract class ACalendarEventContent extends ACalendarCursor implements C
     public ACalendarEventContent(final Context ctx, final SQLiteDatabase mockDatabase,
                                  String... sqlColumnNames) {
         super(ctx, mockDatabase, sqlColumnNames);
+        if ((sqlColumnNames == null) || (sqlColumnNames.length < EventRowBinder.COLUMN_COUNT)) {
+            throw new IllegalArgumentException("String[] sqlColumnNames must match EventRowBinder");
+        }
     }
 
     /// TODO implement insert/update/delete
@@ -71,9 +75,9 @@ public abstract class ACalendarEventContent extends ACalendarCursor implements C
 
     // #9
     class ReminderCursor extends ContentUriCursor {
-        protected static final int col_MINUTES = 1;
-        protected static final int col_EVENT_ID = 2;
-        protected static final int col_METHOD = 3;
+        private static final int col_MINUTES = 1;
+        private static final int col_EVENT_ID = 2;
+        private static final int col_METHOD = 3;
 
         public ReminderCursor(final Context ctx, final SQLiteDatabase mockDatabase,String... sqlColumnNames) {
             super(ctx, mockDatabase, sqlColumnNames);
@@ -90,13 +94,110 @@ public abstract class ACalendarEventContent extends ACalendarCursor implements C
             return super.queryByContentURI(ACalendarCursor.createContentUri("reminders"));
         }
 
-        @Override
-        protected Cursor queryByContentURI(Uri uri, String tableName,
-                                           String sqlWhere, String... sqlWhereParameters) {
-            sqlWhere = COLUMS[col_EVENT_ID] + "=? and " + COLUMS[col_METHOD] + "=?";
+        private String[] getSqlWhere(StringBuilder result, String eventId, List<String> minutes) {
+            return getSqlWhere(result, eventId, minutes.toArray(new String[minutes.size()]));
+        }
 
-            return super.queryByContentURI(uri, tableName, sqlWhere
-                    , this.eventId, Integer.toString(1));
+        private String[] getSqlWhere(StringBuilder result, String eventId, String... minutes) {
+            ArrayList<String> parameters = new ArrayList<String>();
+
+            result.append(COLUMS[col_EVENT_ID]).append("=? and ").append(COLUMS[col_METHOD]).append("=?");
+            parameters.add(eventId);
+            parameters.add(Integer.toString(1));
+
+            if ((minutes != null) && (minutes.length > 0)) {
+                result.append(" and ").append(COLUMS[col_MINUTES]).append(" in (?");
+                parameters.add(minutes[0]);
+
+                for (int i=1;i<minutes.length;i++) {
+                    result.append(",?");
+                    parameters.add(minutes[i]);
+                }
+                result.append(") ");
+            }
+            return parameters.toArray(new String[parameters.size()]);
+        }
+
+        @Override
+        protected Cursor queryByContentURI(Uri uri,
+                                           String sqlWhere, String... sqlWhereParameters) {
+            StringBuilder newSqlWhere = new StringBuilder();
+            String[] params = getSqlWhere(newSqlWhere, eventId);
+            return super.queryByContentURI(uri, newSqlWhere.toString()
+                    , params);
+        }
+
+        /** #9 downloads dependant data */
+        public List<Integer> getAlarms(final String eventId, final List<Integer> alarmMinutesBeforeEventResult) {
+            if (alarmMinutesBeforeEventResult != null) {
+                if (Global.debugEnabled) {
+                    Log.d(ACalendar2IcsEngine.TAG, "Downloading Reminders for Event " + eventId);
+                }
+
+                Cursor cursor = null;
+                try {
+                    // set to null for non mocked production
+                    cursor = queryByContentURI(eventId);
+
+                    if (cursor != null) {
+                        // Use the cursor to step through the returned records
+                        while (cursor.moveToNext()) {
+                            alarmMinutesBeforeEventResult.add(getMinutes());
+                        }
+                    }
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+            } else {
+                if (Global.debugEnabled) {
+                    Log.d(ACalendar2IcsEngine.TAG, "No Reminders for Event " + eventId);
+                }
+            }
+            return alarmMinutesBeforeEventResult;
+        }
+
+        /** return all items that are in allItems but not in subtractItems. diff({12345},{34567}) => {1,2} */
+        private List<String> diff(final List<Integer> allItems, final List<Integer> subtractItems) {
+            final List<String> result = new ArrayList<String>();
+
+            for(Integer cur : allItems) {
+                if (!subtractItems.contains(cur)) {
+                    result.add(cur.toString());
+                }
+            }
+
+            return result;
+        }
+
+        public void updateAlarms(final Uri uri, final String eventId, final List<Integer> newAlarms) {
+            final List<Integer> currentAlarms = getAlarms(eventId, new ArrayList<Integer>());
+
+            final List<String> deleteMinutes = diff(currentAlarms, newAlarms);
+            final List<String> insertMinutes = diff(newAlarms, currentAlarms);
+            deleteAlarms(uri, eventId, deleteMinutes);
+            insertAlarms(uri, eventId, insertMinutes);
+        }
+
+        public void deleteAlarms(final Uri uri, final String eventId, final List<String> minutes) {
+            if (minutes.size() > 0) {
+                StringBuilder sqlWhere = new StringBuilder();
+                String[] params = getSqlWhere(sqlWhere, eventId, minutes);
+                executeDelete(uri,sqlWhere.toString(), params);
+            }
+        }
+
+        public void insertAlarms(final Uri uri, final String eventId, final List<String> minutes) {
+            if (minutes.size() > 0) {
+                ContentValues values = new ContentValues();
+                values.put(COLUMS[col_EVENT_ID], eventId);
+                values.put(COLUMS[col_METHOD], "1");
+                for (String minute : minutes) {
+                    values.put(COLUMS[col_MINUTES], "1");
+                    executeInsert(uri, values);
+                }
+            }
         }
     }
 
@@ -107,38 +208,9 @@ public abstract class ACalendarEventContent extends ACalendarCursor implements C
         EventDtoSimple data = new EventDtoSimple(new EventRowBinder(columnBinder), filter);
 
         if (filter.getAlarms()) {
-            this.addAlarms(data.getId(), data.getAlarmMinutesBeforeEvent());
+            this.reminderCursor.getAlarms(data.getId(), data.getAlarmMinutesBeforeEvent());
         }
         return data;
     }
 
-    /** #9 downloads dependant data */
-    private void addAlarms(final String eventId, final List<Integer> alarmMinutesBeforeEvent) {
-        if (alarmMinutesBeforeEvent != null) {
-            if (Global.debugEnabled) {
-                Log.d(ACalendar2IcsEngine.TAG, "Downloading Reminders for Event " + eventId);
-            }
-
-            Cursor eventCursor = null;
-            try {
-                // set to null for non mocked production
-                eventCursor = reminderCursor.queryByContentURI(eventId);
-
-                if (eventCursor != null) {
-                    // Use the cursor to step through the returned records
-                    while (eventCursor.moveToNext()) {
-                        alarmMinutesBeforeEvent.add(reminderCursor.getMinutes());
-                    }
-                }
-            } finally {
-                if (eventCursor != null) {
-                    eventCursor.close();
-                }
-            }
-        } else {
-            if (Global.debugEnabled) {
-                Log.d(ACalendar2IcsEngine.TAG, "No Reminders for Event " + eventId);
-            }
-        }
-    }
 }

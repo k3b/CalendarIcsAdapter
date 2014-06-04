@@ -1,6 +1,11 @@
 todo.txt for android.calendar.ics.adapter
 =========
 
+rowBinder
+	unittests for completeness
+		all but alarms
+	make colids private
+	public col-count => verify compatibility with acal-event-content provider
 	
 v #5 Seperate android2 api from android4 api  
 
