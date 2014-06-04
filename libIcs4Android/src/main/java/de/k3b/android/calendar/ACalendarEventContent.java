@@ -34,7 +34,7 @@ import de.k3b.android.sql.ContentUriCursor;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventDtoSimple;
 import de.k3b.calendar.EventFilter;
-import de.k3b.sql.EventBinder;
+import de.k3b.sql.EventRowBinder;
 
 /**
  * Let an android specific calendarEvent cursor appear as a EventDto.
@@ -58,12 +58,13 @@ public abstract class ACalendarEventContent extends ACalendarCursor implements C
         super(ctx, mockDatabase, sqlColumnNames);
     }
 
+    /// TODO implement insert/update/delete
     public ContentValues createValues(EventDto src, EventFilter filter) {
         ContentValues values = new ContentValues();
-        AndroidContentValuesBinder binder = new AndroidContentValuesBinder(values, this.COLUMS);
+        AndroidContentValuesBinder columnBinder = new AndroidContentValuesBinder(values, this.COLUMS);
 
-        EventBinder ebinder = new EventBinder(binder);
-        ebinder.bind(src, filter);
+        EventRowBinder rowBinder = new EventRowBinder(columnBinder);
+        rowBinder.bind(src, filter);
 
         return values;
     }
@@ -103,7 +104,7 @@ public abstract class ACalendarEventContent extends ACalendarCursor implements C
     /** #9 creates a copy of the data and downlownloads dependent subdata
      * @param filter*/
     public EventDto loadFull(final EventFilter filter) {
-        EventDtoSimple data = new EventDtoSimple(new EventBinder(columnBinder), filter);
+        EventDtoSimple data = new EventDtoSimple(new EventRowBinder(columnBinder), filter);
 
         if (filter.getAlarms()) {
             this.addAlarms(data.getId(), data.getAlarmMinutesBeforeEvent());

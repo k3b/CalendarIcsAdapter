@@ -30,7 +30,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import de.k3b.android.Global;
-import de.k3b.sql.Binder;
+import de.k3b.sql.ColumnBinder;
 
 /**
  * Baseclass for cursor based dataaccess via content-uri.<br/>
@@ -50,7 +50,7 @@ public abstract class ContentUriCursor implements Closeable {
 
     protected Cursor currentCalendarContentDatabaseCursor = null;
 
-    protected Binder columnBinder = null;
+    protected ColumnBinder columnBinder = null;
 
 	/**
 	 * Creates a datasource that uses the ContentResolver from context or mock database if not null.

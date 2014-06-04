@@ -1,9 +1,11 @@
 package de.k3b.sql;
 
 /**
- * Created by EVE on 04.06.2014.
+ * Facade to hide sql-column specific operations.
+ *
+ * Created by k3b on 04.06.2014.
  */
-public interface Binder {
+public interface ColumnBinder {
     void clear();
 
     String getString(int columnId);

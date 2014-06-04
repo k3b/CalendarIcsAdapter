@@ -1,5 +1,7 @@
 package de.k3b.sql;
 
+import org.apache.commons.lang.NullArgumentException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,7 @@ import de.k3b.calendar.EventFilter;
  *
  * Created by k3b on 04.06.2014.
  */
-public class EventBinder implements EventDto {
+public class EventRowBinder implements EventDto {
     protected static final int col_ID = 0;
     protected static final int col_DtStart = 1;
     protected static final int col_DtEnd = 2;
@@ -27,9 +29,10 @@ public class EventBinder implements EventDto {
     protected static final int col_Alarm = 12;
     protected static final int col_ExtDates = 13;
 
-    private final Binder columnBinder;
+    private final ColumnBinder columnBinder;
 
-    public EventBinder(final Binder columnBinder) {
+    public EventRowBinder(final ColumnBinder columnBinder) {
+        if (columnBinder == null) throw new NullArgumentException(ColumnBinder.class.getName());
         this.columnBinder = columnBinder;
     }
 

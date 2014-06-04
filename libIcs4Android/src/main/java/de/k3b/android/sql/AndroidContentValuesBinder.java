@@ -2,16 +2,21 @@ package de.k3b.android.sql;
 
 import android.content.ContentValues;
 
-import de.k3b.sql.Binder;
+import org.apache.commons.lang.NullArgumentException;
+
+import de.k3b.sql.ColumnBinder;
 
 /**
  * Created by EVE on 04.06.2014.
  */
-public class AndroidContentValuesBinder implements Binder{
+public class AndroidContentValuesBinder implements ColumnBinder {
     private final ContentValues values;
     private final String[] columNames;
 
     public AndroidContentValuesBinder(ContentValues values, String... columNames) {
+        if (values == null) throw new NullArgumentException(ContentValues.class.getName());
+        if ((columNames == null) || (columNames.length == 0)) throw new NullArgumentException("columNames[]");
+
         this.values = values;
         this.columNames = columNames;
     }
