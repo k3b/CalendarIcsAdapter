@@ -50,7 +50,7 @@ public class ACalendar2IcsEngine implements Closeable {
 	/**
 	 * where data comes from
 	 */
-	final private ACalendarCursorAsEventDto eventData;
+	final private ACalendarEventContent eventData;
 
     /** controls, wich data elements will be exported */
     private final EventFilter filter;
@@ -80,9 +80,9 @@ public class ACalendar2IcsEngine implements Closeable {
 		writableDatabase  = (useMockCalendar) ? mock.getWritableDatabase() : null;
 		
 		if (Compat.isCalendarContract4Available()) {
-			this.eventData = new ACalendarCursorAsEventDto4(ctx, writableDatabase);
+			this.eventData = new ACalendarEventContent4(ctx, writableDatabase);
 		} else {
-			this.eventData = new ACalendarCursorAsEventDto2(ctx, writableDatabase) ;
+			this.eventData = new ACalendarEventContent2(ctx, writableDatabase) ;
 		}
 	}
 

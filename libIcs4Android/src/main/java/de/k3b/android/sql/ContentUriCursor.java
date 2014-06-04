@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import de.k3b.android.Global;
+import de.k3b.sql.Binder;
 
 /**
  * Baseclass for cursor based dataaccess via content-uri.<br/>
@@ -49,6 +50,8 @@ public abstract class ContentUriCursor implements Closeable {
 
     protected Cursor currentCalendarContentDatabaseCursor = null;
 
+    protected Binder columnBinder = null;
+
 	/**
 	 * Creates a datasource that uses the ContentResolver from context or mock database if not null.
      * mockimplementation is for testing with local copy of events database. This way real events are not at risc or you can test it on an
@@ -66,6 +69,7 @@ public abstract class ContentUriCursor implements Closeable {
 	 * frees all allocated resources
 	 */
 	public void close() {
+        columnBinder = null;
 		if (currentCalendarContentDatabaseCursor != null) {
 			currentCalendarContentDatabaseCursor.close();
 			currentCalendarContentDatabaseCursor = null;
@@ -127,13 +131,14 @@ public abstract class ContentUriCursor implements Closeable {
 		} else {
 			currentCalendarContentDatabaseCursor = this.mockedCalendarContentDatabase.query(tableName, COLUMS, sqlWhere, sqlWhereParameters, null,null,null);
 		}
+        this.columnBinder = new AndroidCursorBinder(currentCalendarContentDatabaseCursor);
 		return currentCalendarContentDatabaseCursor;
 	}
 
-	public String getId() {return currentCalendarContentDatabaseCursor.getString(0);}
+	public String getId() {return columnBinder.getString(0);}
 
 	protected Date getDateTime(int columnIndex) {
-		long ticks = currentCalendarContentDatabaseCursor.getLong(columnIndex);
+		long ticks = columnBinder.getLong(columnIndex);
 		return (ticks == 0) ? null : new Date(ticks);
 	}
 }

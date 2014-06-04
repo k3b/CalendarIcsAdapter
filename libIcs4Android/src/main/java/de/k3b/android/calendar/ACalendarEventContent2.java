@@ -27,12 +27,12 @@ import android.database.sqlite.SQLiteDatabase;
  * Facade that make a android-calendar-event-cursor appear as EventDto.
  * To load data with depenent data use loadFull().
  * <br/>
- * Note: ACalendarCursorAsEventDto2 for android2.x and ACalendarCursorAsEventDto4 for android4.x are identical, except
+ * Note: ACalendarEventContent2 for android2.x and ACalendarEventContent4 for android4.x are identical, except
  * that 2.x uses de.k3b.android.compat.CalendarContract and 4.x uses android.provider.CalendarContract;
  * 
  * @author k3b
  */
-public class ACalendarCursorAsEventDto2 extends ACalendarCursorAsEventDto {
+public class ACalendarEventContent2 extends ACalendarEventContent {
     /**
      * Creates a datasource that uses the ContentResolver from context or mock database if not null.
      * mockimplementation is for testing with local copy of events database. This way real events are not at risc or you can test it on an
@@ -40,7 +40,7 @@ public class ACalendarCursorAsEventDto2 extends ACalendarCursorAsEventDto {
      * To use copy existing events database file (/data/data/com.android.provider.calendar/databases/calendar.db )
      * to local apps database folder ( /data/data/de.k3b.calendar.adapter/databases/calendar.db ) .<br/>
      */
-	public ACalendarCursorAsEventDto2(final Context ctx, final SQLiteDatabase mockDatabase) {
+	public ACalendarEventContent2(final Context ctx, final SQLiteDatabase mockDatabase) {
         super(ctx, mockDatabase,
                 CalendarContract.Events._ID,
                 CalendarContract.Events.DTSTART,
