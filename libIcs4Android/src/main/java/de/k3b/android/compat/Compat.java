@@ -21,7 +21,7 @@ package de.k3b.android.compat;
 import junit.framework.Assert;
 import android.util.Log;
 import de.k3b.android.calendar.ACalendar2IcsEngine;
-import de.k3b.android.calendar.Global;
+import de.k3b.android.Global;
 
 /**
  * Compatibility support library

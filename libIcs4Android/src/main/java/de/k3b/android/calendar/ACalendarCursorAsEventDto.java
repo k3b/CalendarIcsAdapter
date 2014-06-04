@@ -22,12 +22,15 @@ import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
+import de.k3b.android.Global;
+import de.k3b.android.sql.ContentUriCursor;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventDtoSimple;
 import de.k3b.calendar.EventFilter;
@@ -53,6 +56,7 @@ public abstract class ACalendarCursorAsEventDto extends ACalendarCursor implemen
     protected static final int col_CalendarId = 11;
     protected static final int col_Alarm = 12;
     protected static final int col_ExtDates = 13;
+
     protected ReminderCursor reminderCursor;
 
     /**
@@ -67,9 +71,9 @@ public abstract class ACalendarCursorAsEventDto extends ACalendarCursor implemen
         super(ctx, mockDatabase, sqlColumnNames);
     }
 
-    /* (non-Javadoc)
- * @see de.k3b.calendar.adapter.EventData#getDtStart()
- */
+   /* (non-Javadoc)
+    * @see de.k3b.calendar.adapter.EventData#getDtStart()
+    */
     @Override
     public long getDtStart() {return currentCalendarContentDatabaseCursor.getLong(col_DtStart);}
     /* (non-Javadoc)
@@ -128,8 +132,44 @@ public abstract class ACalendarCursorAsEventDto extends ACalendarCursor implemen
         return currentCalendarContentDatabaseCursor.getString(col_ExtDates);
     }
 
+    public ContentValues createValues(EventDto src, EventFilter filter) {
+        ContentValues values = new ContentValues();
+
+        set(values, col_ID,  src.getId(), filter.getId());
+        set(values, col_CalendarId,  src.getCalendarId(), filter.getCalendarId());
+        set(values, col_DtStart,  src.getDtEnd(), true);
+        set(values, col_DtEnd,  src.getDtStart(), true);
+        set(values, col_Title,  src.getTitle(), true);
+        set(values, col_Description,  src.getDescription(), true);
+        set(values, col_EventLocation,  src.getEventLocation(), filter.getEventLocation());
+        set(values, col_Organizer,  src.getOrganizer(), filter.getOrganizer());
+
+        set(values, col_Duration,  src.getDuration(), true);
+        set(values, col_EventTimezone,  src.getEventTimezone(), filter.getEventTimezone());
+
+        boolean copyRecurrence = filter.getRecurrenceType() != EventFilter.RecurrenceType.ThisEvent;
+        set(values, col_RRule,  src.getRRule(), copyRecurrence);
+        set(values, col_RDate,  src.getRDate(), copyRecurrence);
+        set(values, col_ExtDates,  src.getExtDates(), copyRecurrence);
+        set(values, col_Alarm, (src.getAlarmMinutesBeforeEvent() != null) ? 1 : 0, filter.getAlarms());
+
+        return values;
+    }
+
+    private void set(final ContentValues values, final int colId, final long value, final boolean enabled) {
+        if (enabled) {
+            values.put(COLUMS[colId], value);
+        }
+    }
+
+    private void set(final ContentValues values, final int colId, final String value, final boolean enabled) {
+        if (enabled) {
+            values.put(COLUMS[colId], value);
+        }
+    }
+
     // #9
-    class ReminderCursor extends  ContentUriCursor {
+    class ReminderCursor extends ContentUriCursor {
         protected static final int col_MINUTES = 1;
         protected static final int col_EVENT_ID = 2;
         protected static final int col_METHOD = 3;

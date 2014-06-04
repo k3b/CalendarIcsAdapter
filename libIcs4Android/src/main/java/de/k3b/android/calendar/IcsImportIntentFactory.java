@@ -27,6 +27,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import de.k3b.android.Global;
 import de.k3b.android.compat.Compat;
 import de.k3b.calendar.EventDto;
 

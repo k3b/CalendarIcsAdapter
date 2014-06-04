@@ -23,6 +23,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import de.k3b.android.Global;
 import de.k3b.util.DateTimeUtil;
 
 /**

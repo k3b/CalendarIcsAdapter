@@ -20,13 +20,12 @@ package de.k3b.android.calendar;
 
 
 import java.io.Closeable;
-import java.io.IOException;
 
+import de.k3b.android.Global;
 import de.k3b.android.calendar.ics.R;
 import de.k3b.android.compat.Compat;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventFilter;
-import de.k3b.calendar.EventFilterDto;
 import de.k3b.calendar.ics.EventDto2IcsFactory;
 
 import net.fortuna.ical4j.model.Calendar;

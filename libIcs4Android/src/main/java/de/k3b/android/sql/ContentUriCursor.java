@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with 
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
-package de.k3b.android.calendar;
+package de.k3b.android.sql;
 
 import java.io.Closeable;
 import java.util.Date;
@@ -29,6 +29,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
+import de.k3b.android.Global;
+
 /**
  * Baseclass for cursor based dataaccess via content-uri.<br/>
  * It can used with calendarContentResolver or with a local (mock)database that simulates the contentProviderAPI.<br/><br/>
@@ -37,13 +39,15 @@ import android.util.Log;
  */
 public abstract class ContentUriCursor implements Closeable {
     protected static final int col_ID = 0;
+    private static final String TAG = "k3b-sql";
 
     // collumn names must match order of the consts col_XXX.
     protected final String[] COLUMS;
 
-	protected Cursor currentCalendarContentDatabaseCursor = null;
 	private ContentResolver calendarContentResolver = null;
 	private SQLiteDatabase mockedCalendarContentDatabase = null;
+
+    protected Cursor currentCalendarContentDatabaseCursor = null;
 
 	/**
 	 * Creates a datasource that uses the ContentResolver from context or mock database if not null.
@@ -115,7 +119,7 @@ public abstract class ContentUriCursor implements Closeable {
                 }
             }
             debugMessage.append(")");
-            Log.d(ACalendar2IcsEngine.TAG, debugMessage.toString());
+            Log.d(TAG, debugMessage.toString());
         }
 
         if (calendarContentResolver != null) {

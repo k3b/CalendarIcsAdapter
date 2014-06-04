@@ -39,7 +39,7 @@ import java.util.Locale;
 
 import de.k3b.android.calendar.ACalendar2IcsEngine;
 import de.k3b.android.calendar.ACalendarCursor;
-import de.k3b.android.calendar.Global;
+import de.k3b.android.Global;
 import de.k3b.android.calendar.ics.adapter.R;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventFilter;
