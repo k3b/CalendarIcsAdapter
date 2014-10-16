@@ -1,6 +1,8 @@
 todo.txt for android.calendar.ics.adapter
 =========
 
+add https://github.com/k3b/CalendarIcsAdapter/wiki/History to description
+
 rowBinder
 	unittests for completeness
 		all but alarms

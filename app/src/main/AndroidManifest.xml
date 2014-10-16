@@ -2,8 +2,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.k3b.android.calendar.ics.adapter"
-    android:versionCode="12"
-    android:versionName="1.5.6.12-140525">
+    android:versionCode="13"
+    android:versionName="1.5.6.13-141013">
 
     <!-- /*
      * Copyright (C) 2013, 2014 - Daniele Gobbetti and k3b
