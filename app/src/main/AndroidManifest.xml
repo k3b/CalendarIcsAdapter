@@ -89,8 +89,6 @@
                 <data android:mimeType="*/*" />
                 <data android:host="*" />
                 <data android:scheme="file" />
-                <data android:scheme="http" />
-                <data android:scheme="https" />
                 <!-- android does not allow to download *.ics-files via bluetooth but it works with other extensions.
                     according to http://en.wikipedia.org/wiki/ICalendar .ical and .icalendar are also used. -->
                 <data android:pathPattern=".*\\.ics" />

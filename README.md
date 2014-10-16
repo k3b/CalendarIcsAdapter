@@ -22,6 +22,8 @@ The android.calendar.ics.adapter has no gui of its own. Instead it hooks into th
 `(*)` there is an [android issue that blocks receiving `*.ics` files via bluetooth](https://github.com/k3b/CalendarIcsAdapter/issues/2). 
 If you rename the fileextension from `*.ics` to `*.ical` it will work with android bluetooth.
 
+For release history see https://github.com/k3b/CalendarIcsAdapter/wiki/History
+
 ## Permissions
 
 * android.permission.READ_CALENDAR 
@@ -47,12 +49,9 @@ There are 3 branches in the git repository at https://github.com/k3b/CalendarIcs
   * official fdroid releases are tagged with v*.*.* (for example v1.5.4)
 
 The project should build as-is using 
-* ant
-  * `ant clean release install` or 
-  * `ant clean debug install` or 
-* using Gradle-1.11 and android-buildtoos-19.0.3
-  * `gradle clean installRelease`
-  * `gradle clean installDebug`
+* Gradle-1.12 and android-buildtools-20.0
+  * `gradlew clean installRelease`
+  * `gradlew clean installDebug`
 
 The libraries contained  in this project are taken from the [ical4j project](http://ical4j.sf.net/).
 A binary version of the app is [available](https://f-droid.org/wiki/page/de.k3b.android.calendar.ics.adapter) in the android opensource appstore [f-droid](https://f-droid.org/)
