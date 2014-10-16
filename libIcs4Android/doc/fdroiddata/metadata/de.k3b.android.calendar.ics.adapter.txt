@@ -1,0 +1,44 @@
+Categories:Office,System
+License:GPLv3
+Web Site:https://github.com/k3b/CalendarIcsAdapter/wiki
+Source Code:https://github.com/k3b/CalendarIcsAdapter
+Issue Tracker:https://github.com/k3b/CalendarIcsAdapter/issues
+
+Name:Calendar ICS adapter
+Auto Name:android.calendar.ics.adapter
+Summary:Import and export calendar files
+Description:
+Use a filemanager (i.e. [[org.openintents.filemanager]]), emailclient (i.e. [[com.fsck.k9]]) or bluetooth to import or export
+android calendar entries via *.ics or *.ical files or attachments of type text/calendar.
+
+The android.calendar.ics.adapter has no gui of its own. 
+If you open an event from
+the android calendar you can choose between "view event" and "send event to ...".
+If you open an event from file/attachment you get a prepopulated "add to calender-form". 
+
+android.calendar.ics.adapter is a fork of [[org.dgtale.icsimport]] that uses the [http://ical4j.sourceforge.net ical4j] library.
+
+'''Required Android Permissions:''' 
+* READ_CALENDAR used to export events from calendar
+* WRITE_EXTERNAL_STORAGE used to store the created ics-file so that it can be attached to email or send via bluetooth.
+.
+
+Repo Type:git
+Repo:https://github.com/k3b/CalendarIcsAdapter.git
+
+Build:1.5.3-140409,9
+    commit=v1.5.3
+
+Maintainer Notes:
+Jars used in 1.5.3 are the same ones that were used in org.dgtale.icsimport.
+Check them again if they are changed. Will switch to source libraries or
+gradle deps soon.
+
+note from k3b: new version 1.5.5.11-140428 switched to gradle deps with no more local jars.
+.
+
+Auto Update Mode:None
+Update Check Mode:Tags
+Current Version:1.5.3.10-140416
+Current Version Code:10
+

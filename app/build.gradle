@@ -1,0 +1,44 @@
+// android.calendar.ics.adapter/app/build.gradle"
+apply plugin: 'android'
+
+configurations {
+    compile.exclude group: 'commons-logging' // referenced in some portable lib. use android internal instead
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion '20'// '19.1'
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+
+        //!!! andoird buildToolsVersion 19.0.3 does not support exclude with wildcards yet :-(
+        exclude('org/apache/commons/codec/language/bm/*.txt')		//  124 files (uncompressed 215kb) with unused language specific rules
+    }
+
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 19
+    }
+
+    buildTypes {
+        release {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+        debug {
+            runProguard true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile project(':libIcs4Android')
+    compile project(':libIcsJ2se')
+    compile 'org.mnode.ical4j:ical4j:1.0.5'
+    compile 'backport-util-concurrent:backport-util-concurrent:3.1'
+    compile 'commons-codec:commons-codec:1.8'
+    compile 'commons-lang:commons-lang:2.6'
+}

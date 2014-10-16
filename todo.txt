@@ -1,7 +1,35 @@
 todo.txt for android.calendar.ics.adapter
 =========
 
-- #5 Seperate android2 api from android4 api  
+add https://github.com/k3b/CalendarIcsAdapter/wiki/History to description
+
+rowBinder
+	unittests for completeness
+		all but alarms
+	make colids private
+	public col-count => verify compatibility with acal-event-content provider
+	
+v #5 Seperate android2 api from android4 api  
+
+
+v #11 Add Support for RDate
+v #9 Add Support to import/export alarm-reminders
+- #8 acalendar properties transfer alarms
+	// douplicate mode
+	Long calendar_id = 1
+	String title = Shermeier
+	Integer availabilityStatus = 0
+	Boolean allDay = false
+	Integer visibility = 0
+
+                    // nur bei edit
+                    Boolean editMode=true
+
+v #6 bug export: recurring event:email-subject date should be occurence-start (long-extra-beginTime) instead of rule-start
+	- is there a ical rRule to text function?
+- #7 feature export: instead of 2 activities send ics/ical option dialog with format (ics/ical) and with recurrence event (only this event|all events|this and all further events)
+	- dlg
+	- engine convert eventrule
 
 v push to f-droid-store
 	v v1.5.1 wrong package name
@@ -19,9 +47,8 @@ v send via bluetooth workaround via public readable file
 
 ? main view with settings and about
 	
-? split a4.0 and a 2.1-
-
 ----------------------
+How to enable/disable intentet filter at runtime via activity-alias
 
 http://developer.android.com/guide/topics/manifest/activity-alias-element.html
 
@@ -81,5 +108,11 @@ introduced in:
     API Level 1
 see also:
     <activity>
+
+---------------------------------
+recurrence transformation (this; all; this and all further)
+
+C:\Users\eve\Downloads\Android\dbAndContent
+
 
 
