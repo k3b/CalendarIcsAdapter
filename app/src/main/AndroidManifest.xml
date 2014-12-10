@@ -4,7 +4,7 @@
     package="de.k3b.android.calendar.ics.adapter"
     android:versionCode="13"
     android:versionName="1.5.6.13-141013"
-    android:installLocation="preferExternal"
+    android:installLocation="auto"
 	>
 
     <!-- /*

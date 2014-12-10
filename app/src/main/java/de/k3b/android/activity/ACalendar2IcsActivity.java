@@ -37,9 +37,9 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import de.k3b.android.Global;
 import de.k3b.android.calendar.ACalendar2IcsEngine;
 import de.k3b.android.calendar.ACalendarCursor;
-import de.k3b.android.Global;
 import de.k3b.android.calendar.ics.adapter.R;
 import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventFilter;
@@ -54,11 +54,23 @@ import de.k3b.calendar.ics.IcsAsEventDto;
  * @author k3b
  */
 public class ACalendar2IcsActivity extends Activity {
+    /**
+     * controls, wich data elements will be exported.
+     * TODO: make configurable via gui
+     */
+    private final EventFilter filter = EventFilterDto.ALL;
     private ACalendar2IcsEngine engine = null;
 
-    /** controls, wich data elements will be exported.
-     * TODO: make configurable via gui */
-    private final EventFilter filter = EventFilterDto.ALL;
+    private static boolean hasRecurrence(EventDto event) {
+        if (event != null) {
+            return !isEmpty(event.getRRule()) || !isEmpty(event.getRDate());
+        }
+        return false;
+    }
+
+    private static boolean isEmpty(String value) {
+        return ((value == null) || (value.length() == 0));
+    }
 
     /**
      * This will differ between ics and ical
@@ -168,17 +180,6 @@ public class ACalendar2IcsActivity extends Activity {
                     date, event.getTitle());
         }
         return null;
-    }
-
-    private static boolean hasRecurrence(EventDto event) {
-        if (event != null) {
-            return !isEmpty(event.getRRule()) || !isEmpty(event.getRDate()) ;
-        }
-        return false;
-    }
-
-    private static boolean isEmpty(String value) {
-        return ((value == null) || (value.length() == 0));
     }
 
     /**
