@@ -1,7 +1,34 @@
 todo.txt for android.calendar.ics.adapter
 =========
 
-add https://github.com/k3b/CalendarIcsAdapter/wiki/History to description
+update documentation:
+
+to use with a local only calendar
+https://f-droid.org/wiki/page/org.sufficientlysecure.localcalendar
+
+and ics-files with only one event (or only a few)
+
+?? import batch. onResume will add next??
+
+ 
+
+
+
+
+
+Release note:
+
+* bugfixes
+ * [#6 todo](https://github.com/k3b/CalendarIcsAdapter/issues/6) 
+* imporvements
+ * [#6 todo](https://github.com/k3b/CalendarIcsAdapter/issues/6) 
+* todo (open issues from github)
+
+#10  Import multiple entries enhancement
+#8 add enhenced import support for acalendar enhancement
+#7 export: dialog with export settings enhancement 
+
+just released  "de.k3b.android.calendar.ics.adapter" version bump to V1.5.6.13-141016
 
 rowBinder
 	unittests for completeness
