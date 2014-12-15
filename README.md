@@ -33,7 +33,9 @@ The android.calendar.ics.adapter has no gui of its own. Instead it hooks into th
 `(*)` there is an [android issue that blocks receiving `*.ics` files via bluetooth](https://github.com/k3b/CalendarIcsAdapter/issues/2). 
 If you rename the fileextension from `*.ics` to `*.ical` it will work with android bluetooth.
 
-For release history see https://github.com/k3b/CalendarIcsAdapter/wiki/History
+[android.calendar.ics.adapter Release history](https://github.com/k3b/CalendarIcsAdapter/wiki/History)
+
+If you find any issues look at the [CalendarIcsAdapter issue tracker](https://github.com/k3b/CalendarIcsAdapter/issues)
 
 ## Permissions
 
@@ -98,3 +100,4 @@ The CalendarIcsAdapter consists of 3 Layers:
 
   * app -> libIcs4Android -> libIcs2se -> iCal4j -> backport-util-concurrent + commons-codec + commons-lang
   * jUnit4-tests (j2se) -> libIcs2se -> iCal4j -> backport-util-concurrent + commons-codec + commons-lang
+
