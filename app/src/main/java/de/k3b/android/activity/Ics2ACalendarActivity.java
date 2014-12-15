@@ -49,6 +49,11 @@ import de.k3b.calendar.ics.IcsAsEventDto;
  */
 public class Ics2ACalendarActivity extends Activity {
 
+    private IcsImportIntentFactory importFactory;
+    private IcsAsEventDto eventDto;
+    private Iterator eventIterator;
+    private String currentEventName;
+
     /**
      * loads filecontents from stream
      */
@@ -78,18 +83,15 @@ public class Ics2ACalendarActivity extends Activity {
         if (Global.debugEnabled) {
             Log.d(IcsImportIntentFactory.TAG, "Ics2ACalendarActivity begin " + data);
         }
-        startCalendarImportActivity(this, data);
-        if (Global.debugEnabled) {
-            Log.d(IcsImportIntentFactory.TAG, "Ics2ACalendarActivity done" + data);
-        }
-
-        this.finish();
+        startCalendarImportActivity(data);
+        importNextEvent();
     }
 
     /**
-     * opens re-populated "Add Event-To-Calendar"-Activity from contents of file-uri.
+     * opens pre-populated "Add Event-To-Calendar"-Activity from contents of file-uri.
      */
-    void startCalendarImportActivity(Context context, Uri calendarEventFileUri) {
+    void startCalendarImportActivity(Uri calendarEventFileUri) {
+        this.eventIterator = null;
         if (calendarEventFileUri != null) {
             try {
                 if (Global.debugEnabled) {
@@ -98,29 +100,17 @@ public class Ics2ACalendarActivity extends Activity {
 
                 //use ical4j to parse the event
                 CalendarBuilder cb = new CalendarBuilder();
-                Calendar vcalendar = cb.build(getStreamFromOtherSource(context, calendarEventFileUri));
+                Calendar vcalendar = cb.build(getStreamFromOtherSource(this, calendarEventFileUri));
+
                 if (Global.debugEnabled) {
                     Log.d(IcsImportIntentFactory.TAG, "loaded " + vcalendar);
                 }
 
                 if (vcalendar != null) {
-                    IcsImportIntentFactory importFactory = new IcsImportIntentFactory();
+                    this.importFactory = new IcsImportIntentFactory();
 
-                    IcsAsEventDto eventDto = new IcsAsEventDto(vcalendar);
-                    Iterator<?> i = vcalendar.getComponents(Component.VEVENT).iterator();
-
-                    while (i.hasNext()) {
-                        VEvent event = (VEvent) i.next();
-
-                        if (Global.debugEnabled) {
-                            Log.d(IcsImportIntentFactory.TAG, "processing event " + event.getName());
-                        }
-                        eventDto.set(event);
-
-                        Intent insertIntent = importFactory.createImportIntent(context, eventDto, event);
-
-                        context.startActivity(insertIntent);
-                    }
+                    this.eventDto = new IcsAsEventDto(vcalendar);
+                    this.eventIterator = vcalendar.getComponents(Component.VEVENT).iterator();
                 }
 
             } catch (Exception e) {
@@ -128,5 +118,41 @@ public class Ics2ACalendarActivity extends Activity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean importNextEvent() {
+        if ((eventIterator != null) && eventIterator.hasNext()) {
+            VEvent event = (VEvent) eventIterator.next();
+            this.currentEventName = event.getName() + ":" + event.getSummary();
+
+            if (Global.debugEnabled) {
+                Log.d(IcsImportIntentFactory.TAG, "processing event " + currentEventName);
+            }
+            eventDto.set(event);
+
+            Intent insertIntent = importFactory.createImportIntent(this, eventDto, event);
+
+            startActivityForResult(insertIntent, 1);
+            // this.startActivity(insertIntent);
+            return true;
+        }
+        eventIterator = null;
+        if (Global.debugEnabled) {
+            Log.d(IcsImportIntentFactory.TAG, "Ics2ACalendarActivity done");
+        }
+
+        this.finish();
+        return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (Global.debugEnabled) {
+            Log.d(IcsImportIntentFactory.TAG, "onActivityResult: " + currentEventName + " - " + data + " " + resultCode);
+        }
+
+        importNextEvent();
     }
 }
