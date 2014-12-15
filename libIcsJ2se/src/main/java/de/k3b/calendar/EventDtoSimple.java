@@ -21,6 +21,8 @@ package de.k3b.calendar;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.k3b.util.StringUtils;
+
 /**
  * Minimal implementation of EventDto to backup values of other EventDto-implementations.<br/>
  * This class has no direct dependency to android so it can be run in a j2se-junit-integration test.<br/><br/>
@@ -224,7 +226,7 @@ public class EventDtoSimple implements EventDto {
     }
 
     private String getValueOrNull(final String value, final boolean enabled) {
-        if (enabled && (value != null) && (value.length() > 0)) {
+        if (enabled && (!StringUtils.isEmpty(value))) {
             return value;
         }
         return null;

@@ -1,6 +1,10 @@
 todo.txt for android.calendar.ics.adapter
 =========
 
+20141215
+    ics file gets lastmodifieddate of event.startDate.
+    removed "(null)" form empty fields
+
 update documentation:
 
 to use with a local only calendar
@@ -107,13 +111,13 @@ description:
 attributes:
 
     android:enabled
-        Whether or not the target activity can be instantiated by the system through this alias — "true" if it can be, and "false" if not. The default value is "true".
+        Whether or not the target activity can be instantiated by the system through this alias - "true" if it can be, and "false" if not. The default value is "true".
 
         The <application> element has its own enabled attribute that applies to all application components, including activity aliases. The <application> and <activity-alias> attributes must both be "true" for the system to be able to instantiate the target activity through the alias. If either is "false", the alias does not work. 
     android:exported
-        Whether or not components of other applications can launch the target activity through this alias — "true" if they can, and "false" if not. If "false", the target activity can be launched through the alias only by components of the same application as the alias or applications with the same user ID.
+        Whether or not components of other applications can launch the target activity through this alias - "true" if they can, and "false" if not. If "false", the target activity can be launched through the alias only by components of the same application as the alias or applications with the same user ID.
 
-        The default value depends on whether the alias contains intent filters. The absence of any filters means that the activity can be invoked through the alias only by specifying the exact name of the alias. This implies that the alias is intended only for application-internal use (since others would not know its name) — so the default value is "false". On the other hand, the presence of at least one filter implies that the alias is intended for external use — so the default value is "true". 
+        The default value depends on whether the alias contains intent filters. The absence of any filters means that the activity can be invoked through the alias only by specifying the exact name of the alias. This implies that the alias is intended only for application-internal use (since others would not know its name) - so the default value is "false". On the other hand, the presence of at least one filter implies that the alias is intended for external use - so the default value is "true".
     android:icon
         An icon for the target activity when presented to users through the alias. See the <activity> element's icon attribute for more information. 
     android:label
