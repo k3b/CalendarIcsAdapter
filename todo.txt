@@ -12,14 +12,6 @@ https://f-droid.org/wiki/page/org.sufficientlysecure.localcalendar
 
 and ics-files with only one event (or only a few)
 
-?? import batch. onResume will add next??
-
- 
-
-
-
-
-
 Release note:
 
 * bugfixes
