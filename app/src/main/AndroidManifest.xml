@@ -102,6 +102,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/calendar" />
+                <data android:mimeType="application/ics" />
             </intent-filter>
 
         </activity>
