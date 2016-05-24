@@ -1,13 +1,14 @@
 // android.calendar.ics.adapter/app/build.gradle"
-apply plugin: 'android'
+apply plugin: 'com.android.application'
+apply plugin: 'maven'
 
 configurations {
     compile.exclude group: 'commons-logging' // referenced in some portable lib. use android internal instead
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '20'// '19.1'
+    compileSdkVersion 21
+    buildToolsVersion '23.0.2'
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -18,8 +19,10 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 7
-        targetSdkVersion 19
+        minSdkVersion 8
+        targetSdkVersion 21
+        versionCode 16
+        versionName "1.5.8.16-10524"
     }
 
     buildTypes {
@@ -37,8 +40,16 @@ android {
 dependencies {
     compile project(':libIcs4Android')
     compile project(':libIcsJ2se')
-    compile 'org.mnode.ical4j:ical4j:1.0.5'
+    compile 'org.mnode.ical4j:ical4j:1.0.7'
     compile 'backport-util-concurrent:backport-util-concurrent:3.1'
     compile 'commons-codec:commons-codec:1.8'
     compile 'commons-lang:commons-lang:2.6'
+
+    /*
+    compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
+        // exclusion is not necessary, but generally a good idea.
+        exclude group: 'com.google.android', module: 'support-v4'
+    }
+    */
+
 }

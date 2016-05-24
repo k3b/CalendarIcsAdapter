@@ -1,12 +1,12 @@
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 
 configurations {
     compile.exclude group: 'commons-logging' // referenced in some portable lib. use android internal instead
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1"
+    compileSdkVersion 21
+    buildToolsVersion '23.0.2'
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -16,9 +16,6 @@ android {
     defaultConfig {
         minSdkVersion 7
         targetSdkVersion 18 // roboelectric does not support 19 yet
-
-//!!        versionCode 2
-//!!        versionName "1.0.0-SNAPSHOT"
     }
 }
 
@@ -28,7 +25,7 @@ task jar(type: Jar) {
 
 dependencies {
     compile project(':libIcsJ2se')
-    compile 'org.mnode.ical4j:ical4j:1.0.5'
+    compile 'org.mnode.ical4j:ical4j:1.0.7'
     compile 'backport-util-concurrent:backport-util-concurrent:3.1'
     compile 'commons-codec:commons-codec:1.8'
     compile 'commons-lang:commons-lang:2.6'

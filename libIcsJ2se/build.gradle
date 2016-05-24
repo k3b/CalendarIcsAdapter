@@ -1,9 +1,21 @@
 apply plugin: 'java'
 apply plugin: 'jacoco'
 
+jacoco {
+    toolVersion = "0.7.6.201602180812"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+
 dependencies {
-    testCompile 'junit:junit:4.+'
-    compile 'org.mnode.ical4j:ical4j:1.0.5'
+    testCompile 'junit:junit:4.12'
+
+    compile 'org.mnode.ical4j:ical4j:1.0.7'
     compile 'backport-util-concurrent:backport-util-concurrent:3.1'
     compile 'commons-codec:commons-codec:1.8'
     compile 'commons-lang:commons-lang:2.6'
