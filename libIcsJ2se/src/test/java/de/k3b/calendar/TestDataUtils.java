@@ -18,11 +18,14 @@
  */
 package de.k3b.calendar;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
 import de.k3b.calendar.ics.EventDto2IcsFactory;
-import de.k3b.util.DateTimeUtil;
 
 /**
- * Created by EVE on 02.06.2014.
+ * Created by k3b on 02.06.2014.
  */
 public class TestDataUtils {
     public static EventDtoSimple createTestEventDto() {
@@ -31,8 +34,8 @@ public class TestDataUtils {
                 .setCalendarId("3")
                 .setDescription("bla bla bla")
                 .setTitle("test title")
-                .setDtStart(DateTimeUtil.createDate(2000, 5, 1, 12, 34, 56).getTime())
-                .setDtEnd(DateTimeUtil.createDate(2000, 5, 1, 17,12,34).getTime())
+                .setDtStart(TestDataUtils.createDateCET(2000, 5, 1, 12, 34, 56).getTime())
+                .setDtEnd(TestDataUtils.createDateCET(2000, 5, 1, 17,12,34).getTime())
                 .setEventLocation("location")
                 .setOrganizer("mailto:max.mustermann@url.org")
                 .setDuration("P1D")
@@ -41,6 +44,17 @@ public class TestDataUtils {
                 .setEventTimezone("Australia/Sydney")
                 .setRRule("FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU")
                 .setAlarmMinutesBeforeEvent(5,10);
+    }
+
+    /** make it easier to create a date from its components.
+     * For Testing always CET (central european time) is used so unittests executed in different timezones should not fail */
+    public static Date createDateCET(final int year, final int monthOfYear,
+                                     final int dayOfMonth, final int hour, final int minute,
+                                     final int second) {
+        final Calendar c = Calendar.getInstance();
+        c.setTimeZone(TimeZone.getTimeZone("CET"));
+        c.set(year, monthOfYear - 1,dayOfMonth, hour, minute,second);
+        return c.getTime();
     }
 
     public static String getIcs(final EventFilter filter, final EventDto... events) {

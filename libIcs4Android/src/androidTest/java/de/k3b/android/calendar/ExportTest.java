@@ -1,8 +1,5 @@
 package de.k3b.android.calendar;
 
-import android.app.Activity;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.test.AndroidTestCase;
 
@@ -10,10 +7,9 @@ import junit.framework.Assert;
 
 import net.fortuna.ical4j.model.Calendar;
 
-import de.k3b.calendar.EventDtoSimple;
 import de.k3b.calendar.EventFilter;
 import de.k3b.calendar.EventFilterDto;
-import de.k3b.util.DateTimeUtil;
+import de.k3b.calendar.TestDataUtils;
 
 public class ExportTest extends AndroidTestCase {
     public static final long ONE_DAY_IN_MILLISECS = 24 * 60 * 60 *1000;
@@ -174,8 +170,8 @@ public class ExportTest extends AndroidTestCase {
         final Uri data = ACalendarCursor.createContentUri("events", "1");
         EventFilter filter = EventFilterDto.ALL;
 
-        long dtstart = DateTimeUtil.createDate(2000, 5, 1, 12, 34, 56).getTime() + ONE_DAY_IN_MILLISECS;
-        long dtend = DateTimeUtil.createDate(2000, 5, 1, 17,12,34).getTime() + ONE_DAY_IN_MILLISECS;
+        long dtstart = TestDataUtils.createDateCET(2000, 5, 1, 12, 34, 56).getTime() + ONE_DAY_IN_MILLISECS;
+        long dtend = TestDataUtils.createDateCET(2000, 5, 1, 17,12,34).getTime() + ONE_DAY_IN_MILLISECS;
 
         boolean useMockCalendar = true;
 
