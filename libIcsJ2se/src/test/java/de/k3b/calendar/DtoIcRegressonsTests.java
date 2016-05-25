@@ -22,6 +22,7 @@ import net.fortuna.ical4j.data.ParserException;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -57,6 +58,7 @@ Executing this test with gradle does not show this.
 ical4j.properties tells ical4j not to use the internet to update timezone-infos.
 
 */
+@Ignore("Generated ics content may differ in timezone definitions due to machine config")
 public class DtoIcRegressonsTests {
     public static final long ONE_DAY_IN_MILLISECS = 24 * 60 * 60 *1000;
     private EventDtoSimple src = null;
