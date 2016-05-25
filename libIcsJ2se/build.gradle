@@ -8,6 +8,19 @@ jacocoTestReport {
     }
 }
 
+// https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.logging.TestLoggingContainer.html
+// to analyse failed test on buildserver travis-ci
+test {
+    testLogging {
+        events "failed", "SKIPPED"
+        exceptionFormat "short"
+        showCauses true
+        showExceptions true
+        showStackTraces true
+        showStandardStreams true
+    }
+}
+
 dependencies {
     testCompile 'junit:junit:4.12'
 
