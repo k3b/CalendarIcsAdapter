@@ -6,7 +6,7 @@ configurations {
 
 android {
     compileSdkVersion 21
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '23.0.1'
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
