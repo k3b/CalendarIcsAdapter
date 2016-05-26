@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.Date;
 
-import de.k3b.calendar.ics.EventDto2IcsFactory;
 import de.k3b.calendar.ics.IcsAsEventDto;
 import de.k3b.util.DateTimeUtil;
 
@@ -39,7 +38,7 @@ import de.k3b.util.DateTimeUtil;
  * Created by k3b on 29.05.2014.
  */
 public class DtoIcsDtoTests {
-    private final Date xmasNoonDate = DateTimeUtil.createDate(2000, 12, 24, 12,0,0);
+    private final Date xmasNoonDate = TestDataUtils.createDateCET(2000, 12, 24, 12,0,0);
     private final String xmasNoonString = "20001224T120000Z";
 
     /** controls, wich data elements will be exported. */
@@ -158,8 +157,8 @@ public class DtoIcsDtoTests {
                 .setId("4712")
                 .setCalendarId(src.getCalendarId())
                 .setTitle("test title2")
-                .setDtStart(DateTimeUtil.createDate(2001, 5, 1, 12, 34, 56).getTime())
-                .setDtEnd(DateTimeUtil.createDate(2001, 5, 1, 17, 12, 34).getTime())
+                .setDtStart(TestDataUtils.createDateCET(2001, 5, 1, 12, 34, 56).getTime())
+                .setDtEnd(TestDataUtils.createDateCET(2001, 5, 1, 17, 12, 34).getTime())
                 .setEventTimezone(src.getEventTimezone());
 
         this.lastIcs = TestDataUtils.getIcs(filter, src, src2);

@@ -46,6 +46,7 @@ public class ACalendar2IcsEngine implements Closeable {
 	 * uses as logging-prefix
 	 */
 	public static final String TAG = "ICS-Export";
+	private static final String URI_TRANSLATION_PREFIX = "content://com.mediatek.calendarimporter/";
 
 	/**
 	 * where data comes from
@@ -91,6 +92,11 @@ public class ACalendar2IcsEngine implements Closeable {
 	 */
 	public Calendar export(Uri contentUri, long dtStart, long dtEnd) {
 		boolean hasData = false;
+
+		String uriValue = (contentUri == null) ? null : contentUri.toString();
+		if ((uriValue != null) && uriValue.startsWith(URI_TRANSLATION_PREFIX)) {
+			contentUri = ACalendarCursor.createContentUri("events", uriValue.substring(URI_TRANSLATION_PREFIX.length()));
+		}
 		EventDto2IcsFactory factory = new EventDto2IcsFactory(filter, this.ctx.getText(R.string.app_ics_provider_name).toString());
         Cursor eventCursor = null;
         try {

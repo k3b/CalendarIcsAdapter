@@ -45,6 +45,7 @@ import de.k3b.calendar.EventDto;
 import de.k3b.calendar.EventFilter;
 import de.k3b.calendar.EventFilterDto;
 import de.k3b.calendar.ics.IcsAsEventDto;
+import de.k3b.util.StringUtils;
 //import android.provider.CalendarContract from android 4.0 is replaced by local CalendarContract so it is runnable from android 2.1 
 
 /**
@@ -63,13 +64,9 @@ public class ACalendar2IcsActivity extends Activity {
 
     private static boolean hasRecurrence(EventDto event) {
         if (event != null) {
-            return !isEmpty(event.getRRule()) || !isEmpty(event.getRDate());
+            return !StringUtils.isEmpty(event.getRRule()) || !StringUtils.isEmpty(event.getRDate());
         }
         return false;
-    }
-
-    private static boolean isEmpty(String value) {
-        return ((value == null) || (value.length() == 0));
     }
 
     /**
@@ -97,6 +94,17 @@ public class ACalendar2IcsActivity extends Activity {
         Intent intent = getIntent();
 
         Uri data = intent.getData();
+
+        if (data == null) {
+            // support for android-4.4 send content://com.mediatek.calendarimporter/
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                Object stream = extras.get(Intent.EXTRA_STREAM);
+                if ((stream != null) && (stream.toString().startsWith("content:"))) {
+                    data = Uri.parse(stream.toString());
+                }
+            }
+        }
 
         if ((Global.USE_MOCK_CALENDAR) && (data == null)) {
             data = ACalendarCursor.createContentUri("events", "1");
@@ -130,7 +138,7 @@ public class ACalendar2IcsActivity extends Activity {
                     if (Global.debugEnabled) {
                         Log.d(ACalendar2IcsEngine.TAG, "sending '" + mailSubject + "'");
                     }
-                    sendIcsTo(mailSubject, description, vcalendar.toString());
+                    sendIcsTo(mailSubject, description, event.getDtStart(), vcalendar.toString());
                 }
 
             } catch (Exception e) {
@@ -176,8 +184,10 @@ public class ACalendar2IcsActivity extends Activity {
                 DateFormat shortTimeformatter = DateFormat.getDateInstance(java.text.DateFormat.SHORT, locale);
                 date = shortTimeformatter.format(dtStart);
             }
-            return String.format(this.getString(R.string.export_mail_subject).toString(),
-                    date, event.getTitle());
+            String title = event.getTitle();
+            if (title == null) title="";
+            return String.format(this.getString(R.string.export_mail_subject),
+                    date, title);
         }
         return null;
     }
@@ -199,8 +209,12 @@ public class ACalendar2IcsActivity extends Activity {
                 DateFormat timeFormatter = DateFormat.getTimeInstance(java.text.DateFormat.SHORT, locale);
                 date = dateFormatter.format(dtStart) + " " + timeFormatter.format(dtStart);
             }
+            String eventLocation = event.getEventLocation();
+            if (eventLocation == null) eventLocation = "";
+            String description = event.getDescription();
+            if (description == null) description="";
             return String.format(this.getString(R.string.export_mail_content).toString(),
-                    date, event.getEventLocation(), event.getDescription(), getAppVersionName());
+                    date, eventLocation, description, getAppVersionName());
         }
         return null;
     }
@@ -225,9 +239,10 @@ public class ACalendar2IcsActivity extends Activity {
     /**
      * Opens android "sendTo"-chooser with propopulated data:
      */
-    private void sendIcsTo(String mailSubject, String mailBody, String mailAttachmentContent) throws IOException {
+    private void sendIcsTo(String mailSubject, String mailBody, long dtStart, String mailAttachmentContent) throws IOException {
         final File icsFIle = this.getOutputFile();
-        this.writeStringToTextFile(icsFIle, mailAttachmentContent.toString());
+        this.writeStringToTextFile(icsFIle, mailAttachmentContent);
+        if (dtStart != 0) icsFIle.setLastModified(dtStart);
 
         final Uri uri = this.getUriForFile(icsFIle);
 

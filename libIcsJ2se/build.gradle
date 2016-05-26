@@ -1,9 +1,30 @@
 apply plugin: 'java'
 apply plugin: 'jacoco'
 
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
+
+// https://docs.gradle.org/current/dsl/org.gradle.api.tasks.testing.logging.TestLoggingContainer.html
+// to analyse failed test on buildserver travis-ci
+test {
+    testLogging {
+        events "failed", "SKIPPED"
+        exceptionFormat "short"
+        showCauses true
+        showExceptions true
+        showStackTraces true
+        showStandardStreams true
+    }
+}
+
 dependencies {
-    testCompile 'junit:junit:4.+'
-    compile 'org.mnode.ical4j:ical4j:1.0.5'
+    testCompile 'junit:junit:4.12'
+
+    compile 'org.mnode.ical4j:ical4j:1.0.7'
     compile 'backport-util-concurrent:backport-util-concurrent:3.1'
     compile 'commons-codec:commons-codec:1.8'
     compile 'commons-lang:commons-lang:2.6'

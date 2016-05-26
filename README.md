@@ -1,4 +1,30 @@
+# This software is deprecated and only usefull if you are using android 2.x
+
+Please use https://github.com/danielegobbetti/ICSImport instead.
+
+Reason:
+
+The import code (or "Open with Calendar") of k3b/CalendarIcsAdapter is functional equivalent to the code
+from danielegobbetti/ICSImport (because it was originally based on his code)
+
+The Export code of this module ("Send Calendar Event To") is not callable from google-stock-calendar-app any more.
+Instead google-stock-calendar-app has its own implementation of "Send Calendar Event To".
+
+Version V1.5.8.160526 is the last version maintained by me
+
 # CalendarIcsAdapter ( android.calendar.ics.adapter )
+
+* Current FDroid Release
+  * [![GitHub release](https://img.shields.io/github/release/k3b/CalendarIcsAdapter.svg?maxAge=2592000)](https://github.com/k3b/CalendarIcsAdapter/wiki/History)
+* Available on FDroid
+  * https://f-droid.org/wiki/page/Calendar_ICS_adapter
+* Sourcecode
+  * https://github.com/k3b/CalendarIcsAdapter/
+* Last FDroid build
+  * [![Build Status](https://travis-ci.org/k3b/CalendarIcsAdapter.svg?branch=release-fdroid)](https://travis-ci.org/k3b/CalendarIcsAdapter)
+* Last Development build
+  * [![Build Status](https://travis-ci.org/k3b/CalendarIcsAdapter.svg?branch=development)](https://travis-ci.org/k3b/CalendarIcsAdapter)
+
 
 **CalendarIcsAdapter** is a small free and open source app for Android 2.1 and up
 that converts between 
@@ -58,13 +84,13 @@ the event details before saving.
 There are 3 branches in the git repository at https://github.com/k3b/CalendarIcsAdapter.git
 
 * **master** ics-import only that requires no additional permisions based on [[org.dgtale.icsimport]]
-* **development** current development version for eclipse that include local lib/*.jars and is not suitable for fdroid-builds
-* **release-fdroid** official fdroid build version with gradle-build and no local lib/*.jars.
+* **development** current development version for android-studio
+* **release-fdroid** official fdroid build version with gradle-build.
     * official fdroid releases are tagged with v*.*.* (for example v1.5.4)
 
 The project should build as-is using
 
-* gradle-2.2.1 and android-buildtools-20.0
+* gradle-2.13 and android-buildtools-23.0.1
   * `gradlew clean installRelease`
   * `gradlew clean installDebug`
 
