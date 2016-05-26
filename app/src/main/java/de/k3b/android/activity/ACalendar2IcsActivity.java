@@ -95,6 +95,17 @@ public class ACalendar2IcsActivity extends Activity {
 
         Uri data = intent.getData();
 
+        if (data == null) {
+            // support for android-4.4 send content://com.mediatek.calendarimporter/
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                Object stream = extras.get(Intent.EXTRA_STREAM);
+                if ((stream != null) && (stream.toString().startsWith("content:"))) {
+                    data = Uri.parse(stream.toString());
+                }
+            }
+        }
+
         if ((Global.USE_MOCK_CALENDAR) && (data == null)) {
             data = ACalendarCursor.createContentUri("events", "1");
             // data = ACalendarCursor.createContentUri("events");
